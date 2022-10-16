@@ -1,7 +1,7 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.entity.Contact;
-import com.rookies.assignment.service.serviceImpl.ContactServiceImpl;
+import com.rookies.assignment.data.entity.Contact;
+import com.rookies.assignment.service.impl.ContactServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

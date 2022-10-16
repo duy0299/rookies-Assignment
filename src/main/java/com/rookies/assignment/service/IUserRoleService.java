@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.UserRole;
+import com.rookies.assignment.data.entity.UserRole;
 
 @Component
 public interface IUserRoleService {

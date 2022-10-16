@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Rating;
+import com.rookies.assignment.data.entity.Rating;
 
 @Component
 public interface IRatingService {
@@ -20,5 +20,5 @@ public interface IRatingService {
 
 	public List<Rating> listAll();
 	
-	public List<Rating> listByProductModel(UUID product_model_id);
+	public List<Rating> listByProductModel(UUID productModelId);
 }

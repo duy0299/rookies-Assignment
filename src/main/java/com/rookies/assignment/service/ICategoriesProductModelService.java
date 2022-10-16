@@ -2,10 +2,10 @@ package com.rookies.assignment.service;
 
 import java.util.List;
 
-import com.rookies.assignment.entity.CategoriesProductModel;
+import com.rookies.assignment.data.entity.CategoriesProductModel;
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.CategoriesProductModel;
+import com.rookies.assignment.data.entity.CategoriesProductModel;
 
 @Component
 public interface ICategoriesProductModelService {

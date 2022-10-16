@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Wishlist;
+import com.rookies.assignment.data.entity.Wishlist;
 
 @Component
 public interface IWishlistService {

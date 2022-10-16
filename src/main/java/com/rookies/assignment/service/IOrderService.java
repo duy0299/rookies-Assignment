@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Order;
+import com.rookies.assignment.data.entity.Order;
 
 @Component
 public interface IOrderService {

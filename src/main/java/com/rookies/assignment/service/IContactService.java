@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Contact;
+import com.rookies.assignment.data.entity.Contact;
 
 @Component
 public interface IContactService {

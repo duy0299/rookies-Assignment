@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Size;
+import com.rookies.assignment.data.entity.Size;
 
 @Component
 public interface ISizeService {

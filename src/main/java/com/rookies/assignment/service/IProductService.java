@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Product;
+import com.rookies.assignment.data.entity.Product;
 
 @Component
 public interface IProductService {
@@ -20,6 +20,6 @@ public interface IProductService {
 
 	public List<Product> listAll();
 	
-	public List<Product> listByProductModel(UUID product_model_id);
+	public List<Product> listByProductModel(UUID productModelId);
 	
 }

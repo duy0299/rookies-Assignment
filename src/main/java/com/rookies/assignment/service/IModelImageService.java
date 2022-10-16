@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 
-import com.rookies.assignment.entity.ModelImage;
+import com.rookies.assignment.data.entity.ModelImage;
 
 @Component
 public interface IModelImageService {

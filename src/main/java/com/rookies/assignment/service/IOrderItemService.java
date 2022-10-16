@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.OrderItem;
+import com.rookies.assignment.data.entity.OrderItem;
 
 @Component
 public interface IOrderItemService {

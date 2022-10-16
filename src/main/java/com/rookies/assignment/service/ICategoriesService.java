@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.Categories;
+import com.rookies.assignment.data.entity.Categories;
 
 @Component
 public interface ICategoriesService {

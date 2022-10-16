@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.entity.ProductModel;
+import com.rookies.assignment.data.entity.ProductModel;
 
 @Component
 public interface IProductModelService {
