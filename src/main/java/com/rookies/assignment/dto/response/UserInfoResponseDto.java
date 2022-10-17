@@ -22,6 +22,7 @@ public class UserInfoResponseDto extends UserInfoDtoFlat {
     private List<RoleDtoFlat> listRole;
 
     public UserInfoResponseDto(UserInfo user){
+        super(user);
         listRatings = setlistRatings(user.getListRatings());
         listFeedbacks = setFeedbacks(user.getListFeedbacks());
         listWishlists = setWishlists(user.getListWishlists());

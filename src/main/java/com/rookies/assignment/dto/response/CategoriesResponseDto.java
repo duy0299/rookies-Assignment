@@ -21,7 +21,7 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
     private CategoriesDtoFlat parentCategories;
 
     public CategoriesResponseDto(Categories categories, Categories parent){
-        super();
+        super(categories);
         parentCategories = new CategoriesDtoFlat(parent);
         listModel = setlistProductModelFlat(categories.getListModel());
     }

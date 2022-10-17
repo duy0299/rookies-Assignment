@@ -8,8 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseDto<E> {
-    private int statusCode;
+    private String statusCode;
     private String message;
     private E   result;
 
+    public ResponseDto(String statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.result = null;
+    }
+
+    public ResponseDto(String message) {
+        this.statusCode = "00";
+        this.message = message;
+        this.result = null;
+    }
 }
