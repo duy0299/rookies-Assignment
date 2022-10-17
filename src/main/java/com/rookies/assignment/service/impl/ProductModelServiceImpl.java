@@ -60,7 +60,16 @@ public class ProductModelServiceImpl implements IProductModelService {
 
     @Override
     public ResponseDto<List<ProductModelResponseDto>> listByName(String name) {
-        return null;
+        name = changeToText(name);
+        ResponseDto<List<ProductModelResponseDto>> all = listAll();
+        List<ProductModelResponseDto> result = new ArrayList<ProductModelResponseDto>();
+        String check = "^.*"+name+".*$";
+        for(ProductModelResponseDto p : all.getResult()) {
+            if(Pattern.matches(check, changeToText(p.getName()))) {
+                result.add(p);
+            }
+        }
+        return new ResponseDto<>(result);
     }
 
     @Override
@@ -68,5 +77,17 @@ public class ProductModelServiceImpl implements IProductModelService {
         return null;
     }
 
+    //Change accented characters to unsigned
+    public String changeToText(String text) {
+        text = text.toLowerCase();
 
+        text = text.replaceAll("á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ", "a");
+        text = text.replaceAll("é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ", "e");
+        text = text.replaceAll("i|í|ì|ỉ|ĩ|ị", "i");
+        text = text.replaceAll("ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ", "o");
+        text = text.replaceAll("ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự", "u");
+        text = text.replaceAll("ý|ỳ|ỷ|ỹ|ỵ", "y");
+        text = text.replaceAll("đ", "d");
+        return text;
+    }
 }
