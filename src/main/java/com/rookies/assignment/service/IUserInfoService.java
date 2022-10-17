@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.rookies.assignment.dto.request.LoginRequestDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +21,12 @@ public interface IUserInfoService {
 
 	public void updateStatus(UUID id, short ststus);
 	
-	public UserInfoResponseDto getById(UUID id);
+	public ResponseDto<UserInfoResponseDto> getById(UUID id);
 
 	public List<UserInfoResponseDto> listAll();
 
 	public UserInfoResponseDto updatePassword();
 
-	public UserInfoResponseDto login(LoginRequestDto dto);
 
 	public UserInfoResponseDto register();
 }
