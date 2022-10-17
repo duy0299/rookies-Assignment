@@ -39,13 +39,13 @@ public class Contact {
     @Column(name="brand_story", nullable = false, length = 350)
     private String brandStory;
 
-    @Column(name="time_open")
+    @Column(name="timeOpen")
     private Time timeOpen;
 
-    @Column(name="time_close")
+    @Column(name="timeClose")
     private Time timeClose;
 
-    @Column(name="time_update")
+    @Column(name="timeUpdate")
     private Timestamp timeUpdate;
 
 }

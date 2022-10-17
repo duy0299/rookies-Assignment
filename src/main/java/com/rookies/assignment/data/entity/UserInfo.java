@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="user_info")
+@Table(name="userInfo")
 public class UserInfo {
 	@Id
 	@GeneratedValue
@@ -34,27 +34,27 @@ public class UserInfo {
 	
 	@ManyToMany
 	@JoinTable(
-			name = "user_role",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "role_id"))
+			name = "userRole",
+			joinColumns = @JoinColumn(name = "userId"),
+			inverseJoinColumns = @JoinColumn(name = "roleId"))
 	private List<Role> listRole;
 	
 	
 	
 //	---------------------------------------------------------
-	@Column(name="first_name", nullable = false, length = 20)
+	@Column(name="firstName", nullable = false, length = 20)
 	private String firstName;
 
-	@Column(name="last_name", nullable = false, length = 20)
+	@Column(name="lastName", nullable = false, length = 20)
 	private String lastName;
 
-	@Column(name="phone_number", nullable = true, length = 15)
+	@Column(name="phoneNumber", nullable = true, length = 15)
 	private String phoneNumber;
 
 	@Column(name="gender", nullable = false)
 	private boolean gender;
 
-	@Column(name="email", nullable = false, length = 50)
+	@Column(name="email", nullable = false, length = 50, unique=true)
 	private String email;
 
 	@Column(name="avatar", nullable = true, length = 35)
@@ -66,10 +66,10 @@ public class UserInfo {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 	

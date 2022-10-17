@@ -26,11 +26,11 @@ public class Wishlist {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="product_modelid")
+	@JoinColumn(name="productModelid")
 	private ProductModel model;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "userId")
 	private UserInfo userInfo;
 	
 	
@@ -38,9 +38,9 @@ public class Wishlist {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 }

@@ -17,17 +17,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name="user_role")
+@Table(name="userRole")
 public class UserRole {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "role_id")
+	@JoinColumn(name = "roleId")
 	private Role role;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "userId")
 	private UserInfo userInfo;
 }

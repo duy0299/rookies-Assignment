@@ -37,11 +37,11 @@ public class Product {
 	private List<OrderItem> listItems;
 	
 	@ManyToOne
-	@JoinColumn(name="size_id")
+	@JoinColumn(name="sizeId")
 	private Size size;
 
 	@ManyToOne
-	@JoinColumn(name="product_model_id")
+	@JoinColumn(name="productModelId")
 	private ProductModel model;
 	
 	
@@ -53,12 +53,12 @@ public class Product {
 	@Column(name="avatar", length = 50)
 	private String avatar;
 
-	@Column(name="sale_type", nullable = false, length = 15)
+	@Column(name="saleType", nullable = false, length = 15)
 	private String saleType;
 
 	@ColumnDefault("0")
 	@Min(value = 0)
-	@Column(name="price_sale", nullable = false, columnDefinition="Decimal(10,2)")
+	@Column(name="priceSale", nullable = false, columnDefinition="Decimal(10,2)")
 	private BigDecimal priceSale;
 
 	@Min(value = 0)
@@ -66,16 +66,16 @@ public class Product {
 	private int quantity;
 
 	@ColumnDefault("0")
-	@Column(name="sold_product_quantity", nullable = false)
+	@Column(name="soldProductQuantity", nullable = false)
 	private int soldProductQuantity;
 	
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 

@@ -29,13 +29,13 @@ public class Order {
 	private List<OrderItem> listItems;
 	
 //	----------------------------------------------------------
-	@Column(name="first_name", nullable = false, length = 20)
+	@Column(name="firstName", nullable = false, length = 20)
 	private String firstName;
 
-	@Column(name="last_name", nullable = false, length = 20)
+	@Column(name="lastName", nullable = false, length = 20)
 	private String lastName;
 
-	@Column(name="phone_number", nullable = false, length = 15)
+	@Column(name="phoneNumber", nullable = false, length = 15)
 	private String phoneNumber;
 
 	@Column(name="email", nullable = true, length = 50)
@@ -50,10 +50,10 @@ public class Order {
 	@Column(name="status", nullable = false)
 	private short status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 	public Order() {

@@ -21,18 +21,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="order_item")
+@Table(name="orderItem")
 public class OrderItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="product_id")
+	@JoinColumn(name="productId")
 	private Product product;
 	
 	@ManyToOne
-	@JoinColumn(name="order_id")
+	@JoinColumn(name="orderId")
 	private Order order;
 	
 //-----------------------------------------------
@@ -40,6 +40,6 @@ public class OrderItem {
 	@Column(name="quantity", nullable = false)
 	private int quantity;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 }

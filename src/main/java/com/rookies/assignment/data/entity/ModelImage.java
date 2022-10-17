@@ -19,19 +19,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="model_image")
+@Table(name="modelImage")
 public class ModelImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "product_model_id")
+	@JoinColumn(name = "productModelId")
 	private ProductModel model;
 	
 	
 //	----------------------------------------------------------
-	@Column(name="url_image", nullable = false, length = 150)
+	@Column(name="urlImage", nullable = false, length = 150)
 	private String urlImage;
 	
 	

@@ -32,10 +32,10 @@ public class Size {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 }

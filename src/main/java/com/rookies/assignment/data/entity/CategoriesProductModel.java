@@ -21,18 +21,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="categories_product_model")
+@Table(name="categoriesProductModel")
 public class CategoriesProductModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@ManyToOne
-	@JoinColumn(name="categories_id")
+	@JoinColumn(name="categoriesId")
 	private Categories categories;
 	
 	@ManyToOne
-	@JoinColumn(name="product_model_id")
+	@JoinColumn(name="productModelId")
 	private ProductModel model;
 	
 	
@@ -40,10 +40,10 @@ public class CategoriesProductModel {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 }

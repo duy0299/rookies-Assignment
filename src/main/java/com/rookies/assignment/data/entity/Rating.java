@@ -26,11 +26,11 @@ public class Rating {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="product_model_id")
+	@JoinColumn(name="productModelId")
 	private ProductModel model;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "userId")
 	private UserInfo userInfo;
 	
 	
@@ -44,9 +44,9 @@ public class Rating {
 	@Column(name="status", nullable = false)
 	private short status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 }

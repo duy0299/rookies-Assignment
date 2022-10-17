@@ -24,15 +24,15 @@ public class Categories {
 	
 	@ManyToMany
 	@JoinTable(
-			name = "categories_product_model",
-			joinColumns = @JoinColumn(name = "categories_id"),
-			inverseJoinColumns = @JoinColumn(name = "product_model_id"))
+			name = "categoriesProductModel",
+			joinColumns = @JoinColumn(name = "categoriesId"),
+			inverseJoinColumns = @JoinColumn(name = "productModelId"))
 	private List<ProductModel> listModel;
 	
 	
 //	------------------------------------------------------
 // parent of categories
-	@Column(name="parent_categories_id", nullable = true)
+	@Column(name="parentCategoriesId", nullable = true)
 	private int parentCategoriesId;
 	
 	@Column(name="name", nullable = false, length = 50)
@@ -44,10 +44,10 @@ public class Categories {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 	

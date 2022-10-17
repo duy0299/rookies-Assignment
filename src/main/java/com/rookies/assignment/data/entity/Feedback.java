@@ -26,7 +26,7 @@ public class Feedback {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "userId")
 	private UserInfo userInfo;
 	
 	
@@ -38,9 +38,9 @@ public class Feedback {
 	@Column(name="status", nullable = false)
 	private short status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 }

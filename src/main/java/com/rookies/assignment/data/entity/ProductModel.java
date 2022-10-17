@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name="product_model")
+@Table(name="productModel")
 public class ProductModel {
 	
 	@Id
@@ -51,7 +51,7 @@ public class ProductModel {
 	@Column(name="name", nullable = false, length = 50)
 	private String name;
 	
-	@Column(name="price_root", nullable = false, columnDefinition = "Decimal(10,2)")
+	@Column(name="priceRoot", nullable = false, columnDefinition = "Decimal(10,2)")
 	private BigDecimal priceRoot;
 	
 	@Column(name="description", nullable = false, length = 200)
@@ -60,10 +60,10 @@ public class ProductModel {
 	@Column(name="status", nullable = false)
 	private boolean status;
 
-	@Column(name="time_create")
+	@Column(name="timeCreate")
 	private Timestamp timeCreate;
 
-	@Column(name="time_update")
+	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
 	
 	
