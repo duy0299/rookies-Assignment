@@ -18,6 +18,12 @@ public class ResponseDto<E> {
         this.result = null;
     }
 
+    public ResponseDto( String message, E result) {
+        this.result = result;
+        this.message = message;
+        this.statusCode = "00";
+    }
+
     public ResponseDto(String message) {
         this.statusCode = "00";
         this.message = message;

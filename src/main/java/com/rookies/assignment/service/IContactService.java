@@ -1,7 +1,7 @@
 package com.rookies.assignment.service;
 
-import java.util.List;
-
+import com.rookies.assignment.dto.request.ContactRequestDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
 import com.rookies.assignment.data.entity.Contact;
@@ -9,7 +9,7 @@ import com.rookies.assignment.data.entity.Contact;
 @Component
 public interface IContactService {
 	
-	public Contact update(int id, Contact contact);
+	public ResponseDto<Contact> update(ContactRequestDto contact);
 	
-	public List<Contact> get();
+	public ResponseDto<Contact> get();
 }
