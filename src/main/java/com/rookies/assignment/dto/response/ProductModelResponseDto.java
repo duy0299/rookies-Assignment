@@ -9,26 +9,26 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A DTO for the {@link com.rookies.assignment.data.entity.ProductModel} entity
- */
+
 @Data
 @NoArgsConstructor
 public class ProductModelResponseDto extends ProductModelDtoFlat {
     private List<ProductResponseDto> listProduct;
     private List<ModelImageDtoFlat> listImages;
     private List<RatingResponseDto> listRatings;
+    private List<CategoriesResponseDto> listCategories;
     private List<WishlistDto> listWishlists;
 
     public ProductModelResponseDto(ProductModel model){
         super(model);
-        listProduct = setlistProduct(model.getListProduct());
-        listImages  = setlistImages(model.getListImages());
-        listRatings = setlistRatings(model.getListRatings());
+        listProduct = setListProduct(model.getListProduct());
+        listImages  = setListImages(model.getListImages());
+        listRatings = setListRatings(model.getListRatings());
+        listCategories = setListCategories(model.getListCategories());
         listWishlists = setWishlists(model.getListWishlists());
     }
 
-    private List<ProductResponseDto> setlistProduct(List<Product> list){
+    private List<ProductResponseDto> setListProduct(List<Product> list){
         List<ProductResponseDto> result = new ArrayList<>();
         for(Product product : list){
             result.add(new ProductResponseDto(product));
@@ -36,7 +36,7 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         return result;
     }
 
-    private List<ModelImageDtoFlat> setlistImages(List<ModelImage> list){
+    private List<ModelImageDtoFlat> setListImages(List<ModelImage> list){
         List<ModelImageDtoFlat> result = new ArrayList<>();
         for(ModelImage image : list){
             result.add(new ModelImageDtoFlat(image));
@@ -44,10 +44,19 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         return result;
     }
 
-    private List<RatingResponseDto> setlistRatings(List<Rating> list){
+    private List<RatingResponseDto> setListRatings(List<Rating> list){
         List<RatingResponseDto> result = new ArrayList<>();
         for(Rating rating : list){
             result.add(new RatingResponseDto(rating));
+        }
+        return result;
+    }
+
+    private List<CategoriesResponseDto> setListCategories(List<Categories> list){
+
+        List<CategoriesResponseDto> result = new ArrayList<>();
+        for(Categories categories : list){
+            result.add(new CategoriesResponseDto(categories));
         }
         return result;
     }

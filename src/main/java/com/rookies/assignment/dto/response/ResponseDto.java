@@ -23,7 +23,11 @@ public class ResponseDto<E> {
         this.message = message;
         this.statusCode = "00";
     }
-
+    public ResponseDto(E result) {
+        this.result = result;
+        this.message = "thành công";
+        this.statusCode = "00";
+    }
     public ResponseDto(String message) {
         this.statusCode = "00";
         this.message = message;

@@ -1,22 +1,28 @@
 package com.rookies.assignment.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import com.rookies.assignment.dto.request.ModelRequestInsertDto;
+import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
+import com.rookies.assignment.dto.response.ProductModelResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
-
-import com.rookies.assignment.data.entity.ProductModel;
 
 @Component
 public interface IProductModelService {
 
-	public ProductModel insert(ProductModel model);
+	public ResponseDto<ProductModelResponseDto> insert(ModelRequestInsertDto model);
 	
-	public ProductModel update(ProductModel model);
-	
-	public void delete(UUID id);
-	
-	public ProductModel getById(UUID id);
+	public ResponseDto<ProductModelResponseDto> update(ModelRequestUpdateDto model);
 
-	public List<ProductModel> listAll();
+	public ResponseDto<ProductModelResponseDto> changeStatusDelete(UUID id);
+	
+	public ResponseDto<ProductModelResponseDto> getById(UUID id);
+
+	public ResponseDto<List<ProductModelResponseDto>> listAll();
+
+	public ResponseDto<List<ProductModelResponseDto>> listByName(String name);
+	public ResponseDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom);
 }

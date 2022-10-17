@@ -26,6 +26,11 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
         listModel = setlistProductModelFlat(categories.getListModel());
     }
 
+    public CategoriesResponseDto(Categories categories){
+        super(categories);
+        listModel = setlistProductModelFlat(categories.getListModel());
+    }
+
     private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list){
         List<ProductModelDtoFlat> result = new ArrayList<>();
         for(ProductModel model : list){

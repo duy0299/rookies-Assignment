@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name="productModel")
 public class ProductModel {
@@ -65,10 +66,5 @@ public class ProductModel {
 
 	@Column(name="timeUpdate")
 	private Timestamp timeUpdate;
-	
-	
-	
-	public ProductModel() {
-		super();
-	}
+
 }
