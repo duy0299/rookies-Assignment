@@ -9,5 +9,6 @@ import com.rookies.assignment.data.entity.Size;
 
 @Repository
 public interface ISizeRepository  extends JpaRepository<Size, Integer>{
+    public Size findByName(String name);
 
 }
