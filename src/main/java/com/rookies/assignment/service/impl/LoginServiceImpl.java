@@ -1,9 +1,12 @@
-package com.rookies.assignment.service.impl;
+package com.rookies.assignment.dto.response.impl;
 
+import com.rookies.assignment.data.entity.Role;
 import com.rookies.assignment.data.entity.UserInfo;
+import com.rookies.assignment.data.repository.IRoleRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
+import com.rookies.assignment.dto.CreateImage;
 import com.rookies.assignment.dto.request.LoginRequestDto;
-import com.rookies.assignment.dto.request.UserRegisterRequestDto;
+import com.rookies.assignment.dto.request.RegisterRequestDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import com.rookies.assignment.exceptions.ResourceFoundException;
@@ -22,6 +25,9 @@ public class LoginServiceImpl implements ILoginService {
     @Autowired
     private IUserInfoRepository repository;
 
+    @Autowired
+    private IRoleRepository roleRepository;
+
     @Override
     public ResponseDto<UserInfoResponseDto> login(LoginRequestDto dto, HttpServletRequest req) {
         Optional<UserInfo> user = Optional.ofNullable(repository.findByEmailAndPassword(dto.getEmail(), dto.getPassword()));
@@ -35,16 +41,13 @@ public class LoginServiceImpl implements ILoginService {
     }
 
     @Override
-    public ResponseDto<String> logout(HttpServletRequest req) {
+    public ResponseDto<UserInfoResponseDto> logout(HttpServletRequest req) {
         req.getSession().setAttribute("login",null);
-        return new ResponseDto<String>("thành công");
+        return new ResponseDto<UserInfoResponseDto>("thành công");
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> register(UserRegisterRequestDto dto, HttpServletRequest req) {
-        Date dateNow = new Date();
-        Timestamp now = new Timestamp(dateNow.getTime());
-
+    public ResponseDto<UserInfoResponseDto> register(RegisterRequestDto dto, HttpServletRequest req) {
         //  check empty
         if(dto.getFirstName().trim().equals("") || dto.getLastName().trim().equals("") || dto.getPhoneNumber().trim().equals("") ||
                 dto.getEmail().trim().equals("") || dto.getPassword().trim().equals("") || dto.getPasswordConfirmation().trim().equals("")) {
@@ -66,10 +69,17 @@ public class LoginServiceImpl implements ILoginService {
         if(!user.isEmpty()){
             throw new ResourceFoundException("Email này đã tồn tại");
         }
+//      get role user
+        Role role = roleRepository.findByLevel((short) 2);
 
-//        Create UserInfo
+//      create new user
+        UserInfo newUser = dto.changeToUserInfo(role);
+
+//       save UserInfo
+        repository.save(newUser);
+
         ResponseDto<UserInfoResponseDto> result = new ResponseDto<UserInfoResponseDto>("00","thành công",
-                new UserInfoResponseDto(user.get()));
+                new UserInfoResponseDto(newUser));
         req.getSession().setAttribute("login",result);
         return result;
     }

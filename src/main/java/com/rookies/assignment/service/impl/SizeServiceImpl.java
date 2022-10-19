@@ -1,4 +1,4 @@
-package com.rookies.assignment.service.impl;
+package com.rookies.assignment.dto.response.impl;
 
 import com.rookies.assignment.data.entity.Size;
 import com.rookies.assignment.data.repository.ISizeRepository;

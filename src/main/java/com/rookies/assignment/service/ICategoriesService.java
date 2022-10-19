@@ -1,22 +1,22 @@
 package com.rookies.assignment.service;
 
 import java.util.List;
-import java.util.UUID;
 
+import com.rookies.assignment.dto.flat.CategoriesDtoFlat;
+import com.rookies.assignment.dto.response.CategoriesResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
-
-import com.rookies.assignment.data.entity.Categories;
 
 @Component
 public interface ICategoriesService {
 
-	public Categories insert(Categories categories);
+	public ResponseDto<CategoriesResponseDto> insert(CategoriesDtoFlat dto);
 	
-	public Categories update(Categories categories);
+	public ResponseDto<CategoriesResponseDto> update(CategoriesDtoFlat dto);
 	
-	public void delete(UUID id);
+	public ResponseDto<CategoriesResponseDto> delete(int id);
 	
-	public Categories getById(UUID id);
+	public ResponseDto<CategoriesResponseDto> getById(int id);
 
-	public List<Categories> listAll();
+	public ResponseDto<List<CategoriesResponseDto>> listAll();
 }

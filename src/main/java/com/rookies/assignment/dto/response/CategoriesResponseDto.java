@@ -1,6 +1,7 @@
 package com.rookies.assignment.dto.response;
 
 import com.rookies.assignment.dto.flat.CategoriesDtoFlat;
+import com.rookies.assignment.dto.flat.FeedbackDtoFlat;
 import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import com.rookies.assignment.data.entity.Categories;
 import com.rookies.assignment.data.entity.ProductModel;
@@ -18,11 +19,11 @@ import java.util.List;
 public class CategoriesResponseDto extends CategoriesDtoFlat {
 
     private List<ProductModelDtoFlat> listModel;
-    private CategoriesDtoFlat parentCategories;
+    private CategoriesDtoFlat childrenCategories;
 
-    public CategoriesResponseDto(Categories categories, Categories parent){
+    public CategoriesResponseDto(Categories categories, Categories children){
         super(categories);
-        parentCategories = new CategoriesDtoFlat(parent);
+        childrenCategories = new CategoriesDtoFlat(children);
         listModel = setlistProductModelFlat(categories.getListModel());
     }
 
@@ -33,9 +34,13 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
 
     private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list){
         List<ProductModelDtoFlat> result = new ArrayList<>();
+        if (list == null) {
+            return result;
+        }
         for(ProductModel model : list){
             result.add(new ProductModelDtoFlat(model));
         }
         return result;
     }
+
 }
