@@ -2,6 +2,9 @@ package com.rookies.assignment.service;
 
 import java.util.List;
 
+import com.rookies.assignment.dto.request.WishlistRequestDto;
+import com.rookies.assignment.dto.response.ResponseDto;
+import com.rookies.assignment.dto.response.WishlistResponseDto;
 import org.springframework.stereotype.Component;
 
 import com.rookies.assignment.data.entity.Wishlist;
@@ -9,13 +12,13 @@ import com.rookies.assignment.data.entity.Wishlist;
 @Component
 public interface IWishlistService {
 
-	public Wishlist insert(Wishlist wishlist);
+	public ResponseDto<WishlistResponseDto> insert(WishlistRequestDto dto);
 	
-	public Wishlist update(Wishlist Wishlist);
+	public ResponseDto<WishlistResponseDto> updateStatus(WishlistRequestDto dto);
 	
-	public void delete(Integer id);
+	public ResponseDto delete(Integer id);
 	
-	public Wishlist getById(Integer id);
+	public ResponseDto<WishlistResponseDto> getById(Integer id);
 
-	public List<Wishlist> listAll();
+	public ResponseDto<List<WishlistResponseDto>> listAll();
 }

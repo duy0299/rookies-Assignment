@@ -1,7 +1,7 @@
 package com.rookies.assignment.controller;
 
 import com.rookies.assignment.dto.request.LoginRequestDto;
-import com.rookies.assignment.dto.request.UserRegisterRequestDto;
+import com.rookies.assignment.dto.request.RegisterRequestDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.impl.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +15,22 @@ public class LoginController {
     @Autowired
     private LoginServiceImpl service;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     @ResponseBody
     public ResponseDto login(@RequestBody LoginRequestDto dto, HttpServletRequest req){
 
         return service.login(dto, req);
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @ResponseBody
     public ResponseDto logout(HttpServletRequest req){
         return service.logout(req);
     }
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     @ResponseBody
-    public ResponseDto register(@RequestBody UserRegisterRequestDto dto, HttpServletRequest req){
+    public ResponseDto register(@RequestBody RegisterRequestDto dto, HttpServletRequest req){
         return service.register(dto, req);
     }
 

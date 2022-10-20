@@ -26,7 +26,7 @@ public class Wishlist {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name="productModelid")
+	@JoinColumn(name="productModelId")
 	private ProductModel model;
 	
 	@ManyToOne
