@@ -31,6 +31,9 @@ public class UserInfo {
 	
 	@OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
 	private List<Wishlist> listWishlists;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Order> listOrder;
 	
 	@ManyToMany
 	@JoinTable(
