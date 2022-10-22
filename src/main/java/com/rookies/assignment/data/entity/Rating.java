@@ -36,7 +36,7 @@ public class Rating {
 	
 //	---------------------------------------------------------
 	@Column(name="content", nullable = true, length = 200)
-	private int content;
+	private String content;
 
 	@Column(name="rating", nullable = false)
 	private int rating;

@@ -3,6 +3,9 @@ package com.rookies.assignment.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.rookies.assignment.dto.request.RatingRequestDto;
+import com.rookies.assignment.dto.response.RatingResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
 import com.rookies.assignment.data.entity.Rating;
@@ -10,15 +13,16 @@ import com.rookies.assignment.data.entity.Rating;
 @Component
 public interface IRatingService {
 
-	public Rating insert(Rating rating);
-	
-	public Rating update(Rating rating);
-	
-	public void delete(Integer id);
-	
-	public Rating getById(Integer id);
+	public ResponseDto<RatingResponseDto> insert(RatingRequestDto dto);
 
-	public List<Rating> listAll();
+	public ResponseDto<RatingResponseDto> update(RatingRequestDto dto);
+
+	public ResponseDto<RatingResponseDto> updateStatus(RatingRequestDto dto);
 	
-	public List<Rating> listByProductModel(UUID productModelId);
+//	public ResponseDto delete(Integer id);
+	
+	public ResponseDto<RatingResponseDto> getById(Integer id);
+
+	public ResponseDto<List<RatingResponseDto>>  listAll();
+
 }
