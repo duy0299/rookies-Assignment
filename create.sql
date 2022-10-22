@@ -37,7 +37,7 @@
 
     create table feedback (
        id  serial not null,
-        content int4,
+        content varchar(200),
         status int2 not null,
         time_create timestamp,
         time_update timestamp,
@@ -52,20 +52,6 @@
         primary key (id)
     );
 
-    create table "order" (
-       id uuid not null,
-        address varchar(100) not null,
-        email varchar(50),
-        first_name varchar(20) not null,
-        last_name varchar(20) not null,
-        note varchar(100) not null,
-        phone_number varchar(15) not null,
-        status int2 not null,
-        time_create timestamp,
-        time_update timestamp,
-        primary key (id)
-    );
-
     create table order_item (
        id  serial not null,
         quantity int4 not null,
@@ -77,7 +63,7 @@
 
     create table product (
        id uuid not null,
-        avatar varchar(50),
+        avatar varchar(150),
         name varchar(50) not null,
         price_sale Decimal(10,2) default 0 not null,
         quantity int4 not null,
@@ -104,7 +90,7 @@
 
     create table rating (
        id  serial not null,
-        content int4,
+        content varchar(200),
         rating int4 not null,
         status int2 not null,
         time_create timestamp,
@@ -114,7 +100,7 @@
         primary key (id)
     );
 
-    create table "role" (
+    create table role (
        id uuid not null,
         description varchar(200),
         level int2 not null,
@@ -123,7 +109,18 @@
         primary key (id)
     );
 
-    create table "size" (
+    create table tborder (
+       id uuid not null,
+        address varchar(100) not null,
+        note varchar(100) not null,
+        status int2 not null,
+        time_create timestamp,
+        time_update timestamp,
+        user_id uuid,
+        primary key (id)
+    );
+
+    create table tbsize (
        id  serial not null,
         name varchar(50) not null,
         status boolean not null,
@@ -159,10 +156,13 @@
         status boolean not null,
         time_create timestamp,
         time_update timestamp,
-        product_modelid uuid,
+        product_model_id uuid,
         user_id uuid,
         primary key (id)
     );
+
+    alter table user_info 
+       add constraint UK_gnu0k8vv6ptioedbxbfsnan9g unique (email);
 
     alter table categories_product_model 
        add constraint FKkchw5m5319iymybgkyq9f591q 
@@ -185,9 +185,9 @@
        references product_model;
 
     alter table order_item 
-       add constraint FKt6wv8m7eshksp5kp8w4b2d1dm 
+       add constraint FKpn6138u6hgfa3s9w3qymh7l2q 
        foreign key (order_id) 
-       references order;
+       references tborder;
 
     alter table order_item 
        add constraint FK551losx9j75ss5d6bfsqvijna 
@@ -200,9 +200,9 @@
        references product_model;
 
     alter table product 
-       add constraint FKsccbu8jiglqc6t5tjsp04amv7 
+       add constraint FK6gr8lmi0ucqnne4lh6l36ndmk 
        foreign key (size_id) 
-       references "size";
+       references tbsize;
 
     alter table rating 
        add constraint FKaeyym7u4he52usn16cn1fy1qe 
@@ -214,10 +214,15 @@
        foreign key (user_id) 
        references user_info;
 
+    alter table tborder 
+       add constraint FK2wg5pjldaplupa6begnan8swg 
+       foreign key (user_id) 
+       references user_info;
+
     alter table user_role 
        add constraint FKa68196081fvovjhkek5m97n3y 
        foreign key (role_id) 
-       references "role";
+       references role;
 
     alter table user_role 
        add constraint FKm90yi1ak9h9tbct25k3km0hia 
@@ -225,11 +230,21 @@
        references user_info;
 
     alter table wishlist 
-       add constraint FKqhoc8o333aqqqp2u6rrw2ikba 
-       foreign key (product_modelid) 
+       add constraint FKblwpecunsx1a18eafvgm27w0e 
+       foreign key (product_model_id) 
        references product_model;
 
     alter table wishlist 
        add constraint FKbrbunxhtojin0ona9ui421o0r 
        foreign key (user_id) 
        references user_info;
+
+INSERT INTO public."role" (id,description,"level",name,status) VALUES
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd0','Temporarily lock your account',0,'Ban',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd1','Admin',1,'Admin',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd2','User',2,'User',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd3','Ban Comment',3,'Ban Comment',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd4','Feedback Manager',4,'Feedback Manager',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd5','Order Manager',5,'Order Manager',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd6','Warehouse Manager',6,'Warehouse Manager',1),
+ ('0710a5ca-f57e-11e9-802a-5aa538984bd7','User Manager',7,'User Manager',1);
