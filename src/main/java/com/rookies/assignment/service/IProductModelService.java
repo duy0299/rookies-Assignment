@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.rookies.assignment.dto.request.ModelRequestInsertDto;
 import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
+import com.rookies.assignment.dto.request.ModelRequestUpdateImageDto;
 import com.rookies.assignment.dto.response.ProductModelResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,9 @@ public interface IProductModelService {
 	
 	public ResponseDto<ProductModelResponseDto> update(ModelRequestUpdateDto model);
 
-	public ResponseDto<ProductModelResponseDto> changeStatusDelete(UUID id);
+	public ResponseDto<ProductModelResponseDto> updateImage(ModelRequestUpdateImageDto dto);
+
+	public ResponseDto<ProductModelResponseDto> updateStatus(UUID id);
 	
 	public ResponseDto<ProductModelResponseDto> getById(UUID id);
 

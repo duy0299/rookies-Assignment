@@ -30,7 +30,7 @@ public class ProductResponseDto extends ProductDtoFlat {
 
         product.setId(getId());
         product.setSize(size.changeToSize());
-        product.setModel(model.changeToProductModel());
+        product.setModel(model.changeToProductModelFlat());
         product.setName(getName());
         product.setAvatar(getAvatar());
         product.setSaleType(getSaleType());

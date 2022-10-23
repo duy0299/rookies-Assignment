@@ -9,6 +9,7 @@ import com.rookies.assignment.data.repository.IProductRepository;
 import com.rookies.assignment.data.repository.ISizeRepository;
 import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
+import com.rookies.assignment.exceptions.ParamNotValidException;
 import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.response.ProductResponseDto;
@@ -46,16 +47,14 @@ public class ProductServiceImpl implements IProductService {
         String urlAvatar = "";
         Optional<ProductModel> modelOptional = modelRepository.findById(dto.getModelID());
         Optional<Size> sizeOptional = sizeRepository.findById(dto.getSizeID());
-
+//      Validate
         validateInsert(modelOptional, sizeOptional, dto);
-
 //      up file image to Amazon s3
         try {
             urlAvatar     = amazonClient.uploadFile(dto.getFileAvatar(), folderName);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-
 //      create Product Entity
         Product newProduct =  repository.save(
                 dto.changeToProduct(sizeOptional.get(), modelOptional.get(), urlAvatar )
@@ -159,7 +158,9 @@ public class ProductServiceImpl implements IProductService {
 
 
     public void validateInsert(Optional<ProductModel> modelOptional, Optional<Size> sizeOptional, ProductRequestInsertDto dto){
-
+        if(dto.getModelID().equals("")){
+            throw new ParamNotValidException("ModelID bị rỗng");
+        }
         if(modelOptional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy Mẫu Trang Sức để gán Trang Sức vào");
         }
@@ -175,7 +176,7 @@ public class ProductServiceImpl implements IProductService {
         }
 
         //      check Sale type  với price sale
-        dto.isPriceSale(modelOptional.get().getPriceRoot());
+        dto.checkPriceSale(modelOptional.get().getPriceRoot());
 
     }
 

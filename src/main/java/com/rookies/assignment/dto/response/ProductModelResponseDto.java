@@ -6,6 +6,7 @@ import com.rookies.assignment.data.entity.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
     private List<ModelImageDtoFlat> listImages;
     private List<RatingResponseDto> listRatings;
     private List<CategoriesResponseDto> listCategories;
-    private List<WishlistDto> listWishlists;
+    private List<WishlistResponseDto> listWishlists;
+    private BigDecimal priceTo, priceFrom;
 
     public ProductModelResponseDto(ProductModel model){
         super(model);
@@ -26,6 +28,28 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         listRatings = setListRatings(model.getListRatings());
         listCategories = setListCategories(model.getListCategories());
         listWishlists = setWishlists(model.getListWishlists());
+        priceTo  = setPriceTo(listProduct);
+        priceFrom = setPriceFrom(listProduct);
+    }
+
+    public BigDecimal setPriceFrom(List<ProductResponseDto> list){
+        BigDecimal min = new BigDecimal(0);
+        for (ProductResponseDto dto: list) {
+            if (dto.getCurrentPrice().compareTo(min) == -1){
+                min = dto.getCurrentPrice();
+            }
+        }
+        return min;
+    }
+
+    public BigDecimal setPriceTo(List<ProductResponseDto> list){
+        BigDecimal max = new BigDecimal(0);
+        for (ProductResponseDto dto: list) {
+            if (dto.getCurrentPrice().compareTo(max) == 1){
+                max = dto.getCurrentPrice();
+            }
+        }
+        return max;
     }
 
     private List<ProductResponseDto> setListProduct(List<Product> list){
@@ -61,10 +85,10 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         return result;
     }
 
-    private List<WishlistDto> setWishlists(List<Wishlist> list){
-        List<WishlistDto> result = new ArrayList<>();
+    private List<WishlistResponseDto> setWishlists(List<Wishlist> list){
+        List<WishlistResponseDto> result = new ArrayList<>();
         for(Wishlist wishlist : list){
-            result.add(new WishlistDto(wishlist));
+            result.add(new WishlistResponseDto(wishlist));
         }
         return result;
     }
