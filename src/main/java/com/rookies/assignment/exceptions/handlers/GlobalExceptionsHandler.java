@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.constraints.Null;
+import java.io.IOException;
 
 @ControllerAdvice
 public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
@@ -73,9 +74,15 @@ public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({NullPointerException.class})
-    protected ResponseEntity NullPointerExceptionException(RuntimeException exception) {
+    protected ResponseEntity handleNullPointerException(RuntimeException exception) {
         ResponseDto error = new ResponseDto("498", exception.getMessage(), "NullPointerException");
         return new ResponseEntity<ResponseDto>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({IOException.class})
+    protected ResponseEntity handleIOException(RuntimeException exception) {
+        ResponseDto error = new ResponseDto("497", exception.getMessage(), "IOException");
+        return new ResponseEntity<ResponseDto>(error, HttpStatus.NOT_MODIFIED);
     }
 
     public GlobalExceptionsHandler() {

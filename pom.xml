@@ -65,6 +65,12 @@
 			<version>2.0.1.Final</version>
 		</dependency>
 
+<!--	amazonaws cloud storages	-->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.11.133</version>
+		</dependency>
 
 	</dependencies>
 
