@@ -1,0 +1,91 @@
+package com.rookies.assignment.controller;
+
+import com.rookies.assignment.dto.request.ProductRequestInsertDto;
+import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
+import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
+import com.rookies.assignment.dto.response.ProductResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
+import com.rookies.assignment.service.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping(value = "/product")
+public class ProductController {
+    @Autowired
+    private IProductService service;
+
+    @GetMapping(value = "")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> get(@RequestParam(name = "id", required = true) UUID id){
+        return service.getById(id);
+    }
+
+    @GetMapping(value = "/all")
+    @ResponseBody
+    public ResponseDto<List<ProductResponseDto>> all(){
+        return service.listAll();
+    }
+
+    @PostMapping(value = "")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> insert( @RequestParam(name="sizeID")int sizeID,      @RequestParam(name="modelID")UUID modelID,
+                                                   @RequestParam(name="name")String name,       @RequestParam(name="saleType")String saleType,
+                                                   @RequestParam(name="quantity")int quantity,  @RequestParam(name="fileAvatar" )MultipartFile fileAvatar,
+                                                   @RequestParam(name="priceSale") BigDecimal priceSale ){
+        ProductRequestInsertDto dto = new ProductRequestInsertDto();
+        dto.setName(name);
+        dto.setQuantity(quantity);
+        dto.setSizeID(sizeID);
+        dto.setModelID(modelID);
+        dto.setSaleType(saleType);
+        dto.setPriceSale(priceSale);
+        dto.setFileAvatar(fileAvatar);
+        return service.insert(dto);
+    }
+
+    @PutMapping(value = "")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> updateNoAvatar( @RequestParam(name="sizeID")int sizeID,      @RequestParam(name="modelID")UUID modelID,
+                                                           @RequestParam(name="name")String name,       @RequestParam(name="saleType")String saleType,
+                                                           @RequestParam(name="quantity")int quantity,  @RequestParam(name="productID" )UUID productID,
+                                                           @RequestParam(name="priceSale") BigDecimal priceSale ){
+        ProductRequestUpdateDto dto = new ProductRequestUpdateDto();
+        dto.setId(productID);
+        dto.setName(name);
+        dto.setQuantity(quantity);
+        dto.setSizeID(sizeID);
+        dto.setModelID(modelID);
+        dto.setSaleType(saleType);
+        dto.setPriceSale(priceSale);
+        return service.update(dto);
+    }
+
+    @PutMapping(value = "/avatar")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> updateAvatar( @RequestParam(name="productID" )UUID productID,
+                                                         @RequestParam(name="fileAvatar")MultipartFile fileAvatar ){
+        ProductRequestUpdateAvatarDto dto = new ProductRequestUpdateAvatarDto();
+        dto.setProductID(productID);
+        dto.setFileAvatar(fileAvatar);
+        return service.updateAvatar(dto);
+    }
+
+    @PutMapping(value = "/status")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> updateStatus( @RequestParam(name="productID" )UUID productID){
+
+        return service.updateStatus(productID);
+    }
+
+    @DeleteMapping(value = "")
+    @ResponseBody
+    public ResponseDto<ProductResponseDto> delete(@RequestParam(name = "id", required = true) UUID id){
+        return service.delete(id);
+    }
+}

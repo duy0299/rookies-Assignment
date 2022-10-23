@@ -50,7 +50,7 @@ public class Product {
 	@Column(name="name", nullable = false, length = 50)
 	private String name;
 
-	@Column(name="avatar", length = 50)
+	@Column(name="avatar", length = 150)
 	private String avatar;
 
 	@Column(name="saleType", nullable = false, length = 15)

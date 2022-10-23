@@ -3,23 +3,28 @@ package com.rookies.assignment.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.rookies.assignment.dto.request.ProductRequestInsertDto;
+import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
+import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
+import com.rookies.assignment.dto.response.ProductResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
-
-import com.rookies.assignment.data.entity.Product;
 
 @Component
 public interface IProductService {
 
-	public Product insert(Product product);
+//	insert a list Product with the same ProductModel
+	public ResponseDto<ProductResponseDto>  insert(ProductRequestInsertDto listDto);
 	
-	public Product update(Product product);
-	
-	public void delete(UUID id);
-	
-	public Product getById(UUID id);
+	public ResponseDto<ProductResponseDto>  update(ProductRequestUpdateDto dto);
 
-	public List<Product> listAll();
+	public ResponseDto<ProductResponseDto> updateAvatar(ProductRequestUpdateAvatarDto dto);
+
+	public ResponseDto<ProductResponseDto> updateStatus(UUID productID);
+
+	public ResponseDto<ProductResponseDto> delete(UUID id);
 	
-	public List<Product> listByProductModel(UUID productModelId);
-	
+	public ResponseDto<ProductResponseDto> getById(UUID id);
+
+	public ResponseDto<List<ProductResponseDto>> listAll();
 }
