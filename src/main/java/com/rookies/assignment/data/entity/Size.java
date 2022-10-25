@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="size")
+@Table(name="tbsize")
 public class Size {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

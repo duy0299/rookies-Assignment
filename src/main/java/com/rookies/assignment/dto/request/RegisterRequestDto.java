@@ -15,13 +15,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestRegisterDto {
+public class RegisterRequestDto {
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String gender;
     private String email;
-    private String avatar;
     private String password;
     private String passwordConfirmation;
 
@@ -34,6 +33,7 @@ public class UserRequestRegisterDto {
         listRole.add(role);
 
         boolean isGender = true;
+
         if(gender.equals("female")){
             isGender = false;
         }
@@ -44,7 +44,7 @@ public class UserRequestRegisterDto {
         user.setPhoneNumber(phoneNumber);
         user.setGender(isGender);
         user.setEmail(email);
-        user.setAvatar(avatar);
+        user.setAvatar("https://assignment-rookies.s3.ap-southeast-1.amazonaws.com/user/1666602080493-avatarDefault.jpg");
         user.setPassword(password);
         user.setTimeCreate(now);
         user.setTimeUpdate(now);

@@ -4,16 +4,19 @@ import com.rookies.assignment.data.entity.Feedback;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
-/**
- * A DTO for the {@link com.rookies.assignment.data.entity.Feedback} entity
- */
 @Data
 @NoArgsConstructor
 public class FeedbackDtoFlat{
     private  int id;
-    private  int content;
+    @NotEmpty
+    @NotNull
+    @Size(min = 1,  max = 200)
+    private  String content;
     private  short status;
     private  Timestamp timeCreate;
     private  Timestamp timeUpdate;

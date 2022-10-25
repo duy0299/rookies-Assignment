@@ -60,10 +60,10 @@ public class UserInfo {
 	@Column(name="email", nullable = false, length = 50, unique=true)
 	private String email;
 
-	@Column(name="avatar", nullable = true, length = 35)
+	@Column(name="avatar", nullable = true, length = 150)
 	private String avatar;
 
-	@Column(name="password", nullable = false, length = 30)
+	@Column(name="password", nullable = false, length = 250)
 	private String password;
 
 	@Column(name="status", nullable = false)

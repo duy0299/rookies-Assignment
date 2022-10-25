@@ -16,7 +16,7 @@ public class WishlistResponseDto extends WishlistDtoFlat {
 
     public WishlistResponseDto(Wishlist wishlist){
         super(wishlist);
-        model = new ProductModelResponseDto(wishlist.getModel());
-        userInfo = new UserInfoResponseDto(wishlist.getUserInfo());
+        model = new ProductModelDtoFlat(wishlist.getModel());
+        userInfo = new UserInfoDtoFlat(wishlist.getUserInfo());
     }
 }

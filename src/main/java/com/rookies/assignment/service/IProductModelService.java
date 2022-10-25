@@ -20,7 +20,9 @@ public interface IProductModelService {
 
 	public ResponseDto<ProductModelResponseDto> updateImage(ModelRequestUpdateImageDto dto);
 
-	public ResponseDto<ProductModelResponseDto> updateStatus(UUID id);
+	public ResponseDto<ProductModelResponseDto> updateStatus(UUID id, boolean status);
+
+	public ResponseDto<ProductModelResponseDto> delete(UUID id);
 	
 	public ResponseDto<ProductModelResponseDto> getById(UUID id);
 

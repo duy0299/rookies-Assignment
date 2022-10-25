@@ -3,22 +3,28 @@ package com.rookies.assignment.service;
 import java.util.List;
 import java.util.UUID;
 
+import com.rookies.assignment.dto.request.OrderRequestDto;
+import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
+import com.rookies.assignment.dto.response.OrderResponseDto;
+import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
 import com.rookies.assignment.data.entity.Order;
 
+import javax.servlet.http.HttpSession;
+
 @Component
 public interface IOrderService {
 
-	public Order insert(Order order);
+	public ResponseDto<OrderResponseDto> insert(OrderRequestDto order, HttpSession session);
 	
-	public Order update(Order order);
+	public ResponseDto<OrderResponseDto> updateStatus(OrderRequestUpdateDto order);
 	
-	public void delete(UUID id);
+	public ResponseDto<OrderResponseDto> delete(UUID id);
 	
-	public Order getById(UUID id);
+	public ResponseDto<OrderResponseDto> getById(UUID id);
 
-	public List<Order> listAll();
+	public ResponseDto<List<OrderResponseDto>> listAll();
 	
 	
 }

@@ -17,19 +17,14 @@ public class WishlistRequestDto extends WishlistDtoFlat {
     private UUID modelId;
     private UUID user_id;
 
-    public Wishlist changeToWishlistInsert(){
+    public Wishlist changeToWishlistInsert(UserInfo userInfo, ProductModel model){
         Wishlist wishlist = new Wishlist();
-        UserInfo userInfo = new UserInfo();
-        ProductModel model = new ProductModel();
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        userInfo.setId(user_id);
-        model.setId(modelId);
-
         wishlist.setUserInfo(userInfo);
-        wishlist.setModel(model);
         wishlist.setStatus(true);
+        wishlist.setModel(model);
         wishlist.setTimeCreate(now);
         wishlist.setTimeUpdate(now);
         return wishlist;
@@ -40,6 +35,7 @@ public class WishlistRequestDto extends WishlistDtoFlat {
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
+        wishlist.setId(getId());
         wishlist.setStatus(true);
         wishlist.setTimeUpdate(now);
         return wishlist;

@@ -17,25 +17,24 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/product-model")
 public class ProductModelController {
 
     @Autowired
     private IProductModelService service;
 
-    @GetMapping("")
+    @GetMapping("/product-model")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> get(@RequestParam(name = "id", required = true) UUID id){
         return service.getById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/product-models")
     @ResponseBody
     public ResponseDto<List<ProductModelResponseDto>> listAll(){
         return service.listAll();
     }
 
-    @PostMapping("")
+    @PostMapping("/product-model")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> insert(@RequestParam(name="images")List<MultipartFile> images,
                @RequestParam(name="modelName")String modelName,             @RequestParam(name="priceRoot")BigDecimal priceRoot,
@@ -67,7 +66,7 @@ public class ProductModelController {
     }
 
 
-    @PutMapping("")
+    @PutMapping("/product-model/info")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateInfo( @RequestParam(name="id")UUID id,
                                                             @RequestParam(name="modelName")String modelName, @RequestParam(name="priceRoot")BigDecimal priceRoot,
@@ -81,7 +80,7 @@ public class ProductModelController {
         return service.update(dto);
     }
 
-    @PutMapping("/images")
+    @PutMapping("/product-model/images")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateImage( @RequestParam(name="id")UUID id, @RequestParam(name="images")List<MultipartFile> images){
         ModelRequestUpdateImageDto dto = new ModelRequestUpdateImageDto();
@@ -90,19 +89,25 @@ public class ProductModelController {
         return service.updateImage(dto);
     }
 
-    @PutMapping("/status")
+    @PutMapping("/product-model/status")
     @ResponseBody
-    public ResponseDto<ProductModelResponseDto> updateStatus( @RequestParam(name="id")UUID id){
-        return service.updateStatus(id);
+    public ResponseDto<ProductModelResponseDto> updateStatus( @RequestParam(name="id")UUID id, @RequestParam(name="status")boolean status){
+        return service.updateStatus(id, status);
     }
 
-    @GetMapping("/search-name")
+    @DeleteMapping("/product-model/status")
+    @ResponseBody
+    public ResponseDto<ProductModelResponseDto> delete( @RequestParam(name="id")UUID id){
+        return service.delete(id);
+    }
+
+    @GetMapping("/product-models/search-name")
     @ResponseBody
     public ResponseDto<List<ProductModelResponseDto>> searchName(@RequestParam(name="search")String name){
         return service.listByName(name);
     }
 
-    @GetMapping("/list-price-range")
+    @GetMapping("/product-models/list-price-range")
     @ResponseBody
     public ResponseDto<List<ProductModelResponseDto>> listByPriceRange(@RequestParam(name="priceFrom")BigDecimal priceFrom, @RequestParam(name="priceTo")BigDecimal priceTo){
         return service.listByPriceRange(priceTo, priceFrom);

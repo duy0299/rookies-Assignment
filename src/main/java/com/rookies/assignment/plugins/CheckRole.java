@@ -6,6 +6,7 @@ import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Component
 public class  CheckRole {
@@ -32,6 +33,17 @@ public class  CheckRole {
             if(role.getLevel() == level1 && role.getLevel() == level2){
                 return true;
             }
+        }
+        return false;
+    }
+
+    public  boolean isUserLogged (UUID userID, HttpSession session){
+        UserInfoResponseDto login = (UserInfoResponseDto) session.getAttribute("login");
+        if(login == null){
+            return false;
+        }
+        if (login.getId().equals(userID)){
+            return true;
         }
         return false;
     }

@@ -9,6 +9,7 @@ import com.rookies.assignment.data.repository.IWishlistRepository;
 import com.rookies.assignment.dto.request.WishlistRequestDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.WishlistResponseDto;
+import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.service.IWishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,19 @@ public class WishlistServiceImpl implements IWishlistService {
     public ResponseDto<WishlistResponseDto> insert(WishlistRequestDto dto) {
         Optional<UserInfo> optionalUser = userRepository.findById(dto.getUser_id());
         Optional<ProductModel> optionalModel = modelRepository.findById(dto.getModelId());
-        Optional<Wishlist> optionalWishlist = Optional.ofNullable(repository.findByProductModelIdAndUserId(dto.getModelId(), dto.getUser_id()));
+        Optional<List<Wishlist>> s = Optional.of(repository.findAll());
+        Optional<Wishlist> optionalWishlist = Optional.ofNullable(repository.findByUserAndMode(dto.getUser_id(), dto.getModelId()));
+
         if(optionalUser.isEmpty() || optionalModel.isEmpty()){
             throw new ResourceFoundException("User hoặc Trang sức không tồn tại");
         }
 //
         if(!optionalWishlist.isEmpty()){
-            throw new ResourceFoundException("Đã thêm vào danh sách yêu thích");
+            throw new RepeatDataException("Đã thêm vào danh sách yêu thích rồi");
         }
+
 //        => SAVE
-        Wishlist newWishlist = repository.save(dto.changeToWishlistInsert());
+        Wishlist newWishlist = repository.save(dto.changeToWishlistInsert(optionalUser.get(), optionalModel.get()));
         return new ResponseDto<>(new WishlistResponseDto(newWishlist));
     }
 

@@ -1,4 +1,4 @@
-package com.rookies.assignment.dto.response.impl;
+package com.rookies.assignment.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class ContactServiceImpl implements IContactService {
 		}
 		int contact_id = contactOld.get().get(0).getId();
 		Long view = contactOld.get().get(0).getViewPage();
-		Contact contactNew = contact.setContact(contact_id, view);
+		Contact contactNew = contact.setContact();
 		contactRepository.save(contactNew);
 		return new ResponseDto<Contact>("thành công", contactNew);
 	}

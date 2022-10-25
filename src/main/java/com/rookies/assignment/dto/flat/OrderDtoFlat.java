@@ -4,6 +4,8 @@ import com.rookies.assignment.data.entity.Order;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -14,10 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderDtoFlat{
     private  UUID id;
-    private  String firstName;
-    private  String lastName;
-    private  String phoneNumber;
-    private  String email;
+    @NotNull
+    @NotEmpty
     private  String address;
     private  String note;
     private  short status;
@@ -26,10 +26,6 @@ public class OrderDtoFlat{
 
     public OrderDtoFlat(Order order){
         id = order.getId();
-        firstName = order.getFirstName();
-        lastName = order.getLastName();
-        phoneNumber = order.getPhoneNumber();
-        email = order.getEmail();
         address = order.getAddress();
         note = order.getNote();
         status = order.getStatus();

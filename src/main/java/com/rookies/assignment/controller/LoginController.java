@@ -18,7 +18,6 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseDto login(@RequestBody LoginRequestDto dto, HttpServletRequest req){
-
         return service.login(dto, req);
     }
 

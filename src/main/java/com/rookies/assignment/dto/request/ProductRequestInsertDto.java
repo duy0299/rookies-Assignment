@@ -25,8 +25,7 @@ public class ProductRequestInsertDto extends ProductDtoFlat {
     @NotNull
     @NotEmpty
     private int sizeID;
-    @NotNull
-    @NotEmpty
+
     private UUID modelID;
 
     @NotNull
@@ -53,7 +52,26 @@ public class ProductRequestInsertDto extends ProductDtoFlat {
         return product;
     }
 
-    public  void isPriceSale(BigDecimal priceRoot){
+    public  Product changeProductToInsertModel(Size size,String urlAvatar){
+        Product product = new Product();
+        Date dateNow = new Date();
+        Timestamp now = new Timestamp(dateNow.getTime());
+
+        product.setSize(size);
+        product.setName(getName());
+        product.setAvatar(urlAvatar);
+        product.setSaleType(getSaleType());
+        product.setPriceSale(getPriceSale());
+        product.setQuantity(getQuantity());
+        product.setSoldProductQuantity(0);
+        product.setStatus(true);
+        product.setTimeCreate(now);
+        product.setTimeUpdate(now);
+
+        return product;
+    }
+
+    public  void checkPriceSale(BigDecimal priceRoot){
         switch (getSaleType().toLowerCase()){
             case "percent":{
                 if(getPriceSale().floatValue() < 0 ||  getPriceSale().floatValue() >= 100){

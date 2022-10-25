@@ -2,22 +2,22 @@ package com.rookies.assignment.service.impl;
 
 import com.rookies.assignment.data.entity.Role;
 import com.rookies.assignment.data.entity.UserInfo;
-import com.rookies.assignment.data.entity.UserRole;
 import com.rookies.assignment.data.repository.IRoleRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
-import com.rookies.assignment.data.repository.IUserRoleRepository;
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import com.rookies.assignment.dto.request.UserRequestDto;
+import com.rookies.assignment.dto.request.UserRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.UserRequestUpdatePasswordDto;
 import com.rookies.assignment.dto.request.UserRequestUpdateRoleDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import com.rookies.assignment.exceptions.ParamNotValidException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private IUserInfoRepository repository;
     @Autowired
     private IRoleRepository roleRepository;
+
+    @Autowired
+    private AmazonClient amazonClient;
+    @Value("${amazonProperties.folderSaveUser}")
+    private String folderName;
 
 //    Update info of User first name, last name, phone, gender
     @Override
@@ -54,16 +59,13 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> updateStatus(UUID id) {
+    public ResponseDto<UserInfoResponseDto> updateStatus(UUID id, boolean status) {
         Optional<UserInfo> optional = repository.findById(id);
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
         }
-        if(optional.get().isStatus()){
-            optional.get().setStatus(false);
-        }else{
-            optional.get().setStatus(true);
-        }
+        optional.get().setStatus(status);
+
         UserInfo modified = repository.save(optional.get());
         return new ResponseDto(modified);
     }
@@ -93,7 +95,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
 
     @Override
     public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto) {
-        Optional<UserInfo> user = repository.findById(dto.getUser_id());
+        Optional<UserInfo> user = repository.findById(dto.getUserID());
         validateUpdatePassword(user, dto);
         user.get().setPassword(dto.getNewPassword());
         repository.save(user.get());
@@ -132,9 +134,27 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> updateAvatar(UUID id, MultipartFile fileAvatar) {
-        return null;
+    public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto) {
+        Optional<UserInfo> user = repository.findById(dto.getUserID());
+        String urlAvatar = "";
+        if(user.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy User này");
+        }
+        //      up file image to Amazon s3
+        try {
+            urlAvatar     = amazonClient.uploadFile(dto.getFileAvatar(), folderName);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+        UserInfo modifiedUser =  repository.save(
+                dto.changeToProduct( user.get(), urlAvatar)
+        );
+        return new ResponseDto<UserInfoResponseDto>(new UserInfoResponseDto(modifiedUser));
     }
+
+
+
 
 
     public void validateUpdate(Optional<UserInfo> optional, UserInfoDtoFlat dto){

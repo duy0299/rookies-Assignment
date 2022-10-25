@@ -14,9 +14,9 @@ public interface ICategoriesService {
 	
 	public ResponseDto<CategoriesResponseDto> update(CategoriesDtoFlat dto);
 	
-	public ResponseDto<CategoriesResponseDto> delete(int id);
+	public ResponseDto<CategoriesResponseDto> delete(Integer id);
 	
-	public ResponseDto<CategoriesResponseDto> getById(int id);
+	public ResponseDto<CategoriesResponseDto> getById(Integer id);
 
 	public ResponseDto<List<CategoriesResponseDto>> listAll();
 }

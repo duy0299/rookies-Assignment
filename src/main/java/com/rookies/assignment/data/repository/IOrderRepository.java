@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.rookies.assignment.data.entity.Order;
 
+import java.util.UUID;
+
 @Repository
-public interface IOrderRepository extends JpaRepository<Order, Integer>{
+public interface IOrderRepository extends JpaRepository<Order, UUID>{
 
 }

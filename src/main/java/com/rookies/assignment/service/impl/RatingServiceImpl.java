@@ -82,14 +82,15 @@ public class RatingServiceImpl implements IRatingService {
         return new ResponseDto<>(new RatingResponseDto(modifiedRating));
     }
 
-//    @Override
-//    public ResponseDto delete(Integer id) {
-//        Optional<Rating> optional = repository.findById(id);
-//        if(optional.isEmpty()){
-//            throw new ResourceFoundException("Không tìm thấy");
-//        }
-//        return new ResponseDto<>(null);
-//    }
+    @Override
+    public ResponseDto delete(Integer id) {
+        Optional<Rating> optional = repository.findById(id);
+        if(optional.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy");
+        }
+        repository.delete(optional.get());
+        return new ResponseDto<>(null);
+    }
 
     @Override
     public ResponseDto<RatingResponseDto> getById(Integer id) {

@@ -11,37 +11,36 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/categories")
 public class CategoriesController {
 
     @Autowired
     private ICategoriesService service;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/category")
     @ResponseBody
     public ResponseDto<CategoriesResponseDto>  get(@RequestParam(name = "id", required = true) int id){
         return service.getById(id);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/categories")
     @ResponseBody
     public ResponseDto<List<CategoriesResponseDto>>  listAll(){
         return service.listAll();
     }
 
-    @DeleteMapping(value = "")
+    @DeleteMapping(value = "/category")
     @ResponseBody
     public ResponseDto<CategoriesResponseDto>  delete(@RequestParam(name = "id", required = true) int id){
         return service.delete(id);
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/category")
     @ResponseBody
     public ResponseDto<CategoriesResponseDto>  insert(@Valid @RequestBody CategoriesDtoFlat dto){
         return service.insert(dto);
     }
 
-    @PutMapping(value = "")
+    @PutMapping(value = "/category")
     @ResponseBody
     public ResponseDto<CategoriesResponseDto>  update(@Valid @RequestBody CategoriesDtoFlat dto){
         return service.update(dto);

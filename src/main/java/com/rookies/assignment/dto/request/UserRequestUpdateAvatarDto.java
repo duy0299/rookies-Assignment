@@ -1,10 +1,11 @@
 package com.rookies.assignment.dto.request;
 
+import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.data.entity.UserInfo;
-import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,35 +13,28 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestUpdatePasswordDto  {
-
-    @NotEmpty
+@AllArgsConstructor
+public class UserRequestUpdateAvatarDto {
     @NotNull
+    @NotEmpty
     private UUID userID;
-    @NotEmpty
-    @NotNull
-    private String password;
-    @NotEmpty
-    @NotNull
-    private String newPassword;
-    @NotEmpty
-    @NotNull
-    private String passwordConfirmation;
 
+    @NotNull
+    @NotEmpty
+    private MultipartFile fileAvatar;
 
-    public UserInfo  changeToUserInfo(UserInfo oldUserInfo){
-        UserInfo user = oldUserInfo;
+    public UserInfo changeToProduct(UserInfo oldUser, String urlAvatar){
+        UserInfo user = oldUser;
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        user.setPassword(newPassword);
+        user.setAvatar(urlAvatar);
         user.setTimeUpdate(now);
-
         return user;
     }
+
+
 
 }

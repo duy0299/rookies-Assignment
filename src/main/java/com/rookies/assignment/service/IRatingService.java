@@ -19,7 +19,7 @@ public interface IRatingService {
 
 	public ResponseDto<RatingResponseDto> updateStatus(RatingRequestDto dto);
 	
-//	public ResponseDto delete(Integer id);
+	public ResponseDto delete(Integer id);
 	
 	public ResponseDto<RatingResponseDto> getById(Integer id);
 

@@ -33,7 +33,7 @@ public class Feedback {
 //	-----------------------------------------------------------
 	
 	@Column(name="content", nullable = true, length = 200)
-	private int content;
+	private String content;
 
 	@Column(name="status", nullable = false)
 	private short status;

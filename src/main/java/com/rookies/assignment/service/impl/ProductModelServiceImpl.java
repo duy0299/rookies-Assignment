@@ -67,6 +67,17 @@ public class ProductModelServiceImpl implements IProductModelService {
     }
 
     @Override
+    public ResponseDto<ProductModelResponseDto> delete(UUID id) {
+        Optional<ProductModel> optional = repository.findById(id);
+        if(optional.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy Mẫu trang sức");
+        }
+
+        repository.delete(optional.get());
+        return new ResponseDto<>(null);
+    }
+
+    @Override
     public ResponseDto<ProductModelResponseDto> updateImage(ModelRequestUpdateImageDto dto) {
         Optional<ProductModel> optional = repository.findById(dto.getId());
         if(optional.isEmpty()){
@@ -79,19 +90,16 @@ public class ProductModelServiceImpl implements IProductModelService {
 
 //    change satatus of this  product model  to false:  hide the product, don't sell anymore.
     @Override
-    public ResponseDto<ProductModelResponseDto> updateStatus(UUID id) {
+    public ResponseDto<ProductModelResponseDto> updateStatus(UUID id, boolean status) {
         Optional<ProductModel> optional = repository.findById(id);
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy Trang Sức");
         }
         ProductModel model = optional.get();
-        if (model.isStatus()) {
-            model.setStatus(false);
-        }else{
-            model.setStatus(true);
-        }
+        model.setStatus(status);
+
         repository.save(model);
-        return new ResponseDto<ProductModelResponseDto>(new ProductModelResponseDto(model));
+        return new ResponseDto<>(new ProductModelResponseDto(model));
     }
 
 //    get a model product by ID

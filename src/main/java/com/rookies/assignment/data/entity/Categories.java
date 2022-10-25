@@ -33,7 +33,7 @@ public class Categories {
 //	------------------------------------------------------
 // parent of categories
 	@Column(name="parentCategoriesId", nullable = true)
-	private int parentCategoriesId;
+	private Integer parentCategoriesId;
 	
 	@Column(name="name", nullable = false, length = 50)
 	private String name;

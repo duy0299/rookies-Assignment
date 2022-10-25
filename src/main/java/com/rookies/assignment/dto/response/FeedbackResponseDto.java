@@ -17,6 +17,8 @@ public class FeedbackResponseDto extends FeedbackDtoFlat {
 
     public FeedbackResponseDto(Feedback feedback) {
         super(feedback);
+
         userInfo = new UserInfoDtoFlat(feedback.getUserInfo());
+
     }
 }

@@ -9,37 +9,36 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/size")
 public class SizeController {
 
     @Autowired
     private SizeServiceImpl service;
 
-    @GetMapping("")
+    @GetMapping("/size")
     @ResponseBody
     public ResponseDto get( @RequestParam(name = "id", required = true) Integer id){
         return service.getById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/sizes")
     @ResponseBody
     public ResponseDto listAll(){
         return service.listAll();
     }
 
-    @PostMapping("")
+    @PostMapping("/size")
     @ResponseBody
     public ResponseDto insert(@Valid @RequestBody SizeDtoFlat dto){
         return service.insert(dto);
     }
 
-    @PutMapping("")
+    @PutMapping("/size")
     @ResponseBody
     public ResponseDto update(@Valid @RequestBody SizeDtoFlat dto){
         return service.update(dto);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/size")
     @ResponseBody
     public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
         return service.delete(id);

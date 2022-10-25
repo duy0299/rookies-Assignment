@@ -8,6 +8,7 @@ import com.rookies.assignment.dto.request.FeedbackRequestDto;
 import com.rookies.assignment.dto.response.FeedbackResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.exceptions.TooManyRequestsException;
 import com.rookies.assignment.service.IFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,14 +32,15 @@ public class FeedbackServiceImpl implements IFeedbackService {
         if(optionalUserInfo.isEmpty()){
             throw new ResourceFoundException("User này không tồn tại");
         }
+
 //        check if the user has submitted feedback today?
-        if(feedback.isFirstFeedbackToday(optionalUserInfo.get().getListFeedbacks())){
-            throw new ResourceFoundException("một ngày mỗi User chỉ gửi được một Thư phản hồi");
+        if(!feedback.isFirstFeedbackToday(optionalUserInfo.get().getListFeedbacks())){
+            throw new TooManyRequestsException("một ngày mỗi User chỉ gửi được một Thư phản hồi");
         }
+
 //      => SAVE
-        Feedback modifiedFeedback = feedback.changeToFeedbackInsert();
-        repository.save(modifiedFeedback);
-        return new ResponseDto<>(new FeedbackResponseDto(modifiedFeedback));
+        Feedback newFeedback = repository.save(feedback.changeToFeedbackInsert());
+        return new ResponseDto<>(new FeedbackResponseDto(newFeedback));
     }
 
     @Override
@@ -47,8 +49,11 @@ public class FeedbackServiceImpl implements IFeedbackService {
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy thư phản hồi này");
         }
-        Feedback modifiedFeedback = feedback.changeToFeedbackUpdateStatus();
+        System.out.println("test 1");
+        Feedback modifiedFeedback = feedback.changeToFeedbackUpdateStatus(optional.get());
+        System.out.println("test 2");
         Feedback newFeedback = repository.save(modifiedFeedback);
+        System.out.println("test A");
         return new ResponseDto<>(new FeedbackResponseDto(newFeedback));
     }
 

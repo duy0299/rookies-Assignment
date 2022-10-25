@@ -15,24 +15,23 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/product")
 public class ProductController {
     @Autowired
     private IProductService service;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/product/{id}")
     @ResponseBody
-    public ResponseDto<ProductResponseDto> get(@RequestParam(name = "id", required = true) UUID id){
+    public ResponseDto<ProductResponseDto> get(@PathVariable("id") UUID id){
         return service.getById(id);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/products")
     @ResponseBody
     public ResponseDto<List<ProductResponseDto>> all(){
         return service.listAll();
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/product")
     @ResponseBody
     public ResponseDto<ProductResponseDto> insert( @RequestParam(name="sizeID")int sizeID,      @RequestParam(name="modelID")UUID modelID,
                                                    @RequestParam(name="name")String name,       @RequestParam(name="saleType")String saleType,
@@ -49,7 +48,7 @@ public class ProductController {
         return service.insert(dto);
     }
 
-    @PutMapping(value = "")
+    @PutMapping(value = "/product")
     @ResponseBody
     public ResponseDto<ProductResponseDto> updateNoAvatar( @RequestParam(name="sizeID")int sizeID,      @RequestParam(name="modelID")UUID modelID,
                                                            @RequestParam(name="name")String name,       @RequestParam(name="saleType")String saleType,
@@ -66,7 +65,7 @@ public class ProductController {
         return service.update(dto);
     }
 
-    @PutMapping(value = "/avatar")
+    @PutMapping(value = "/product/avatar")
     @ResponseBody
     public ResponseDto<ProductResponseDto> updateAvatar( @RequestParam(name="productID" )UUID productID,
                                                          @RequestParam(name="fileAvatar")MultipartFile fileAvatar ){
@@ -76,14 +75,13 @@ public class ProductController {
         return service.updateAvatar(dto);
     }
 
-    @PutMapping(value = "/status")
+    @PutMapping(value = "/product/status")
     @ResponseBody
     public ResponseDto<ProductResponseDto> updateStatus( @RequestParam(name="productID" )UUID productID){
-
         return service.updateStatus(productID);
     }
 
-    @DeleteMapping(value = "")
+    @DeleteMapping(value = "/product")
     @ResponseBody
     public ResponseDto<ProductResponseDto> delete(@RequestParam(name = "id", required = true) UUID id){
         return service.delete(id);

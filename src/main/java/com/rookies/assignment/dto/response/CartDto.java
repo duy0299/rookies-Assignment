@@ -1,22 +1,13 @@
 package com.rookies.assignment.dto.response;
 
-import com.rookies.assignment.data.entity.Order;
 import com.rookies.assignment.data.entity.OrderItem;
 import com.rookies.assignment.data.entity.Product;
-import com.rookies.assignment.data.entity.UserInfo;
-import com.rookies.assignment.dto.flat.ProductDtoFlat;
-import com.rookies.assignment.dto.request.CartRequestDto;
-import com.rookies.assignment.dto.request.ProductRequestDto;
-import com.rookies.assignment.exceptions.ParamNotValidException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor

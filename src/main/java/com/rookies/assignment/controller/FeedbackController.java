@@ -10,36 +10,35 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/feedback")
 public class FeedbackController {
     @Autowired
     private IFeedbackService service;
 
-    @GetMapping("")
+    @GetMapping("/feedback")
     @ResponseBody
     public ResponseDto get(@RequestParam(name = "id", required = true) Integer id){
         return service.getById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/feedbacks")
     @ResponseBody
     public ResponseDto listAll(){
         return service.listAll();
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/feedback")
     @ResponseBody
     public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
         return service.delete(id);
     }
 
-    @PostMapping("")
+    @PostMapping("/feedback")
     @ResponseBody
     public ResponseDto insert(@Valid @RequestBody FeedbackRequestDto dto){
         return service.insert(dto);
     }
 
-    @PutMapping("")
+    @PutMapping("/feedback")
     @ResponseBody
     public ResponseDto update(@Valid @RequestBody FeedbackRequestDto dto){
         return service.updateStatus(dto);

@@ -5,6 +5,7 @@ import com.rookies.assignment.data.repository.ICategoriesRepository;
 import com.rookies.assignment.dto.flat.CategoriesDtoFlat;
 import com.rookies.assignment.dto.response.CategoriesResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
+import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.service.ICategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,11 @@ public class CategoriesServiceImpl implements ICategoriesService {
     public ResponseDto<CategoriesResponseDto> insert(CategoriesDtoFlat dto) {
         Optional<Categories> optionalCategories = Optional.ofNullable(repository.findByName(dto.getName()));
         if(!optionalCategories.isEmpty()){
-            throw new ResourceFoundException("Loại Trang Sức này đã tồn tại.");
+            throw new RepeatDataException("Loại Trang Sức này đã tồn tại.");
         }
+        System.out.println("test1");
         Categories newCategories = repository.save(dto.changeToCategoriesInsert());
+        System.out.println("test2");
         return new ResponseDto<>(
                 new CategoriesResponseDto(
                         newCategories
@@ -37,19 +40,23 @@ public class CategoriesServiceImpl implements ICategoriesService {
     @Override
     public ResponseDto<CategoriesResponseDto> update(CategoriesDtoFlat dto) {
         Optional<Categories> optionalCategories = repository.findById(dto.getId());
+        Optional<List<Categories>> listAllOptional = Optional.ofNullable(repository.findAll());
+        if(listAllOptional.isEmpty()){
+            throw new ResourceFoundException("danh sách rỗng.");
+        }
         if(optionalCategories.isEmpty()){
             throw new ResourceFoundException("Loại trang sức này không tồn tại.");
         }
-        Categories newCategories = repository.save(dto.changeToCategoriesUpdate(optionalCategories.get().getListModel()));
+        Categories newCategories = repository.save(dto.changeToCategoriesUpdate(optionalCategories.get()));
         return new ResponseDto<>(
                 new CategoriesResponseDto(
-                        newCategories
+                        newCategories, listAllOptional.get()
                 )
         );
     }
 
     @Override
-    public ResponseDto<CategoriesResponseDto> delete(int id) {
+    public ResponseDto<CategoriesResponseDto> delete(Integer id) {
         Optional<Categories> optionalCategories = repository.findById(id);
         if(optionalCategories.isEmpty()){
             throw new ResourceFoundException("Loại trang sức này không tồn tại.");
@@ -59,14 +66,20 @@ public class CategoriesServiceImpl implements ICategoriesService {
     }
 
     @Override
-    public ResponseDto<CategoriesResponseDto> getById(int id) {
+    public ResponseDto<CategoriesResponseDto> getById(Integer id) {
         Optional<Categories> optionalCategories = repository.findById(id);
+        Optional<List<Categories>> listAllOptional = Optional.ofNullable(repository.findAll());
+
+        if(listAllOptional.isEmpty()){
+            throw new ResourceFoundException("danh sách rỗng.");
+        }
         if(optionalCategories.isEmpty()){
             throw new ResourceFoundException("Loại trang sức này không tồn tại.");
         }
+
         return new ResponseDto<>(
                 new CategoriesResponseDto(
-                        optionalCategories.get()
+                        optionalCategories.get(), listAllOptional.get()
                 )
         );
     }
@@ -80,7 +93,7 @@ public class CategoriesServiceImpl implements ICategoriesService {
         }
 //        Categories => Convert to CategoriesResponseDto => Add to listResult
         for (Categories categories: listOptional.get()) {
-            listResult.add(new CategoriesResponseDto(categories));
+            listResult.add(new CategoriesResponseDto(categories, listOptional.get()));
         }
         return new ResponseDto<>(listResult);
     }

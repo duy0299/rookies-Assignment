@@ -18,6 +18,10 @@ import java.util.Date;
 public class ContactRequestDto {
     @NotEmpty
     @NotNull
+    private Integer id;
+
+    @NotEmpty
+    @NotNull
     private String address;
     @NotEmpty
     @NotNull
@@ -44,9 +48,7 @@ public class ContactRequestDto {
     @NotNull
     private Time timeClose;
 
-    private Timestamp timeUpdate;
-
-    public Contact setContact(Integer id, Long  viewPage){
+    public Contact setContact(){
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
@@ -61,8 +63,9 @@ public class ContactRequestDto {
         contact.setTimeClose(timeClose);
         contact.setTimeOpen(timeOpen);
         contact.setTimeUpdate(now);
-        contact.setViewPage(viewPage);
 
         return contact;
     }
+
+
 }

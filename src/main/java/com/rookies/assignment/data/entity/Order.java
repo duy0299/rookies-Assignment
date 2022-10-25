@@ -4,13 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name="order")
+@Table(name="tborder")
 public class Order {
 	@Id
 	@GeneratedValue
@@ -27,19 +21,12 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> listItems;
+
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private UserInfo user;
 	
 //	----------------------------------------------------------
-	@Column(name="firstName", nullable = false, length = 20)
-	private String firstName;
-
-	@Column(name="lastName", nullable = false, length = 20)
-	private String lastName;
-
-	@Column(name="phoneNumber", nullable = false, length = 15)
-	private String phoneNumber;
-
-	@Column(name="email", nullable = true, length = 50)
-	private String email;
 
 	@Column(name="address", nullable = false, length = 100)
 	private String address;

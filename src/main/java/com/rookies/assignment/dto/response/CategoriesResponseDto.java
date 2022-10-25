@@ -19,17 +19,18 @@ import java.util.List;
 public class CategoriesResponseDto extends CategoriesDtoFlat {
 
     private List<ProductModelDtoFlat> listModel;
-    private CategoriesDtoFlat childrenCategories;
+    private List<CategoriesDtoFlat> listChildren;
 
-    public CategoriesResponseDto(Categories categories, Categories children){
+    public CategoriesResponseDto(Categories categories, List<Categories> all){
         super(categories);
-        childrenCategories = new CategoriesDtoFlat(children);
+        listChildren = setlistListChildrent(all);
         listModel = setlistProductModelFlat(categories.getListModel());
     }
 
     public CategoriesResponseDto(Categories categories){
         super(categories);
         listModel = setlistProductModelFlat(categories.getListModel());
+        listChildren = new ArrayList<>();
     }
 
     private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list){
@@ -39,6 +40,19 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
         }
         for(ProductModel model : list){
             result.add(new ProductModelDtoFlat(model));
+        }
+        return result;
+    }
+
+    private List<CategoriesDtoFlat> setlistListChildrent(List<Categories> list){
+        List<CategoriesDtoFlat> result = new ArrayList<>();
+        if (list == null) {
+            return result;
+        }
+        for (Categories categories: list) {
+            if(categories.getParentCategoriesId() == getId()){
+                result.add(new CategoriesDtoFlat(categories));
+            }
         }
         return result;
     }

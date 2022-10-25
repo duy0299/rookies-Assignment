@@ -16,13 +16,13 @@ public class ContactController {
     @Autowired
     private ContactServiceImpl service;
 
-    @GetMapping("/")
+    @GetMapping("")
     @ResponseBody
     public ResponseDto<Contact> get(){
         return service.get();
     }
 
-    @PutMapping("/")
+    @PutMapping("")
     @ResponseBody
     public ResponseDto<Contact> put(@Valid @RequestBody ContactRequestDto dto){
         return service.update(dto);

@@ -16,36 +16,35 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/cart")
 public class CartController {
     @Autowired
     private CartServiceImpl service;
 
-    @GetMapping("")
+    @GetMapping("/carts")
     @ResponseBody
     public ResponseDto<List<CartDto>> get(HttpSession session){
         return service.get(session);
     }
 
-    @PostMapping("")
+    @PostMapping("/cart")
     @ResponseBody
     public ResponseDto<List<CartDto>> add(@Valid @RequestBody CartRequestDto dto, HttpSession session){
         return service.addToCartByMethod(dto, session, "default");
     }
 
-    @PostMapping("/up")
+    @PostMapping("/cart/up")
     @ResponseBody
     public ResponseDto<List<CartDto>> up(@Valid @RequestBody CartRequestDto dto, HttpSession session){
         return service.addToCartByMethod(dto, session, "up");
     }
 
-    @PostMapping("/down")
+    @PostMapping("/cart/down")
     @ResponseBody
     public ResponseDto<List<CartDto>> down(@Valid @RequestBody CartRequestDto dto, HttpSession session){
         return service.addToCartByMethod(dto, session, "down");
     }
 
-    @PostMapping("/change")
+    @PostMapping("/cart/change")
     @ResponseBody
     public ResponseDto<List<CartDto>> change(@Valid @RequestBody CartRequestDto dto, HttpSession session){
         return service.addToCartByMethod(dto, session, "change");

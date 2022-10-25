@@ -90,7 +90,7 @@ public class UserInfoResponseDto extends UserInfoDtoFlat {
         for (OrderResponseDto order : listOrder) {
 //            lọc qua từng product trong Order
             for (OrderItemResponseDto item : order.getListItems()) {
-                if(modelID.equals(item.getProduct().getModelId())){
+                if(modelID.equals(item.getProduct().getModelID())){
                    return true;
                 }
             }

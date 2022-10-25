@@ -31,13 +31,15 @@ public class FeedbackRequestDto extends FeedbackDtoFlat {
 
         feedback.setStatus((short) 1);
         feedback.setUserInfo(userInfo);
+
         feedback.setContent(getContent());
         feedback.setTimeCreate(now);
         feedback.setTimeUpdate(now);
+
         return feedback;
     }
 
-    public Feedback changeToFeedbackUpdateStatus(){
+    public Feedback changeToFeedbackUpdateStatus(Feedback oldFeedback){
         Feedback feedback = new Feedback();
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
@@ -45,19 +47,24 @@ public class FeedbackRequestDto extends FeedbackDtoFlat {
         feedback.setStatus(getStatus());
         feedback.setId(getId());
         feedback.setTimeUpdate(now);
+        feedback.setUserInfo(oldFeedback.getUserInfo());
+        feedback.setContent(oldFeedback.getContent());
+        feedback.setTimeCreate(oldFeedback.getTimeCreate());
+
         return feedback;
     }
 
     public boolean isFirstFeedbackToday(List<Feedback> listFeedback){
+        if(listFeedback == null){
+            return true;
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
         String strNow =  formatter.format(now);
-
         for (Feedback feedback : listFeedback) {
             String strTimeCreate = formatter.format(feedback.getTimeCreate());
-
             if(strTimeCreate.equals(strNow)) {
                 return false;
             }

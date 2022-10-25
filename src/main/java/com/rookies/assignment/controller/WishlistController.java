@@ -9,36 +9,35 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/wishlist")
 public class WishlistController {
     @Autowired
     private WishlistServiceImpl service;
 
-    @GetMapping("")
+    @GetMapping("/wishlist")
     @ResponseBody
     public ResponseDto get(@RequestParam(name = "id", required = true) Integer id){
         return service.getById(id);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/wishlists")
     @ResponseBody
     public ResponseDto listAll(){
         return service.listAll();
     }
 
-    @PostMapping("")
+    @PostMapping("/wishlist")
     @ResponseBody
     public ResponseDto insert(@Valid @RequestBody WishlistRequestDto dto){
         return service.insert(dto);
     }
 
-    @PutMapping("")
+    @PutMapping("/wishlist")
     @ResponseBody
     public ResponseDto update(@Valid @RequestBody WishlistRequestDto dto){
         return service.updateStatus(dto);
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("/wishlist")
     @ResponseBody
     public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
         return service.delete(id);
