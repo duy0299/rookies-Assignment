@@ -6,11 +6,10 @@ import java.util.UUID;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,7 +19,7 @@ public class UserInfo {
 	@GeneratedValue
 	private UUID id;
 	
-	@OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<UserRole> listUserRole;
 	
 	@OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
@@ -34,8 +33,9 @@ public class UserInfo {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Order> listOrder;
-	
-	@ManyToMany
+
+	//	chú ý lỗi =>
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "userRole",
 			joinColumns = @JoinColumn(name = "userId"),

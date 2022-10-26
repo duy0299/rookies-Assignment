@@ -4,14 +4,7 @@ package com.rookies.assignment.data.entity;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,20 +21,17 @@ public class Role {
 	@GeneratedValue
 	private UUID id;
 	
-	@ManyToMany(mappedBy = "listRole")
+	@ManyToMany(mappedBy = "listRole", fetch = FetchType.EAGER)
 	private List<UserInfo> listUser;
 	
-	
-	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<UserRole> listUserRole;
 	
 	
 //	-------------------------------------------------------------
 	@Column(name="name", nullable = false, length = 50)
 	private String name;
-
-	@Column(name="level", nullable = false)
-	private short level;
 
 	@Column(name="description", length = 200)
 	private String description;

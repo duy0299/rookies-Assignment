@@ -15,7 +15,7 @@ public interface ILoginService {
 
     public ResponseDto<UserInfoResponseDto> logout(HttpServletRequest req);
 
-    public ResponseDto<UserInfoResponseDto> register(RegisterRequestDto dto, HttpServletRequest req);
+    public ResponseDto<UserInfoResponseDto> register(RegisterRequestDto dto);
 
 
 
