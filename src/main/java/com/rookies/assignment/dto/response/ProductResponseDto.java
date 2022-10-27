@@ -1,16 +1,10 @@
 package com.rookies.assignment.dto.response;
 
-import com.rookies.assignment.data.entity.ProductModel;
-import com.rookies.assignment.data.entity.Size;
+import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.dto.flat.ProductDtoFlat;
 import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import com.rookies.assignment.dto.flat.SizeDtoFlat;
-import com.rookies.assignment.data.entity.Product;
 import lombok.Data;
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Date;
 
 
 @Data

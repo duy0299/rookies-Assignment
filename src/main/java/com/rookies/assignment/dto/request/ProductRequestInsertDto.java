@@ -52,14 +52,14 @@ public class ProductRequestInsertDto extends ProductDtoFlat {
         return product;
     }
 
-    public  Product changeProductToInsertModel(Size size,String urlAvatar){
+    public  Product changeProductToInsertModel(String urlAvatar){
         Product product = new Product();
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        product.setSize(size);
-        product.setName(getName());
         product.setAvatar(urlAvatar);
+
+        product.setName(getName());
         product.setSaleType(getSaleType());
         product.setPriceSale(getPriceSale());
         product.setQuantity(getQuantity());

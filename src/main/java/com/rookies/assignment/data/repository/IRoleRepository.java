@@ -11,6 +11,6 @@ import com.rookies.assignment.data.entity.Role;
 @Repository
 public interface IRoleRepository  extends JpaRepository<Role, UUID>{
 
-    public Role findByLevel(short level);
+    public Role findByName(String name);
 
 }

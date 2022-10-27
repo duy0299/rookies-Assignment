@@ -1,10 +1,6 @@
 package com.rookies.assignment.dto.request;
 
 import com.rookies.assignment.data.entity.Product;
-import com.rookies.assignment.data.entity.ProductModel;
-import com.rookies.assignment.data.entity.Size;
-import com.rookies.assignment.dto.flat.ProductDtoFlat;
-import com.rookies.assignment.exceptions.ResourceFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;

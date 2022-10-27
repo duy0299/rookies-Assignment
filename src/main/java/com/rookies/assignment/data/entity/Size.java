@@ -2,28 +2,22 @@ package com.rookies.assignment.data.entity;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="tbsize")
+@Table(name="size")
 public class Size {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@OneToMany(mappedBy = "size", cascade = CascadeType.ALL)
-	private List<Product> listProduct;
-	
-
 	
 //	------------------------------------------------------
 	@Column(name="name", nullable = false, length = 50)

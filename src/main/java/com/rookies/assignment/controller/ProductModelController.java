@@ -5,6 +5,7 @@ import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
 import com.rookies.assignment.dto.request.ModelRequestUpdateImageDto;
 import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.response.ProductModelResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IProductModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,13 @@ public class ProductModelController {
     @Autowired
     private IProductModelService service;
 
-    @GetMapping("/product-model")
+    @GetMapping("/product-model/{id}")
     @ResponseBody
-    public ResponseDto<ProductModelResponseDto> get(@RequestParam(name = "id", required = true) UUID id){
+    public ResponseDto<ProductModelResponseDto> get(@PathVariable("id") UUID id){
         return service.getById(id);
     }
 
-    @GetMapping("/product-models")
+    @GetMapping("/product-models/all-status")
     @ResponseBody
     public ResponseDto<List<ProductModelResponseDto>> listAll(){
         return service.listAll();
@@ -40,7 +41,7 @@ public class ProductModelController {
                @RequestParam(name="modelName")String modelName,             @RequestParam(name="priceRoot")BigDecimal priceRoot,
                @RequestParam(name="description")String description,         @RequestParam(name="categoriesID")List<Integer> categoriesID,
                @RequestParam(name="sizeID")List<Integer> sizeID,            @RequestParam(name="priceSale") List<BigDecimal> priceSale,
-               @RequestParam(name="name")List<String> productName,          @RequestParam(name="saleType")List<String> saleType,
+               @RequestParam(name="productName")List<String> productName,          @RequestParam(name="saleType")List<String> saleType,
                @RequestParam(name="quantity")List<Integer> quantity,        @RequestParam(name="fileAvatar" )List<MultipartFile> fileAvatar ){
         List<ProductRequestInsertDto> listProduct = new ArrayList<>();
         for (int i=0; i<productName.size(); i++) {
@@ -95,22 +96,31 @@ public class ProductModelController {
         return service.updateStatus(id, status);
     }
 
-    @DeleteMapping("/product-model/status")
+    @DeleteMapping("/product-model")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> delete( @RequestParam(name="id")UUID id){
         return service.delete(id);
     }
 
+
+    @GetMapping("/product-models")
+    @ResponseBody
+    public ResponseByPageDto<List<ProductModelResponseDto>> searchName(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listByPage(page, size);
+    }
+
     @GetMapping("/product-models/search-name")
     @ResponseBody
-    public ResponseDto<List<ProductModelResponseDto>> searchName(@RequestParam(name="search")String name){
-        return service.listByName(name);
+    public ResponseByPageDto<List<ProductModelResponseDto>> searchName(@RequestParam(name="search")String name,
+                                                                 @RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listByName(name, page, size);
     }
 
     @GetMapping("/product-models/list-price-range")
     @ResponseBody
-    public ResponseDto<List<ProductModelResponseDto>> listByPriceRange(@RequestParam(name="priceFrom")BigDecimal priceFrom, @RequestParam(name="priceTo")BigDecimal priceTo){
-        return service.listByPriceRange(priceTo, priceFrom);
+    public ResponseByPageDto<List<ProductModelResponseDto>> listByPriceRange(@RequestParam(name="priceFrom")BigDecimal priceFrom, @RequestParam(name="priceTo")BigDecimal priceTo,
+                                                                       @RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listByPriceRange(priceTo, priceFrom, page, size);
     }
 
 }

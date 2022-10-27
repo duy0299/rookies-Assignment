@@ -14,9 +14,9 @@ public class SizeController {
     @Autowired
     private SizeServiceImpl service;
 
-    @GetMapping("/size")
+    @GetMapping("/size/{id}")
     @ResponseBody
-    public ResponseDto get( @RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto get( @PathVariable("id") Integer id){
         return service.getById(id);
     }
 

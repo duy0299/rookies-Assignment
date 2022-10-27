@@ -1,10 +1,9 @@
 package com.rookies.assignment.dto.response;
 
-import com.rookies.assignment.dto.flat.CategoriesDtoFlat;
-import com.rookies.assignment.dto.flat.FeedbackDtoFlat;
-import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import com.rookies.assignment.data.entity.Categories;
 import com.rookies.assignment.data.entity.ProductModel;
+import com.rookies.assignment.dto.flat.CategoriesDtoFlat;
+import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

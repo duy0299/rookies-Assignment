@@ -1,10 +1,8 @@
 package com.rookies.assignment.dto.request;
 
-import com.rookies.assignment.data.entity.Feedback;
 import com.rookies.assignment.data.entity.Order;
 import com.rookies.assignment.data.entity.OrderItem;
 import com.rookies.assignment.data.entity.UserInfo;
-import com.rookies.assignment.dto.flat.FeedbackDtoFlat;
 import com.rookies.assignment.dto.flat.OrderDtoFlat;
 import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.exceptions.ResourceFoundException;
@@ -14,7 +12,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

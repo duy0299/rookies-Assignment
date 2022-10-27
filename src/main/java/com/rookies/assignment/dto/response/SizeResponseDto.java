@@ -2,7 +2,6 @@ package com.rookies.assignment.dto.response;
 
 import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.data.entity.Size;
-import com.rookies.assignment.dto.flat.FeedbackDtoFlat;
 import com.rookies.assignment.dto.flat.ProductDtoFlat;
 import com.rookies.assignment.dto.flat.SizeDtoFlat;
 import lombok.Data;
@@ -17,9 +16,9 @@ import java.util.List;
 public class SizeResponseDto extends SizeDtoFlat {
     private List<ProductDtoFlat> productDto;
 
-    public SizeResponseDto(Size size){
+    public SizeResponseDto(Size size, List<Product> product){
         super(size);
-        productDto = setListProduct(size.getListProduct());
+        productDto = setListProduct(product);
     }
 
 

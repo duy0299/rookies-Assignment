@@ -1,16 +1,16 @@
 package com.rookies.assignment.service;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
-import com.rookies.assignment.dto.request.*;
+import com.rookies.assignment.dto.request.UserRequestUpdateAvatarDto;
+import com.rookies.assignment.dto.request.UserRequestUpdatePasswordDto;
+import com.rookies.assignment.dto.request.UserRequestUpdateRoleDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.data.entity.UserInfo;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public interface IUserInfoService {
@@ -23,7 +23,7 @@ public interface IUserInfoService {
 	
 	public ResponseDto<UserInfoResponseDto> getById(UUID id);
 
-	public ResponseDto<List<UserInfoResponseDto>> listAll();
+	public ResponseByPageDto<List<UserInfoResponseDto>> listAll(int page, int size);
 
 	public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto);
 

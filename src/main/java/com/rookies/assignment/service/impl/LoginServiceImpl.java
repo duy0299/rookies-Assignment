@@ -13,6 +13,7 @@ import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.service.ILoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,8 @@ import java.util.regex.Pattern;
 public class LoginServiceImpl implements ILoginService {
     @Autowired
     private IUserInfoRepository repository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private IRoleRepository roleRepository;
 
@@ -33,8 +35,7 @@ public class LoginServiceImpl implements ILoginService {
         if(user.isEmpty()){
             throw new ResourceFoundException("Mật khẩu hoặc Email Không đúng");
         }
-        ResponseDto<UserInfoResponseDto> result = new ResponseDto<UserInfoResponseDto>("00","thành công",
-                                                                 new UserInfoResponseDto(user.get()));
+        ResponseDto<UserInfoResponseDto> result = new ResponseDto<UserInfoResponseDto>(new UserInfoResponseDto(user.get()));
         req.getSession().setAttribute("login",result);
         return result;
     }
@@ -46,14 +47,13 @@ public class LoginServiceImpl implements ILoginService {
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> register(RegisterRequestDto dto, HttpServletRequest req) {
+    public ResponseDto<UserInfoResponseDto> register(RegisterRequestDto dto) {
         //  check empty
         if(dto.getFirstName().trim().equals("") || dto.getLastName().trim().equals("") || dto.getPhoneNumber().trim().equals("") ||
                 dto.getEmail().trim().equals("") || dto.getPassword().trim().equals("") || dto.getPasswordConfirmation().trim().equals("")) {
             String error= "không thể để trống";
             throw new ParamNotValidException("Có thông tin bị trống");
         }
-
         //  check password confirmation
         if(!dto.getPassword().equals(dto.getPasswordConfirmation())) {
             throw new ParamNotValidException("Mật khẩu không khớp với nhau");
@@ -69,17 +69,13 @@ public class LoginServiceImpl implements ILoginService {
             throw new RepeatDataException("Email này đã tồn tại");
         }
 //      get role user
-        Role role = roleRepository.findByLevel((short) 2);
-
+        Role role = roleRepository.findByName("USER");
 //      create new user
         UserInfo newUser = dto.changeToUserInfo(role);
-
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 //       save UserInfo
         repository.save(newUser);
 
-        ResponseDto<UserInfoResponseDto> result = new ResponseDto<UserInfoResponseDto>("00","thành công",
-                new UserInfoResponseDto(newUser));
-        req.getSession().setAttribute("login",result);
-        return result;
+        return new ResponseDto<UserInfoResponseDto>(new UserInfoResponseDto(newUser));
     }
 }

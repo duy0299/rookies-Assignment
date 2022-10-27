@@ -1,6 +1,5 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.dto.flat.SizeDtoFlat;
 import com.rookies.assignment.dto.request.FeedbackRequestDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IFeedbackService;
@@ -14,9 +13,9 @@ public class FeedbackController {
     @Autowired
     private IFeedbackService service;
 
-    @GetMapping("/feedback")
+    @GetMapping("/feedback/{id}")
     @ResponseBody
-    public ResponseDto get(@RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto get(@PathVariable("id") Integer id){
         return service.getById(id);
     }
 
@@ -38,7 +37,7 @@ public class FeedbackController {
         return service.insert(dto);
     }
 
-    @PutMapping("/feedback")
+    @PutMapping("/feedback/status")
     @ResponseBody
     public ResponseDto update(@Valid @RequestBody FeedbackRequestDto dto){
         return service.updateStatus(dto);

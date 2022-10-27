@@ -17,12 +17,10 @@ public class RoleDtoFlat{
     private  String description;
     private  short status;
 
-    private  short level;
 
     public RoleDtoFlat(Role role) {
         id = role.getId();
         name = role.getName();
-        level = role.getLevel();
         description = role.getDescription();
         status = role.getStatus();
     }

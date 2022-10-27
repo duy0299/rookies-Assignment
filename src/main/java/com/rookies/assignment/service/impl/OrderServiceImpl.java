@@ -1,11 +1,12 @@
 package com.rookies.assignment.service.impl;
 
-import com.rookies.assignment.data.entity.*;
-import com.rookies.assignment.data.repository.*;
+import com.rookies.assignment.data.entity.Order;
+import com.rookies.assignment.data.entity.UserInfo;
+import com.rookies.assignment.data.repository.IOrderRepository;
+import com.rookies.assignment.data.repository.IUserInfoRepository;
 import com.rookies.assignment.dto.request.OrderRequestDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.CartDto;
-import com.rookies.assignment.dto.response.CategoriesResponseDto;
 import com.rookies.assignment.dto.response.OrderResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.ParamNotValidException;

@@ -3,10 +3,7 @@ package com.rookies.assignment.dto.request;
 import com.rookies.assignment.data.entity.ProductModel;
 import com.rookies.assignment.data.entity.Rating;
 import com.rookies.assignment.data.entity.UserInfo;
-import com.rookies.assignment.data.entity.Wishlist;
-import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import com.rookies.assignment.dto.flat.RatingDtoFlat;
-import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

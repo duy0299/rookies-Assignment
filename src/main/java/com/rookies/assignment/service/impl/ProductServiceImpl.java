@@ -7,14 +7,14 @@ import com.rookies.assignment.data.entity.Size;
 import com.rookies.assignment.data.repository.IProductModelRepository;
 import com.rookies.assignment.data.repository.IProductRepository;
 import com.rookies.assignment.data.repository.ISizeRepository;
+import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
-import com.rookies.assignment.exceptions.ParamNotValidException;
-import com.rookies.assignment.exceptions.RepeatDataException;
-import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.response.ProductResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.MethodNotAllowedException;
+import com.rookies.assignment.exceptions.ParamNotValidException;
+import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IProductService;
@@ -59,7 +59,6 @@ public class ProductServiceImpl implements IProductService {
         Product newProduct =  repository.save(
                 dto.changeToProduct(sizeOptional.get(), modelOptional.get(), urlAvatar )
         );
-
         return new ResponseDto<ProductResponseDto>(new ProductResponseDto(newProduct));
     }
 
@@ -170,6 +169,7 @@ public class ProductServiceImpl implements IProductService {
 
         //      check this list product already exist in ProductModel?
         for (Product product : modelOptional.get().getListProduct()) {
+
             if (dto.getSizeID() == product.getSize().getId()){
                 throw new RepeatDataException("size này mẫu đã có");
             }

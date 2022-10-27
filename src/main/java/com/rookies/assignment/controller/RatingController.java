@@ -2,26 +2,20 @@ package com.rookies.assignment.controller;
 
 import com.rookies.assignment.dto.request.RatingRequestDto;
 import com.rookies.assignment.dto.response.ResponseDto;
-import com.rookies.assignment.exceptions.ForbiddenException;
-import com.rookies.assignment.plugins.CheckRole;
 import com.rookies.assignment.service.impl.RatingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/rating")
 public class RatingController {
     @Autowired
     private RatingServiceImpl service;
 
-
-
-    @GetMapping("/rating")
+    @GetMapping("/rating/{id}")
     @ResponseBody
-    public ResponseDto get(@RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto get(@PathVariable("id") Integer id){
         return service.getById(id);
     }
 

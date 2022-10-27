@@ -2,7 +2,6 @@ package com.rookies.assignment.dto.request;
 
 import com.rookies.assignment.data.entity.Order;
 import com.rookies.assignment.data.entity.OrderItem;
-import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.dto.flat.OrderDtoFlat;
 import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.exceptions.ResourceFoundException;
@@ -33,17 +32,12 @@ public class OrderRequestUpdateDto extends OrderDtoFlat {
 
 
     public Order changeToOrderUpdateStatus(Order oleOrder){
-        Order order = new Order();
+        Order order = oleOrder;
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
         order.setId(order_id);
-        order.setListItems(oleOrder.getListItems());
         order.setStatus(status);
-        order.setUser(oleOrder.getUser());
-        order.setAddress(oleOrder.getAddress());
-        order.setNote(oleOrder.getNote());
-        order.setTimeCreate(oleOrder.getTimeCreate());
         order.setTimeUpdate(now);
 
         return order;

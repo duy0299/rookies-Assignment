@@ -5,7 +5,6 @@ import com.rookies.assignment.dto.flat.ProductDtoFlat;
 import lombok.Data;
 
 import javax.validation.constraints.Min;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**

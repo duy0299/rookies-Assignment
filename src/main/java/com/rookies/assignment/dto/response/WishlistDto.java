@@ -1,9 +1,9 @@
 package com.rookies.assignment.dto.response;
 
+import com.rookies.assignment.data.entity.Wishlist;
 import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import com.rookies.assignment.dto.flat.WishlistDtoFlat;
-import com.rookies.assignment.data.entity.Wishlist;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

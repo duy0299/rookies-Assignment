@@ -1,6 +1,8 @@
 package com.rookies.assignment.service.impl;
 
-import com.rookies.assignment.data.entity.*;
+import com.rookies.assignment.data.entity.ProductModel;
+import com.rookies.assignment.data.entity.Rating;
+import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.data.repository.IProductModelRepository;
 import com.rookies.assignment.data.repository.IRatingRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
@@ -47,7 +49,7 @@ public class RatingServiceImpl implements IRatingService {
         }
 
 //      check user has already rating
-        Optional<Rating> optional = Optional.ofNullable(repository.findByUserAndMode(dto.getUser_id(), dto.getModelId()));
+        Optional<Rating> optional = Optional.ofNullable(repository.findByUserAndModel(dto.getUser_id(), dto.getModelId()));
         if(!optional.isEmpty()){
             throw new TooManyRequestsException("Bạn đã đánh giá cho sản phẩm này rồi");
         }

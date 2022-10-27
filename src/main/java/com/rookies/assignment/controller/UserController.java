@@ -4,8 +4,9 @@ import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import com.rookies.assignment.dto.request.UserRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.UserRequestUpdatePasswordDto;
 import com.rookies.assignment.dto.request.UserRequestUpdateRoleDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
-import com.rookies.assignment.plugins.CheckRole;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class UserController {
     @Autowired
     private IUserInfoService service;
     @Autowired
-    private CheckRole checkRole;
+    private JwtProvider jwtProvider;
 
 
     @PutMapping("/user/info")
@@ -42,9 +43,7 @@ public class UserController {
     @PutMapping("/user/status")
     @ResponseBody
     public ResponseDto updateStatus(@RequestParam(name = "userID" )UUID id, @RequestParam(name = "status" )boolean status){
-//        if(!checkRole.checkLevelUser(1, 7, session)){
-//            throw new ForbiddenException("Bạn không có đủ quyền để thực hiện");
-//        }
+        System.out.println("start");
         return service.updateStatus(id, status);
     }
 
@@ -56,8 +55,8 @@ public class UserController {
 
     @GetMapping("/users")
     @ResponseBody
-    public ResponseDto listAll(){
-        return service.listAll();
+    public ResponseByPageDto listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page, size);
     }
 
 
@@ -65,6 +64,7 @@ public class UserController {
     @PutMapping("/user/password")
     @ResponseBody
     public ResponseDto updatePassword(@Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpSession session){
+
         return service.updatePassword(dto);
     }
 

@@ -16,9 +16,9 @@ public class CategoriesController {
     @Autowired
     private ICategoriesService service;
 
-    @GetMapping(value = "/category")
+    @GetMapping(value = "/category/{id}")
     @ResponseBody
-    public ResponseDto<CategoriesResponseDto>  get(@RequestParam(name = "id", required = true) int id){
+    public ResponseDto<CategoriesResponseDto>  get(@PathVariable("id") int id){
         return service.getById(id);
     }
 

@@ -1,6 +1,5 @@
 package com.rookies.assignment.dto.request;
 
-import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.data.entity.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;

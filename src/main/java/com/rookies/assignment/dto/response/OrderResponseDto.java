@@ -2,12 +2,10 @@ package com.rookies.assignment.dto.response;
 
 import com.rookies.assignment.data.entity.Order;
 import com.rookies.assignment.data.entity.OrderItem;
-import com.rookies.assignment.data.entity.Rating;
 import com.rookies.assignment.dto.flat.OrderDtoFlat;
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

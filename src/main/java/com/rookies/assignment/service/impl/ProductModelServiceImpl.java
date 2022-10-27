@@ -10,6 +10,7 @@ import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
 import com.rookies.assignment.dto.request.ModelRequestUpdateImageDto;
 import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.response.ProductModelResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
@@ -17,6 +18,9 @@ import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IProductModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 public class ProductModelServiceImpl implements IProductModelService {
@@ -48,11 +51,16 @@ public class ProductModelServiceImpl implements IProductModelService {
     @Override
     public ResponseDto<ProductModelResponseDto> insert(ModelRequestInsertDto dto) {
         List<Categories> listCategories = setListCategories(dto.getListCategoriesID());
+
         List<Product> listProduct = setListProduct(dto);
+
         List<ModelImage> listModelImage = setListImage(dto.getListImages());
 
-        ProductModel newModel = repository.save(dto.changeToProductModel(listCategories, listProduct, listModelImage));
-        return new ResponseDto<>(new ProductModelResponseDto(newModel));
+        ProductModel newModel = dto.changeToProductModel(listCategories, listProduct, listModelImage);
+
+        repository.save(newModel);
+
+        return new ResponseDto<ProductModelResponseDto>(new ProductModelResponseDto(newModel));
     }
 
     @Override
@@ -112,8 +120,26 @@ public class ProductModelServiceImpl implements IProductModelService {
         return new ResponseDto<ProductModelResponseDto>(new ProductModelResponseDto(optional.get()));
     }
 
+    @Override
+    public ResponseByPageDto <List <ProductModelResponseDto> > listByPage(int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findByStatus(true, pageable));
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
 
-//    List all model product
+        System.out.println( listOptional);
+
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
+        }
+        System.out.println(listOptional.get().getTotalPages());
+        for (ProductModel model: listOptional.get().toList()) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+
+        return new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
+    }
+
+    //    List all model product
     @Override
     public ResponseDto<List<ProductModelResponseDto>> listAll() {
         Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
@@ -126,34 +152,42 @@ public class ProductModelServiceImpl implements IProductModelService {
         for (ProductModel model: listOptional.get()) {
             listResult.add(new ProductModelResponseDto(model));
         }
-        return new ResponseDto<List<ProductModelResponseDto>>(listResult);
+        return new ResponseDto<>(listResult);
     }
 
 //    Search product model by name
     @Override
-    public ResponseDto<List<ProductModelResponseDto>> listByName(String name) {
+    public ResponseByPageDto <List <ProductModelResponseDto> > listByName(String name, int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
         name = changeToText(name);
-        ResponseDto<List<ProductModelResponseDto>> all = listAll();
-        List<ProductModelResponseDto> result = new ArrayList<ProductModelResponseDto>();
-        String check = "^.*"+name+".*$";
-        for(ProductModelResponseDto p : all.getResult()) {
-            if(Pattern.matches(check, changeToText(p.getName()))) {
-                result.add(p);
-            }
+
+        Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findByNameAndStatus(name, true, pageable));
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
         }
-        return new ResponseDto<List<ProductModelResponseDto>>(result);
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        for (ProductModel model: listOptional.get().toList()) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+        return new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
     }
 
     @Override
-    public ResponseDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom) {
-        ResponseDto<List<ProductModelResponseDto>> all = listAll();
-        List<ProductModelResponseDto> result = new ArrayList<ProductModelResponseDto>();
-        for (ProductModelResponseDto dto: all.getResult()) {
-            if(dto.getPriceTo().compareTo(priceTo) != 1  && dto.getPriceFrom().compareTo(priceFrom)!=-1){
-                result.add(dto);
-            }
+    public ResponseByPageDto <List <ProductModelResponseDto> > listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom, int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
         }
-        return new ResponseDto<List<ProductModelResponseDto>>(result);
+
+//        for (ProductModel model: listOptional.get().toList()) {
+//            listResult.add(new ProductModelResponseDto(model));
+//        }
+
+        return new ResponseByPageDto(2, listResult);
     }
 
     //Change accented characters to unsigned
@@ -178,31 +212,39 @@ public class ProductModelServiceImpl implements IProductModelService {
             }
             listResult.add(optionalCategories.get());
         }
+        System.out.println(listResult);
         return listResult;
     }
     private List<Product> setListProduct(ModelRequestInsertDto dto){
         List<Product> listResult =  new ArrayList<>();
-        for (int i=0; i< dto.getListProduct().size(); i++) {
-            for (int a=0; a< dto.getListProduct().size(); a++) {
+
+        for (int i=0; i< dto.getListProduct().size()-1; i++) {
+            for (int a=i+1; a< dto.getListProduct().size(); a++) {
                 if (dto.getListProduct().get(i).getSizeID() == dto.getListProduct().get(a).getSizeID()) {
                     throw new RepeatDataException("có sản phẩm bị trùng size");
                 }
             }
         }
+
         for (ProductRequestInsertDto insertDto : dto.getListProduct()) {
             String urlAvatar = "";
             insertDto.checkPriceSale(dto.getPriceRoot());
+
             Optional<Size> sizeOptional = sizeRepository.findById(insertDto.getSizeID());
+
             if (sizeOptional.isEmpty()){
                 throw new ResourceFoundException("Không tìm thấy size này");
             }
+            Size size = sizeOptional.get();
             //      up file image to Amazon s3
             try {
                 urlAvatar     = amazonClient.uploadFile(insertDto.getFileAvatar(), folderName);
             }catch (Exception e){
                 throw new RuntimeException(e);
             }
-            listResult.add(insertDto.changeProductToInsertModel(sizeOptional.get(),urlAvatar));
+            Product product =  insertDto.changeProductToInsertModel(urlAvatar);
+            product.setSize(size);
+            listResult.add(product);
         }
         return  listResult;
     }

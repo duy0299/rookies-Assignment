@@ -1,11 +1,8 @@
 package com.rookies.assignment.dto.request;
 
 import com.rookies.assignment.data.entity.Feedback;
-import com.rookies.assignment.data.entity.Product;
-import com.rookies.assignment.data.entity.Size;
 import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.dto.flat.FeedbackDtoFlat;
-import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

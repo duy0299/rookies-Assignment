@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.constraints.Null;
 import java.io.IOException;
 
 @ControllerAdvice
@@ -76,7 +75,7 @@ public class GlobalExceptionsHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({NullPointerException.class})
     protected ResponseEntity handleNullPointerException(RuntimeException exception) {
         ResponseDto error = new ResponseDto("498", exception.getMessage(), "NullPointerException");
-        return new ResponseEntity<ResponseDto>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<ResponseDto>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({IOException.class})

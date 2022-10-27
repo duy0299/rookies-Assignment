@@ -1,8 +1,8 @@
 package com.rookies.assignment.dto.response;
 
+import com.rookies.assignment.data.entity.*;
 import com.rookies.assignment.dto.flat.ModelImageDtoFlat;
 import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
-import com.rookies.assignment.data.entity.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

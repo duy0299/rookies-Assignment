@@ -1,15 +1,16 @@
 package com.rookies.assignment.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
-
 import com.rookies.assignment.dto.request.ModelRequestInsertDto;
 import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
 import com.rookies.assignment.dto.request.ModelRequestUpdateImageDto;
 import com.rookies.assignment.dto.response.ProductModelResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public interface IProductModelService {
@@ -28,6 +29,8 @@ public interface IProductModelService {
 
 	public ResponseDto<List<ProductModelResponseDto>> listAll();
 
-	public ResponseDto<List<ProductModelResponseDto>> listByName(String name);
-	public ResponseDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom);
+	public ResponseByPageDto<List<ProductModelResponseDto>> listByPage(int page, int size);
+
+	public ResponseByPageDto<List<ProductModelResponseDto>> listByName(String name, int page, int size);
+	public ResponseByPageDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom, int page, int size);
 }

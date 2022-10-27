@@ -38,7 +38,7 @@ public class SizeDtoFlat {
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        size.setListProduct(sizeOld.getListProduct());
+//        size.setListProduct(sizeOld.getListProduct());
         size.setStatus(sizeOld.isStatus());
         size.setId(id);
         size.setName(name);
@@ -63,7 +63,7 @@ public class SizeDtoFlat {
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        size.setListProduct(new ArrayList<>());
+//        size.setListProduct(new ArrayList<>());
         size.setStatus(true);
         size.setName(name);
         size.setTimeUpdate(now);

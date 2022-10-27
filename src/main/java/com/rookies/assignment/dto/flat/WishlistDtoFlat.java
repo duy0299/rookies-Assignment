@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-/**
- * A DTO for the {@link com.rookies.assignment.data.entity.Wishlist} entity
- */
+
 @Data
 @NoArgsConstructor
 public class WishlistDtoFlat{

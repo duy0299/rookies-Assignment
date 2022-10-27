@@ -9,6 +9,7 @@ import com.rookies.assignment.dto.request.UserRequestDto;
 import com.rookies.assignment.dto.request.UserRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.UserRequestUpdatePasswordDto;
 import com.rookies.assignment.dto.request.UserRequestUpdateRoleDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import com.rookies.assignment.exceptions.ParamNotValidException;
@@ -17,6 +18,9 @@ import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -67,7 +71,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         optional.get().setStatus(status);
 
         UserInfo modified = repository.save(optional.get());
-        return new ResponseDto(modified);
+        return new ResponseDto(new UserInfoResponseDto(modified));
     }
 
     @Override
@@ -80,17 +84,18 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
-    public ResponseDto<List<UserInfoResponseDto>> listAll() {
-        Optional<List<UserInfo>> user = Optional.ofNullable(repository.findAll());
+    public ResponseByPageDto<List<UserInfoResponseDto>> listAll(int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<Page<UserInfo>> optional = Optional.ofNullable(repository.findAll(pageable));
         List<UserInfoResponseDto> listResult = new ArrayList<>();
-        if(user.isEmpty()){
+        if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
         }
 //        UserInfo => Convert to UserInfoResponseDto => Add to listResult
-        for (UserInfo userInfo: user.get()) {
+        for (UserInfo userInfo: optional.get()) {
             listResult.add(new UserInfoResponseDto(userInfo));
         }
-        return new ResponseDto<>(listResult);
+        return new ResponseByPageDto(optional.get().getTotalPages(), listResult);
     }
 
     @Override
@@ -116,13 +121,15 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if(listRoleOptional.isEmpty()){
             throw new ResourceFoundException("danh sách Role Rỗng");
         }
-        for (Short level : dto.getListRoleLevel()) {
-            if(level<0 || level > 7){
-                throw new ParamNotValidException("level của role không hợp lệ");
+        for (String nameRole : dto.getListRole()) {
+            if(!nameRole.equals("BAN") && !nameRole.equals("ADMIN") && !nameRole.equals("USER") &&
+                    !nameRole.equals("BAN_COMMENT") && !nameRole.equals("FEEDBACK_MANAGER") && !nameRole.equals("WAREHOUSE_MANAGER") &&
+                    !nameRole.equals("USER_MANAGER")&& !nameRole.equals("ORDER_MANAGER")){
+                throw new ParamNotValidException("Role không hợp lệ");
             }
-            System.out.println("test 5");
+
             for (Role role : listRoleOptional.get()) {
-                if(level == role.getLevel()){
+                if(nameRole == role.getName()){
                     listRole.add(role);
                     break;
                 }
