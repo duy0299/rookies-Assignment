@@ -6,7 +6,8 @@ import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.data.repository.IProductModelRepository;
 import com.rookies.assignment.data.repository.IRatingRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
-import com.rookies.assignment.dto.request.RatingRequestDto;
+import com.rookies.assignment.dto.request.RatingRequestInsertDto;
+import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
 import com.rookies.assignment.dto.response.RatingResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
@@ -14,10 +15,13 @@ import com.rookies.assignment.exceptions.ForbiddenException;
 import com.rookies.assignment.exceptions.ParamNotValidException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.exceptions.TooManyRequestsException;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +35,18 @@ public class RatingServiceImpl implements IRatingService {
     private IUserInfoRepository userRepository;
     @Autowired
     private IProductModelRepository modelRepository;
+    @Autowired
+    private JwtProvider jwtProvider;
+
 
     @Override
-    public ResponseDto<RatingResponseDto> insert(RatingRequestDto dto) {
-        Optional<UserInfo> userOptional = userRepository.findById(dto.getUser_id());
+    public ResponseDto<RatingResponseDto> insert(RatingRequestInsertDto dto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi Thanh toán");
+        }
+        Optional<UserInfo> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
         Optional<ProductModel> modelOptional = modelRepository.findById(dto.getModelId());
 
         if(userOptional.isEmpty() || modelOptional.isEmpty()){
@@ -49,7 +61,8 @@ public class RatingServiceImpl implements IRatingService {
         }
 
 //      check user has already rating
-        Optional<Rating> optional = Optional.ofNullable(repository.findByUserAndModel(dto.getUser_id(), dto.getModelId()));
+        Optional<Rating> optional = Optional.ofNullable(repository.findByUserAndModel(userOptional.get().getId(), dto.getModelId()));
+
         if(!optional.isEmpty()){
             throw new TooManyRequestsException("Bạn đã đánh giá cho sản phẩm này rồi");
         }
@@ -65,7 +78,7 @@ public class RatingServiceImpl implements IRatingService {
     }
 
     @Override
-    public ResponseDto<RatingResponseDto> update(RatingRequestDto dto) {
+    public ResponseDto<RatingResponseDto> update(RatingRequestUpdateDto dto) {
         Optional<Rating> optional = repository.findById(dto.getId());
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy");
@@ -75,7 +88,7 @@ public class RatingServiceImpl implements IRatingService {
     }
 
     @Override
-    public ResponseDto<RatingResponseDto> updateStatus(RatingRequestDto dto) {
+    public ResponseDto<RatingResponseDto> updateStatus(RatingRequestUpdateDto dto) {
         Optional<Rating> optional = repository.findById(dto.getId());
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy");

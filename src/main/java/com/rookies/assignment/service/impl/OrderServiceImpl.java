@@ -2,6 +2,7 @@ package com.rookies.assignment.service.impl;
 
 import com.rookies.assignment.data.entity.Order;
 import com.rookies.assignment.data.entity.UserInfo;
+import com.rookies.assignment.data.repository.IOrderItemRepository;
 import com.rookies.assignment.data.repository.IOrderRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
 import com.rookies.assignment.dto.request.OrderRequestDto;
@@ -9,12 +10,15 @@ import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.dto.response.OrderResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
+import com.rookies.assignment.exceptions.ForbiddenException;
 import com.rookies.assignment.exceptions.ParamNotValidException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +31,20 @@ public class OrderServiceImpl implements IOrderService {
     private IOrderRepository repository;
     @Autowired
     private IUserInfoRepository userRepository;
+    @Autowired
+    private IOrderItemRepository itemRepository;
+    @Autowired
+    private JwtProvider jwtProvider;
     @Override
-    public ResponseDto<OrderResponseDto> insert(OrderRequestDto dto, HttpSession session) {
-        Optional<UserInfo> optionalUser = userRepository.findById(dto.getUser_id());
-        List<CartDto> listCart = (List<CartDto>) session.getAttribute("cart");
+    public ResponseDto<OrderResponseDto> insert(OrderRequestDto dto, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi Thanh toán");
+        }
+
+        Optional<UserInfo> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
+        List<CartDto> listCart = (List<CartDto>) session.getAttribute("cart" + email);
 //       validate
         validateInsert(optionalUser, listCart);
 //       create Order

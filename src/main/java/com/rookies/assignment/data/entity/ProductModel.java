@@ -5,14 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,9 +23,6 @@ public class ProductModel {
 	private UUID id;
 	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	private List<CategoriesProductModel> listCategoriesProductModel;
-	
-	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	private List<Product> listProduct;
 	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
@@ -43,9 +33,15 @@ public class ProductModel {
 	
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
 	private List<Wishlist> listWishlists;
-	
-	@ManyToMany(mappedBy = "listModel")
-	private List<Categories> listCategories;
+
+	@ManyToOne
+	@JoinColumn(name="categoriesId")
+	private Categories categories;
+
+//	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
+//	private List<CategoriesProductModel> listCategoriesProductModel;
+//	@ManyToMany(mappedBy = "listModel")
+//	private List<Categories> listCategories;
 	
 	
 //	------------------------------------------------------

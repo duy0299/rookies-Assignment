@@ -23,10 +23,6 @@ import java.util.UUID;
 public class OrderRequestDto extends OrderDtoFlat {
     @NotEmpty
     @NotNull
-    private UUID user_id;
-
-    @NotEmpty
-    @NotNull
     private String address;
 
     private String note = "";
@@ -38,7 +34,7 @@ public class OrderRequestDto extends OrderDtoFlat {
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        order.setListItems(setListOrderItem(listCart));
+        order.setListItems(setListOrderItem(listCart, order));
         order.setStatus((short) 1);
         order.setUser(user);
         order.setAddress(address);
@@ -49,13 +45,15 @@ public class OrderRequestDto extends OrderDtoFlat {
         return order;
     }
 
-    public  List<OrderItem> setListOrderItem(List<CartDto> listCart){
+    public  List<OrderItem> setListOrderItem(List<CartDto> listCart, Order order){
         List<OrderItem> listItem = new ArrayList<>();
         if(listCart == null){
             throw new ResourceFoundException("không có sản phẩm nào trong giỏ hàng");
         }
         for (CartDto cart:listCart) {
-            listItem.add(cart.changeToOrderItem());
+            OrderItem item = cart.changeToOrderItem();
+            item.setOrder(order);
+            listItem.add(item);
         }
         return listItem;
     }

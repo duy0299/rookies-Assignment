@@ -1,23 +1,23 @@
 package com.rookies.assignment.service;
 
 import java.util.List;
-import java.util.UUID;
 
-import com.rookies.assignment.dto.request.RatingRequestDto;
+import com.rookies.assignment.dto.request.RatingRequestInsertDto;
+import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
 import com.rookies.assignment.dto.response.RatingResponseDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.data.entity.Rating;
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public interface IRatingService {
 
-	public ResponseDto<RatingResponseDto> insert(RatingRequestDto dto);
+	public ResponseDto<RatingResponseDto> insert(RatingRequestInsertDto dto, HttpServletRequest request);
 
-	public ResponseDto<RatingResponseDto> update(RatingRequestDto dto);
+	public ResponseDto<RatingResponseDto> update(RatingRequestUpdateDto dto);
 
-	public ResponseDto<RatingResponseDto> updateStatus(RatingRequestDto dto);
+	public ResponseDto<RatingResponseDto> updateStatus(RatingRequestUpdateDto dto);
 	
 	public ResponseDto delete(Integer id);
 	

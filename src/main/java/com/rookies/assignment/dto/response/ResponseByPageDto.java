@@ -14,6 +14,6 @@ public class ResponseByPageDto<E> extends ResponseDto{
         this.totalPage = totalPage;
         setResult(element);
         setMessage("thành công");
-        setStatusCode("200");
+        setStatusCode(200);
     }
 }

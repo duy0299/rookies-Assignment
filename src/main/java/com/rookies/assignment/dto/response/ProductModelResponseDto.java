@@ -1,12 +1,15 @@
 package com.rookies.assignment.dto.response;
 
+
 import com.rookies.assignment.data.entity.*;
-import com.rookies.assignment.dto.flat.ModelImageDtoFlat;
-import com.rookies.assignment.dto.flat.ProductModelDtoFlat;
+import com.rookies.assignment.dto.flat.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,82 +17,163 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class ProductModelResponseDto extends ProductModelDtoFlat {
-    private List<ProductResponseDto> listProduct;
-    private List<ModelImageDtoFlat> listImages;
-    private List<RatingResponseDto> listRatings;
-    private List<CategoriesResponseDto> listCategories;
-    private List<WishlistResponseDto> listWishlists;
+    private List<ProductForModelDto> listProduct;
+    private List<String> listImages;
+    private List<RatingOfModel> listRating;
+    private CategoriesDtoFlat categories;
+    private List<String> listUserLike;
+    private float start;
     private BigDecimal priceTo, priceFrom;
 
     public ProductModelResponseDto(ProductModel model){
         super(model);
         listProduct = setListProduct(model.getListProduct());
         listImages  = setListImages(model.getListImages());
-        listRatings = setListRatings(model.getListRatings());
-        listCategories = setListCategories(model.getListCategories());
-        listWishlists = setWishlists(model.getListWishlists());
-        priceTo  = setPriceTo(listProduct);
-        priceFrom = setPriceFrom(listProduct);
+        listRating      = setRatings(model.getListRatings());
+        listUserLike = setListUserLike(model.getListWishlists());
+        categories  = new CategoriesDtoFlat(model.getCategories());
+        priceTo     = setPriceTo(listProduct, model.getPriceRoot());
+        priceFrom   = setPriceFrom(listProduct, model.getPriceRoot());
+        start = setStart(model.getListRatings());
     }
 
-    public BigDecimal setPriceFrom(List<ProductResponseDto> list){
-        BigDecimal min = new BigDecimal(0);
-        for (ProductResponseDto dto: list) {
+
+    public BigDecimal setPriceFrom(List<ProductForModelDto> list, BigDecimal priceRoot){
+
+        BigDecimal min = new BigDecimal(String.valueOf(priceRoot));
+        for (ProductForModelDto dto: list) {
             if (dto.getCurrentPrice().compareTo(min) == -1){
                 min = dto.getCurrentPrice();
             }
         }
         return min;
     }
-
-    public BigDecimal setPriceTo(List<ProductResponseDto> list){
-        BigDecimal max = new BigDecimal(0);
-        for (ProductResponseDto dto: list) {
+    public BigDecimal setPriceTo(List<ProductForModelDto> list, BigDecimal priceRoot){
+        BigDecimal max = new BigDecimal(String.valueOf(priceRoot));
+        for (ProductForModelDto dto: list) {
             if (dto.getCurrentPrice().compareTo(max) == 1){
                 max = dto.getCurrentPrice();
             }
         }
         return max;
     }
-
-    private List<ProductResponseDto> setListProduct(List<Product> list){
-        List<ProductResponseDto> result = new ArrayList<>();
+    private List<ProductForModelDto> setListProduct(List<Product> list){
+        List<ProductForModelDto> result = new ArrayList<>();
+        if(list == null){
+            return result;
+        }
         for(Product product : list){
-            result.add(new ProductResponseDto(product));
+            result.add(new ProductForModelDto(product));
         }
         return result;
     }
-
-    private List<ModelImageDtoFlat> setListImages(List<ModelImage> list){
-        List<ModelImageDtoFlat> result = new ArrayList<>();
+    private List<String> setListImages(List<ModelImage> list){
+        List<String> result = new ArrayList<>();
+        if(list == null){
+            return result;
+        }
         for(ModelImage image : list){
-            result.add(new ModelImageDtoFlat(image));
+            result.add(image.getUrlImage());
         }
         return result;
     }
-
-    private List<RatingResponseDto> setListRatings(List<Rating> list){
-        List<RatingResponseDto> result = new ArrayList<>();
+    private List<RatingOfModel> setRatings(List<Rating> list){
+        List<RatingOfModel> result = new ArrayList<>();
+        if(list == null){
+            return result;
+        }
         for(Rating rating : list){
-            result.add(new RatingResponseDto(rating));
+            result.add(new RatingOfModel(rating));
         }
         return result;
     }
-
-    private List<CategoriesResponseDto> setListCategories(List<Categories> list){
-
-        List<CategoriesResponseDto> result = new ArrayList<>();
-        for(Categories categories : list){
-            result.add(new CategoriesResponseDto(categories));
+    private List<String> setListUserLike(List<Wishlist> list){
+        List<String> result = new ArrayList<>();
+        if(list == null){
+            return result;
         }
-        return result;
-    }
-
-    private List<WishlistResponseDto> setWishlists(List<Wishlist> list){
-        List<WishlistResponseDto> result = new ArrayList<>();
         for(Wishlist wishlist : list){
-            result.add(new WishlistResponseDto(wishlist));
+            result.add(wishlist.getUserInfo().getEmail());
         }
         return result;
     }
+    private float setStart(List<Rating> list){
+        float sum = 0;
+        if(list == null){
+            return 0;
+        }
+        for(Rating rating : list){
+            sum += rating.getRating();
+        }
+        return Math.round(sum/list.size());
+    }
+
+
+    @Data
+    private class ProductForModelDto extends ProductDtoFlat {
+
+        private SizeDtoFlat size;
+
+        public ProductForModelDto(Product product) {
+            super(product);
+            size = new SizeDtoFlat(product.getSize());
+        }
+
+        public  Product changeToProduct(){
+            Product product = new Product();
+
+            product.setId(getId());
+            product.setSize(size.changeToSize());
+            product.setName(getName());
+            product.setAvatar(getAvatar());
+            product.setSaleType(getSaleType());
+            product.setPriceSale(getPriceSale());
+            product.setQuantity(getQuantity());
+            product.setSoldProductQuantity(getSoldProductQuantity());
+            product.setStatus(isStatus());
+            product.setTimeCreate(getTimeCreate());
+            product.setTimeUpdate(getTimeUpdate());
+
+            return product;
+        }
+
+
+
+
+    }
+    @Data
+    private class RatingOfModel extends RatingDtoFlat {
+        private userRating user;
+        public RatingOfModel(Rating rating) {
+            super(rating);
+            user = new userRating(rating.getUserInfo());
+        }
+
+    }
+    @Data
+    private class userRating {
+        private  String firstName;
+        private  String lastName;
+        private  String phoneNumber;
+        private  String gender;
+        private  String email;
+        private  String avatar;
+
+        public userRating(UserInfo userInfo) {
+            this.firstName = userInfo.getFirstName();
+            this.lastName = userInfo.getLastName();
+            this.phoneNumber = userInfo.getPhoneNumber();
+            this.email = userInfo.getEmail();
+            this.avatar = userInfo.getAvatar();
+            if(userInfo.isGender()){
+                this.gender = "Nam";
+            }else{
+                this.gender = "Nữ";
+            }
+        }
+
+
+
+    }
+
 }

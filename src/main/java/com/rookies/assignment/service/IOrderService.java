@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.rookies.assignment.data.entity.Order;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Component
 public interface IOrderService {
 
-	public ResponseDto<OrderResponseDto> insert(OrderRequestDto order, HttpSession session);
+	public ResponseDto<OrderResponseDto> insert(OrderRequestDto order, HttpServletRequest request);
 	
 	public ResponseDto<OrderResponseDto> updateStatus(OrderRequestUpdateDto order);
 	

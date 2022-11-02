@@ -1,11 +1,13 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.dto.request.RatingRequestDto;
+import com.rookies.assignment.dto.request.RatingRequestInsertDto;
+import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.impl.RatingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -27,20 +29,20 @@ public class RatingController {
 
     @PostMapping("/rating")
     @ResponseBody
-    public ResponseDto insert(@Valid @RequestBody RatingRequestDto dto){
-        return service.insert(dto);
+    public ResponseDto insert(@Valid @RequestBody RatingRequestInsertDto dto, HttpServletRequest request){
+        return service.insert(dto, request);
     }
 
     @PutMapping("/rating")
     @ResponseBody
-    public ResponseDto update(@Valid @RequestBody RatingRequestDto dto){
+    public ResponseDto update(@Valid @RequestBody RatingRequestUpdateDto dto){
         return service.update(dto);
     }
 
 
     @PutMapping("/rating/status")
     @ResponseBody
-    public ResponseDto updateStatus(@Valid @RequestBody RatingRequestDto dto){
+    public ResponseDto updateStatus(@Valid @RequestBody RatingRequestUpdateDto dto){
         return service.updateStatus(dto);
     }
 

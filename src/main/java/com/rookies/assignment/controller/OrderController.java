@@ -7,6 +7,7 @@ import com.rookies.assignment.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class OrderController {
     @Autowired
     private IOrderService service;
 
-    @GetMapping("/order/{}")
+    @GetMapping("/order/{id}")
     @ResponseBody
     public ResponseDto get(@PathVariable("id") UUID id){
         return service.getById(id);
@@ -30,8 +31,8 @@ public class OrderController {
 
     @PostMapping("/order")
     @ResponseBody
-    public ResponseDto insert(@Valid @RequestBody OrderRequestDto dto, HttpSession session){
-        return service.insert(dto, session);
+    public ResponseDto insert(@Valid @RequestBody OrderRequestDto dto, HttpServletRequest request){
+        return service.insert(dto, request);
     }
 
     @PutMapping("/order/status")

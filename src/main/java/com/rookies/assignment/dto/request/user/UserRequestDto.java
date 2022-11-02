@@ -1,4 +1,4 @@
-package com.rookies.assignment.dto.request;
+package com.rookies.assignment.dto.request.user;
 
 import com.rookies.assignment.data.entity.Role;
 import com.rookies.assignment.data.entity.UserInfo;

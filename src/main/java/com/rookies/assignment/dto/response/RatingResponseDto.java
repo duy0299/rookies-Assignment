@@ -21,4 +21,5 @@ public class RatingResponseDto extends RatingDtoFlat {
         userInfo = new UserInfoDtoFlat(rating.getUserInfo());
         modelDtoFlat = new ProductModelDtoFlat(rating.getModel());
     }
+
 }

@@ -3,13 +3,13 @@ package com.rookies.assignment.dto.request;
 import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.data.entity.ProductModel;
 import com.rookies.assignment.data.entity.Size;
-import com.rookies.assignment.dto.flat.ProductDtoFlat;
 import com.rookies.assignment.exceptions.ResourceFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -20,14 +20,27 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequestInsertDto extends ProductDtoFlat {
+public class ProductRequestInsertDto{
+    private  UUID modelID;
+    @NotNull
+    @NotEmpty
+    @javax.validation.constraints.Size(min = 1, max = 50)
+    private  String name;
+    @NotNull
+    @NotEmpty
+    private  String saleType;
+    @NotNull
+    @NotEmpty
+    @Min(value = 0)
+    private  BigDecimal priceSale;
+    @NotNull
+    @NotEmpty
+    @Min(value = 0)
+    private  int quantity;
 
     @NotNull
     @NotEmpty
     private int sizeID;
-
-    private UUID modelID;
-
     @NotNull
     @NotEmpty
     private MultipartFile fileAvatar;
@@ -39,11 +52,11 @@ public class ProductRequestInsertDto extends ProductDtoFlat {
 
         product.setSize(size);
         product.setModel(model);
-        product.setName(getName());
+        product.setName(name);
         product.setAvatar(urlAvatar);
-        product.setSaleType(getSaleType());
-        product.setPriceSale(getPriceSale());
-        product.setQuantity(getQuantity());
+        product.setSaleType(saleType);
+        product.setPriceSale(priceSale);
+        product.setQuantity(quantity);
         product.setSoldProductQuantity(0);
         product.setStatus(true);
         product.setTimeCreate(now);

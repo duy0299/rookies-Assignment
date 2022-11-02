@@ -60,65 +60,66 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 //User
         http.authorizeRequests()
-                .antMatchers(HttpMethod.PUT, "/user/status").hasAnyAuthority("ADMIN", "USER_MANAGER");
-//                .antMatchers(HttpMethod.PUT, "/user/info").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.PUT, "/user/password").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.PUT, "/user/roles").hasAnyAuthority("ADMIN", "USER_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/user/avatar").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN","USER", "USER_MANAGER")
-//                .antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "USER_MANAGER");
-//
-////Product
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/product").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product/status").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product/avatar").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
-////product-model
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.DELETE, "/product-model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.GET, "/product-models").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/product-model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product-model/info").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product-model/status").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/product-model/images").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
-////Cart
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/cart/**",  "/cart").hasAnyAuthority( "USER")
-//                .antMatchers(HttpMethod.GET, "/carts").hasAnyAuthority( "USER");
-//
-////categories
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.DELETE, "/category").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/category").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/category").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
-//
-////size
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.DELETE, "/size").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/size").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.PUT, "/size").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
-//
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.PUT, "/contact",  "/cart").hasAnyAuthority( "ADMIN");
-//
-////Feedback - Rating - Wishlist
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/feedback", "/rating" , "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.GET, "/feedbacks", "/ratings", "/wishlists").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.DELETE, "/feedback", "/rating", "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/feedback", "/rating", "/wishlist").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.PUT, "/feedback/status", "/rating/status", "/wishlist/status").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER");
+                .antMatchers(HttpMethod.PUT, "/user/status").hasAnyAuthority("ADMIN", "USER_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/user/info").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/user/password").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/user/roles").hasAnyAuthority("ADMIN", "USER_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/user/avatar").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN", "USER_MANAGER")
+                .antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "USER_MANAGER");
+
+//Product
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/product").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/product").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/product").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/product/status").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/product/avatar").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
+//product-model
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+//                .antMatchers(HttpMethod.GET, "/models").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/model-with-products").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/model/info").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/model/status").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/model/images").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
+//Cart
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/cart/**",  "/cart").hasAnyAuthority( "USER")
+                .antMatchers(HttpMethod.GET, "/carts").hasAnyAuthority( "USER");
+
+//categories
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/category").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/category").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/category").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
+
+//size
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.DELETE, "/size").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/size").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/size").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
+
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.PUT, "/contact",  "/cart").hasAnyAuthority( "ADMIN");
+
+//Feedback - Rating - Wishlist
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/feedback", "/rating" , "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.GET, "/feedbacks", "/ratings", "/wishlists").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.DELETE, "/feedback", "/rating", "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.POST, "/feedback", "/rating", "/wishlist").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/feedback/status", "/rating/status", "/wishlist/status").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER");
 
 //Order
-//        http.authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/feedback", "/rating" , "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.GET, "/feedbacks", "/ratings", "/wishlists").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.DELETE, "/feedback", "/rating", "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
-//                .antMatchers(HttpMethod.POST, "/feedback", "/rating", "/wishlist").hasAnyAuthority("USER")
-//                .antMatchers(HttpMethod.PUT, "/feedback/status", "/rating/status", "/wishlist/status").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER");
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/feedback", "/rating" , "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.GET, "/feedbacks", "/ratings", "/wishlists").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.DELETE, "/feedback", "/rating", "/wishlist").hasAnyAuthority("ADMIN", "FEEDBACK_MANAGER")
+                .antMatchers(HttpMethod.POST, "/feedback", "/rating", "/wishlist").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/feedback/status", "/rating/status", "/wishlist/status").hasAnyAuthority("ADMIN","FEEDBACK_MANAGER");
         http.authorizeRequests().anyRequest().permitAll();
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         System.out.println("configure HttpSecurity End");

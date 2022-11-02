@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A DTO for the {@link com.rookies.assignment.data.entity.Categories} entity
- */
+
 @Data
 @NoArgsConstructor
 public class CategoriesResponseDto extends CategoriesDtoFlat {
@@ -23,22 +21,30 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
     public CategoriesResponseDto(Categories categories, List<Categories> all){
         super(categories);
         listChildren = setlistListChildrent(all);
-        listModel = setlistProductModelFlat(categories.getListModel());
+        listModel = setlistProductModelFlat(categories.getListModel(), all);
     }
 
     public CategoriesResponseDto(Categories categories){
         super(categories);
-        listModel = setlistProductModelFlat(categories.getListModel());
+        listModel = setlistProductModelFlat(categories.getListModel(), new ArrayList<>());
         listChildren = new ArrayList<>();
     }
 
-    private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list){
+    private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list, List<Categories> allCategories){
         List<ProductModelDtoFlat> result = new ArrayList<>();
         if (list == null) {
             return result;
         }
         for(ProductModel model : list){
             result.add(new ProductModelDtoFlat(model));
+        }
+
+        for (Categories categories: allCategories) {
+            if(categories.getParentCategoriesId() == getId()){
+                for(ProductModel model : categories.getListModel()){
+                    result.add(new ProductModelDtoFlat(model));
+                }
+            }
         }
         return result;
     }
@@ -53,6 +59,7 @@ public class CategoriesResponseDto extends CategoriesDtoFlat {
                 result.add(new CategoriesDtoFlat(categories));
             }
         }
+
         return result;
     }
 

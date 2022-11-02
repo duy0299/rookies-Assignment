@@ -5,10 +5,11 @@ import com.rookies.assignment.data.repository.ICategoriesRepository;
 import com.rookies.assignment.data.repository.IProductModelRepository;
 import com.rookies.assignment.data.repository.IProductRepository;
 import com.rookies.assignment.data.repository.ISizeRepository;
-import com.rookies.assignment.dto.request.ModelRequestInsertDto;
-import com.rookies.assignment.dto.request.ModelRequestUpdateDto;
-import com.rookies.assignment.dto.request.ModelRequestUpdateImageDto;
-import com.rookies.assignment.dto.request.ProductRequestInsertDto;
+import com.rookies.assignment.dto.request.*;
+import com.rookies.assignment.dto.request.productmodel.ModelAndProductRequestInsertDto;
+import com.rookies.assignment.dto.request.productmodel.ModelRequestInsertDto;
+import com.rookies.assignment.dto.request.productmodel.ModelRequestUpdateDto;
+import com.rookies.assignment.dto.request.productmodel.ModelRequestUpdateImageDto;
 import com.rookies.assignment.dto.response.ProductModelResponseDto;
 import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
@@ -25,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ProductModelServiceImpl implements IProductModelService {
@@ -50,27 +48,41 @@ public class ProductModelServiceImpl implements IProductModelService {
 
     @Override
     public ResponseDto<ProductModelResponseDto> insert(ModelRequestInsertDto dto) {
-        List<Categories> listCategories = setListCategories(dto.getListCategoriesID());
-
-        List<Product> listProduct = setListProduct(dto);
-
+        Optional<Categories> optionalCategories = categoriesRepository.findById(dto.getCategoriesID());
+        if(optionalCategories.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy Loại trang sức để gán vào Mẫu ");
+        }
         List<ModelImage> listModelImage = setListImage(dto.getListImages());
 
-        ProductModel newModel = dto.changeToProductModel(listCategories, listProduct, listModelImage);
+        ProductModel newModel =  repository.save(dto.changeToProductModel(optionalCategories.get(), listModelImage));
+        return new ResponseDto<>(new ProductModelResponseDto(newModel));
+    }
 
-        repository.save(newModel);
+    @Override
+    public ResponseDto<ProductModelResponseDto> insertModelAndProduct(ModelAndProductRequestInsertDto dto) {
+        Optional<Categories> optionalCategories = categoriesRepository.findById(dto.getCategoriesID());
+        if(optionalCategories.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy Loại trang sức để gán vào Mẫu ");
+        }
+        List<Product> listProduct = setListProduct(dto);
+        List<ModelImage> listModelImage = setListImage(dto.getListImages());
 
-        return new ResponseDto<ProductModelResponseDto>(new ProductModelResponseDto(newModel));
+        ProductModel newModel =  repository.save(dto.changeToProductModel(optionalCategories.get(), listProduct, listModelImage));
+        return new ResponseDto<>(new ProductModelResponseDto(newModel));
     }
 
     @Override
     public ResponseDto<ProductModelResponseDto> update(ModelRequestUpdateDto dto) {
-        Optional<ProductModel> optional = repository.findById(dto.getId());
-        if(optional.isEmpty()){
+        Optional<ProductModel> ProductOptional = repository.findById(dto.getId());
+        Optional<Categories> optionalCategories = categoriesRepository.findById(dto.getCategoriesID());
+        if(ProductOptional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy Mẫu trang sức");
         }
-        List<Categories> listCategories = setListCategories(dto.getListCategoriesID());
-        ProductModel modifiedModel = repository.save(dto.changeToProductModel(listCategories, optional.get()));
+        if(optionalCategories.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy Loại trang sức để gán vào Mẫu ");
+        }
+
+        ProductModel modifiedModel = repository.save(dto.changeToProductModel(optionalCategories.get(), ProductOptional.get()));
         return new ResponseDto<>(new ProductModelResponseDto(modifiedModel));
     }
 
@@ -117,7 +129,7 @@ public class ProductModelServiceImpl implements IProductModelService {
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy Trang Sức");
         }
-        return new ResponseDto<ProductModelResponseDto>(new ProductModelResponseDto(optional.get()));
+        return new ResponseDto<>(new ProductModelResponseDto(optional.get()));
     }
 
     @Override
@@ -151,6 +163,58 @@ public class ProductModelServiceImpl implements IProductModelService {
 //        ProductModel =>convert to ProductModelResponseDto => add to listResult
         for (ProductModel model: listOptional.get()) {
             listResult.add(new ProductModelResponseDto(model));
+        }
+        return new ResponseDto<>(listResult);
+    }
+
+    @Override
+    public ResponseDto<List<ProductModelResponseDto>> listMostPopularProduct() {
+        Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+        List<ProductModelResponseDto> dataResult = new ArrayList<>();
+
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
+        }
+        //        ProductModel =>convert to ProductModelResponseDto => add to listResult
+        for (ProductModel model: listOptional.get()) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+
+        listResult.sort( (ProductModelResponseDto p1, ProductModelResponseDto p2)->{
+            if(p1.getListUserLike().size() < p2.getListUserLike().size()) {
+                return 1;
+            }else  if(p1.getListUserLike().size() > p2.getListUserLike().size()) {
+                return -1;
+            }
+            return 0;
+        });
+        if(listResult.size()>10){
+            for (int i = 0; i < 10; i++) {
+                dataResult.add(listResult.get(i));
+            }
+            return new ResponseDto<>(dataResult);
+        }
+        return new ResponseDto<>(listResult);
+    }
+
+    @Override
+    public ResponseDto<List<ProductModelResponseDto>> listNewProduct() {
+        Long oneMonth = 60*60*24*30*1L;
+        Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
+        Date now = new Date();
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
+        }
+        //        ProductModel =>convert to ProductModelResponseDto => add to listResult
+        for (ProductModel model: listOptional.get()) {
+            Date timeCreate = new Date(model.getTimeCreate().getTime());
+            System.out.println(now.getTime() + " - " +timeCreate.getTime() + " = " + (now.getTime()-timeCreate.getTime())/1000 + " >< " +oneMonth);
+            if((now.getTime()-timeCreate.getTime())/1000 < oneMonth ){
+                listResult.add(new ProductModelResponseDto(model));
+            }
         }
         return new ResponseDto<>(listResult);
     }
@@ -203,19 +267,8 @@ public class ProductModelServiceImpl implements IProductModelService {
         return text;
     }
 
-    private List<Categories> setListCategories(List<Integer> listCategoriesID){
-        List<Categories> listResult =  new ArrayList<>();
-        for (Integer categoriesID : listCategoriesID) {
-            Optional<Categories> optionalCategories = categoriesRepository.findById(categoriesID);
-            if(optionalCategories.isEmpty()){
-                throw new ResourceFoundException("Không tìm thấy Loại trang sức để gán vào Mẫu ");
-            }
-            listResult.add(optionalCategories.get());
-        }
-        System.out.println(listResult);
-        return listResult;
-    }
-    private List<Product> setListProduct(ModelRequestInsertDto dto){
+
+    private List<Product> setListProduct(ModelAndProductRequestInsertDto dto){
         List<Product> listResult =  new ArrayList<>();
 
         for (int i=0; i< dto.getListProduct().size()-1; i++) {

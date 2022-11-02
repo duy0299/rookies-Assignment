@@ -4,6 +4,8 @@ import com.rookies.assignment.data.entity.Rating;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
@@ -15,9 +17,11 @@ import java.sql.Timestamp;
 public class RatingDtoFlat{
     private  int id;
     private  String content;
-    @Size(min = 1, max = 5)
+    @Min(1)
+    @Max(5)
     private  int rating;
-    @Size(min = 1, max = 3)
+    @Min(1)
+    @Max(3)
     private  short status;
     private  Timestamp timeCreate;
     private  Timestamp timeUpdate;

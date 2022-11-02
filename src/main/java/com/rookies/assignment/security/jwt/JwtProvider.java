@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtProvider {
@@ -61,6 +63,22 @@ public class JwtProvider {
         String email = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
         System.out.println("JwtProvider => getEmailFromToken End");
         return email;
+    }
+
+    private  String getJwt(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        if(authHeader != null && authHeader.startsWith("Bearer")){
+            return authHeader.replace("Bearer ", "");
+        }
+        return null;
+    }
+    public String getUserIFromHttpServletRequest(HttpServletRequest request){
+        String token = getJwt(request);
+        if(token != null && validateToken(token)){
+            String email = getEmailFromToken(token);
+            return email;
+        }
+        return null;
     }
 
 }

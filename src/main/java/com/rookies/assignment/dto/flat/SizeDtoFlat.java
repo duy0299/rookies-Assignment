@@ -31,19 +31,18 @@ public class SizeDtoFlat {
         name = size.getName();
         status = size.isStatus();
         timeUpdate = size.getTimeUpdate();
+        timeCreate = size.getTimeCreate();
     }
 
     public Size changeToSizeUpdate(Size sizeOld){
-        Size size = new Size();
+        Size size = sizeOld;
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
 //        size.setListProduct(sizeOld.getListProduct());
-        size.setStatus(sizeOld.isStatus());
         size.setId(id);
         size.setName(name);
         size.setTimeUpdate(now);
-        size.setTimeCreate(sizeOld.getTimeCreate());
         return size;
     }
 

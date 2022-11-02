@@ -18,16 +18,19 @@ public class Categories {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@OneToMany(mappedBy = "categories", cascade = CascadeType.ALL)
-	private List<CategoriesProductModel> listCategoriesProductModels;
-	
-	@ManyToMany
-	@JoinTable(
-			name = "categoriesProductModel",
-			joinColumns = @JoinColumn(name = "categoriesId"),
-			inverseJoinColumns = @JoinColumn(name = "productModelId"))
 	private List<ProductModel> listModel;
+
+
+//	@OneToMany(mappedBy = "categories", cascade = CascadeType.ALL)
+//	private List<CategoriesProductModel> listCategoriesProductModels;
+//	@ManyToMany
+//	@JoinTable(
+//			name = "categoriesProductModel",
+//			joinColumns = @JoinColumn(name = "categoriesId"),
+//			inverseJoinColumns = @JoinColumn(name = "productModelId"))
+//	private List<ProductModel> listModel;
 	
 	
 //	------------------------------------------------------

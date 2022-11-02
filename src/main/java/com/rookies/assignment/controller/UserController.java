@@ -1,9 +1,9 @@
 package com.rookies.assignment.controller;
 
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
-import com.rookies.assignment.dto.request.UserRequestUpdateAvatarDto;
-import com.rookies.assignment.dto.request.UserRequestUpdatePasswordDto;
-import com.rookies.assignment.dto.request.UserRequestUpdateRoleDto;
+import com.rookies.assignment.dto.request.user.UserRequestUpdateAvatarDto;
+import com.rookies.assignment.dto.request.user.UserRequestUpdatePasswordDto;
+import com.rookies.assignment.dto.request.user.UserRequestUpdateRoleDto;
 import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.security.jwt.JwtProvider;
@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 public class UserController {
     @Autowired
     private IUserInfoService service;

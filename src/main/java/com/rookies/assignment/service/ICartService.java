@@ -7,6 +7,7 @@ import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Component
 public interface ICartService {
 	
-	public ResponseDto<List<CartDto>> get(HttpSession session);
+	public ResponseDto<List<CartDto>> get(HttpServletRequest request);
 	
-	public ResponseDto<List<CartDto>> addToCartByMethod(CartRequestDto dto, HttpSession session,String method);
+	public ResponseDto<List<CartDto>> addToCartByMethod(CartRequestDto dto, HttpServletRequest request,String method);
 
 }

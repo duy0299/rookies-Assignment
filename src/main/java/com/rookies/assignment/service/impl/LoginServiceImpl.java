@@ -60,7 +60,7 @@ public class LoginServiceImpl implements ILoginService {
         }
 
         //	check  condition 1 uppercase, 1 lowercase, 1 number, from 8-20 characters
-        if(Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,20})$", dto.getPassword())) {
+        if(!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,20})$", dto.getPassword())) {
             throw new ParamNotValidException("Mật khẩu không phù hợp với yêu cầu");
         }
         //	check xem email này có chưa

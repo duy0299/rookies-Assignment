@@ -1,4 +1,4 @@
-package com.rookies.assignment.dto.request;
+package com.rookies.assignment.dto.request.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

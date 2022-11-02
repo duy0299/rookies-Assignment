@@ -10,16 +10,6 @@
         primary key (id)
     );
 
-    create table categories_product_model (
-       id  serial not null,
-        status boolean not null,
-        time_create timestamp,
-        time_update timestamp,
-        categories_id int4,
-        product_model_id uuid,
-        primary key (id)
-    );
-
     create table contact (
        id  serial not null,
         address varchar(100) not null,
@@ -85,6 +75,7 @@
         status boolean not null,
         time_create timestamp,
         time_update timestamp,
+        categories_id int4,
         primary key (id)
     );
 
@@ -103,9 +94,17 @@
     create table role (
        id uuid not null,
         description varchar(200),
-        level int2 not null,
         name varchar(50) not null,
         status int2 not null,
+        primary key (id)
+    );
+
+    create table size (
+       id  serial not null,
+        name varchar(50) not null,
+        status boolean not null,
+        time_create timestamp,
+        time_update timestamp,
         primary key (id)
     );
 
@@ -120,23 +119,14 @@
         primary key (id)
     );
 
-    create table tbsize (
-       id  serial not null,
-        name varchar(50) not null,
-        status boolean not null,
-        time_create timestamp,
-        time_update timestamp,
-        primary key (id)
-    );
-
     create table user_info (
        id uuid not null,
-        avatar varchar(35),
+        avatar varchar(150),
         email varchar(50) not null,
         first_name varchar(20) not null,
         gender boolean not null,
         last_name varchar(20) not null,
-        password varchar(30) not null,
+        password varchar(250) not null,
         phone_number varchar(15),
         status boolean not null,
         time_create timestamp,
@@ -164,16 +154,6 @@
     alter table user_info 
        add constraint UK_gnu0k8vv6ptioedbxbfsnan9g unique (email);
 
-    alter table categories_product_model 
-       add constraint FKkchw5m5319iymybgkyq9f591q 
-       foreign key (categories_id) 
-       references categories;
-
-    alter table categories_product_model 
-       add constraint FK85lp7oi93624jmhqt0w5pakcy 
-       foreign key (product_model_id) 
-       references product_model;
-
     alter table feedback 
        add constraint FKaxo7xjwxovdx3iv82efe0p4xr 
        foreign key (user_id) 
@@ -200,9 +180,14 @@
        references product_model;
 
     alter table product 
-       add constraint FK6gr8lmi0ucqnne4lh6l36ndmk 
+       add constraint FKsccbu8jiglqc6t5tjsp04amv7 
        foreign key (size_id) 
-       references tbsize;
+       references size;
+
+    alter table product_model 
+       add constraint FKrxyftqhl9tabbubg7xhcwvl2i 
+       foreign key (categories_id) 
+       references categories;
 
     alter table rating 
        add constraint FKaeyym7u4he52usn16cn1fy1qe 
@@ -238,13 +223,3 @@
        add constraint FKbrbunxhtojin0ona9ui421o0r 
        foreign key (user_id) 
        references user_info;
-
-INSERT INTO public."role" (id,description,"level",name,status) VALUES
- ('0710a5ca-f57e-11e9-802a-5aa538984bd0','Temporarily lock your account',0,'Ban',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd1','Admin',1,'Admin',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd2','User',2,'User',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd3','Ban Comment',3,'Ban Comment',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd4','Feedback Manager',4,'Feedback Manager',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd5','Order Manager',5,'Order Manager',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd6','Warehouse Manager',6,'Warehouse Manager',1),
- ('0710a5ca-f57e-11e9-802a-5aa538984bd7','User Manager',7,'User Manager',1);

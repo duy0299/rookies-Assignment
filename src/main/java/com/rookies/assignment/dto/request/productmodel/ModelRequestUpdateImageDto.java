@@ -1,4 +1,4 @@
-package com.rookies.assignment.dto.request;
+package com.rookies.assignment.dto.request.productmodel;
 
 import com.rookies.assignment.data.entity.ModelImage;
 import com.rookies.assignment.data.entity.ProductModel;
@@ -16,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-public class ModelRequestUpdateImageDto extends ProductModelDtoFlat {
-    private UUID productModelID;
+public class ModelRequestUpdateImageDto{
+    private UUID id;
     private List<MultipartFile> listImages;
 
 

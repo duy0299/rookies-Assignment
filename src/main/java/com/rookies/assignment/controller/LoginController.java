@@ -14,14 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@CrossOrigin
 public class LoginController {
 
     @Autowired
@@ -38,6 +36,7 @@ public class LoginController {
     @PostMapping("/login")
     @ResponseBody
     public ResponseDto login(@RequestBody LoginRequestDto dto, HttpServletRequest req){
+
 //        check trên database
         Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
@@ -65,7 +64,7 @@ public class LoginController {
     @PostMapping("/register")
     @ResponseBody
     public ResponseDto register(@RequestBody RegisterRequestDto dto){
-
+        System.out.println("test ");
         return service.register(dto);
     }
 

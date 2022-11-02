@@ -40,11 +40,12 @@ public class ProductController {
         ProductRequestInsertDto dto = new ProductRequestInsertDto();
         dto.setName(name);
         dto.setQuantity(quantity);
-        dto.setSizeID(sizeID);
-        dto.setModelID(modelID);
         dto.setSaleType(saleType);
         dto.setPriceSale(priceSale);
+
         dto.setFileAvatar(fileAvatar);
+        dto.setSizeID(sizeID);
+        dto.setModelID(modelID);
         return service.insert(dto);
     }
 
