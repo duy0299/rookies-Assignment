@@ -1,6 +1,6 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.dto.request.OrderRequestDto;
+import com.rookies.assignment.dto.request.OrderRequestInsertDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IOrderService;
@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 public class OrderController {
     @Autowired
     private IOrderService service;
@@ -31,7 +31,7 @@ public class OrderController {
 
     @PostMapping("/order")
     @ResponseBody
-    public ResponseDto insert(@Valid @RequestBody OrderRequestDto dto, HttpServletRequest request){
+    public ResponseDto insert(@Valid @RequestBody OrderRequestInsertDto dto, HttpServletRequest request){
         return service.insert(dto, request);
     }
 

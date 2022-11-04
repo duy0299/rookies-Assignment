@@ -6,15 +6,20 @@ import com.rookies.assignment.data.entity.Wishlist;
 import com.rookies.assignment.data.repository.IProductModelRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
 import com.rookies.assignment.data.repository.IWishlistRepository;
-import com.rookies.assignment.dto.request.WishlistRequestDto;
+import com.rookies.assignment.dto.request.WishlistRequestInsertDto;
+import com.rookies.assignment.dto.request.WishlistRequestUpdateDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.WishlistResponseDto;
+import com.rookies.assignment.exceptions.ForbiddenException;
 import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IWishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,13 +33,21 @@ public class WishlistServiceImpl implements IWishlistService {
     private IUserInfoRepository userRepository;
     @Autowired
     private IProductModelRepository modelRepository;
+    @Autowired
+    private JwtProvider jwtProvider;
 
     @Override
-    public ResponseDto<WishlistResponseDto> insert(WishlistRequestDto dto) {
-        Optional<UserInfo> optionalUser = userRepository.findById(dto.getUser_id());
+    public ResponseDto<WishlistResponseDto> insert(WishlistRequestInsertDto dto, HttpServletRequest request) {
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi thêm vào danh sách yêu thích");
+        }
+
+        Optional<UserInfo> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
+
         Optional<ProductModel> optionalModel = modelRepository.findById(dto.getModelId());
-        Optional<List<Wishlist>> s = Optional.of(repository.findAll());
-        Optional<Wishlist> optionalWishlist = Optional.ofNullable(repository.findByUserAndMode(dto.getUser_id(), dto.getModelId()));
+
+        Optional<Wishlist> optionalWishlist = Optional.ofNullable(repository.findByUserAndMode(optionalUser.get().getId(), dto.getModelId()));
 
         if(optionalUser.isEmpty() || optionalModel.isEmpty()){
             throw new ResourceFoundException("User hoặc Trang sức không tồn tại");
@@ -50,12 +63,12 @@ public class WishlistServiceImpl implements IWishlistService {
     }
 
     @Override
-    public ResponseDto<WishlistResponseDto> updateStatus(WishlistRequestDto dto) {
+    public ResponseDto<WishlistResponseDto> updateStatus(WishlistRequestUpdateDto dto) {
         Optional<Wishlist> optional = repository.findById(dto.getId());
         if(optional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy");
         }
-        Wishlist modifiedWishlist = repository.save(dto.changeToWishlistUpdateStatus());
+        Wishlist modifiedWishlist = repository.save(dto.changeToWishlistUpdateStatus(optional.get()));
         return new ResponseDto<>(new WishlistResponseDto(modifiedWishlist));
     }
 
@@ -90,5 +103,26 @@ public class WishlistServiceImpl implements IWishlistService {
         }
 
         return new ResponseDto<List<WishlistResponseDto>>(listResult);
+    }
+
+
+    @Override
+    public ResponseDto<List<WishlistResponseDto>> listByUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        List<WishlistResponseDto> listResult = new ArrayList<>();
+        if(email==null){
+            throw new ForbiddenException("Bạn chưa đăng nhập");
+        }
+
+        Optional<UserInfo> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
+        if(optionalUser.isEmpty()){
+
+        }
+        for (Wishlist wishlist:optionalUser.get().getListWishlists()) {
+            listResult.add(new WishlistResponseDto(wishlist));
+        }
+
+        return new ResponseDto<>(listResult);
     }
 }

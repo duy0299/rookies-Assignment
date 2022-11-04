@@ -137,6 +137,13 @@ public class ProductModelController {
         return service.listByName(name, page-1, size);
     }
 
+    @GetMapping("/models/by-category/{id}")
+    @ResponseBody
+    public ResponseByPageDto<List<ProductModelResponseDto>> listByCategories(@PathVariable("id")Integer categoryID,
+                                                                       @RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listByCategories(categoryID, page-1, size);
+    }
+
     @GetMapping("/models/price-range")
     @ResponseBody
     public ResponseByPageDto<List<ProductModelResponseDto>> listByPriceRange(@RequestParam(name="priceFrom")BigDecimal priceFrom, @RequestParam(name="priceTo")BigDecimal priceTo,

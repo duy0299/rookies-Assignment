@@ -15,17 +15,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 @Data
 @NoArgsConstructor
-public class OrderRequestDto extends OrderDtoFlat {
+public class OrderRequestInsertDto {
     @NotEmpty
     @NotNull
     private String address;
 
     private String note = "";
+
+    private List<CartRequestDto> listProduct;
 
 
     public Order changeToOrderInsert(UserInfo user,List<CartDto> listCart){

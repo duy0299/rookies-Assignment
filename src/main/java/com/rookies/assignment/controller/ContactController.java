@@ -12,6 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/contact")
+@CrossOrigin
 public class ContactController {
     @Autowired
     private ContactServiceImpl service;

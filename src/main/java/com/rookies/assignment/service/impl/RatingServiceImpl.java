@@ -41,10 +41,9 @@ public class RatingServiceImpl implements IRatingService {
 
     @Override
     public ResponseDto<RatingResponseDto> insert(RatingRequestInsertDto dto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
         if(email==null){
-            throw new ForbiddenException("Bạn phải đăng nhập trước khi Thanh toán");
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
         }
         Optional<UserInfo> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
         Optional<ProductModel> modelOptional = modelRepository.findById(dto.getModelId());

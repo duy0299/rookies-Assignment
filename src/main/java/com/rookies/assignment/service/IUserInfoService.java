@@ -9,6 +9,7 @@ import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,8 @@ public interface IUserInfoService {
 	public ResponseDto<UserInfoResponseDto> updateStatus(UUID id, boolean status);
 	
 	public ResponseDto<UserInfoResponseDto> getById(UUID id);
+
+	public ResponseDto<UserInfoResponseDto> getByToken(HttpServletRequest request);
 
 	public ResponseByPageDto<List<UserInfoResponseDto>> listAll(int page, int size);
 

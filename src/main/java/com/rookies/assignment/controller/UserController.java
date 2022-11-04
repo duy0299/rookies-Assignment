@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.UUID;
@@ -34,7 +35,7 @@ public class UserController {
 
     @DeleteMapping("/user")
     @ResponseBody
-    public ResponseDto delete(@RequestParam(name = "userID" )UUID id, HttpSession session){
+    public ResponseDto delete(@RequestParam(name = "userID" )UUID id){
 //        if(!checkRole.checkLevelUser(1, 7, session)){
 //            throw new ForbiddenException("Bạn không có đủ quyền để thực hiện");
 //        }
@@ -50,7 +51,7 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     @ResponseBody
-    public ResponseDto get(@PathVariable("id") UUID id){
+    public ResponseDto getById(@PathVariable("id") UUID id){
         return service.getById(id);
     }
 
@@ -60,7 +61,11 @@ public class UserController {
         return service.listAll(page, size);
     }
 
-
+    @GetMapping("/user/with-token")
+    @ResponseBody
+    public ResponseDto getByToken(HttpServletRequest request){
+        return service.getByToken(request);
+    }
 
     @PutMapping("/user/password")
     @ResponseBody

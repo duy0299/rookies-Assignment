@@ -39,5 +39,8 @@ public interface IProductModelService {
 	public ResponseDto<List<ProductModelResponseDto>> listMostPopularProduct();
 
     public ResponseByPageDto<List<ProductModelResponseDto>> listByName(String name, int page, int size);
-	public ResponseByPageDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom, int page, int size);
+
+	public ResponseByPageDto <List <ProductModelResponseDto> > listByCategories(int categoriesID, int page, int size);
+
+    public ResponseByPageDto<List<ProductModelResponseDto>> listByPriceRange(BigDecimal priceTo, BigDecimal priceFrom, int page, int size);
 }

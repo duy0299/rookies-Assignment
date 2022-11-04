@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin
 public class SizeController {
 
     @Autowired
@@ -32,15 +33,16 @@ public class SizeController {
         return service.insert(dto);
     }
 
-    @PutMapping("/size")
+    @PutMapping("/size/{id}")
     @ResponseBody
-    public ResponseDto update(@Valid @RequestBody SizeDtoFlat dto){
+    public ResponseDto update(@PathVariable("id") Integer id, @Valid @RequestBody SizeDtoFlat dto ){
+        dto.setId(id);
         return service.update(dto);
     }
 
-    @DeleteMapping("/size")
+    @DeleteMapping("/size/{id}")
     @ResponseBody
-    public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto delete(@PathVariable("id") Integer id){
         return service.delete(id);
     }
 }

@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class CartController {
     @Autowired
     private CartServiceImpl service;
@@ -30,19 +31,19 @@ public class CartController {
         return service.addToCartByMethod(dto, request, "default");
     }
 
-    @PostMapping("/cart/up")
+    @PutMapping("/cart/up")
     @ResponseBody
     public ResponseDto<List<CartDto>> up(@Valid @RequestBody CartRequestDto dto, HttpServletRequest request){
         return service.addToCartByMethod(dto, request, "up");
     }
 
-    @PostMapping("/cart/down")
+    @PutMapping("/cart/down")
     @ResponseBody
     public ResponseDto<List<CartDto>> down(@Valid @RequestBody CartRequestDto dto, HttpServletRequest request){
         return service.addToCartByMethod(dto, request, "down");
     }
 
-    @PostMapping("/cart/change")
+    @PutMapping("/cart/change")
     @ResponseBody
     public ResponseDto<List<CartDto>> change(@Valid @RequestBody CartRequestDto dto, HttpServletRequest request){
         return service.addToCartByMethod(dto, request, "change");

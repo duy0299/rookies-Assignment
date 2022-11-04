@@ -66,7 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/user/roles").hasAnyAuthority("ADMIN", "USER_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/user/avatar").hasAnyAuthority("USER")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN", "USER_MANAGER")
-                .antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority("USER")
+                .antMatchers(HttpMethod.GET, "/user/with-token").hasAnyAuthority( "USER")
+                .antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority( "ADMIN", "USER_MANAGER")
                 .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "USER_MANAGER");
 
 //Product
@@ -85,10 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/model/info").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/model/status").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/model/images").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
-//Cart
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/cart/**",  "/cart").hasAnyAuthority( "USER")
-                .antMatchers(HttpMethod.GET, "/carts").hasAnyAuthority( "USER");
+
 
 //categories
         http.authorizeRequests()

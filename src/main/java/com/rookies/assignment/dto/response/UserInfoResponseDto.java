@@ -7,6 +7,12 @@ import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +24,7 @@ public class UserInfoResponseDto extends UserInfoDtoFlat {
     private List<RatingResponseDto> listRatings;
     private List<FeedbackDtoFlat> listFeedbacks;
     private List<WishlistResponseDto> listWishlists;
-    private List<RoleDtoFlat> listRole;
+    private List<String> listRole;
     private List<OrderResponseDto> listOrder;
 
     public UserInfoResponseDto(UserInfo user){
@@ -73,13 +79,13 @@ public class UserInfoResponseDto extends UserInfoDtoFlat {
         return result;
     }
 
-    private List<RoleDtoFlat> setListRoles(List<Role> list){
-        List<RoleDtoFlat> result = new ArrayList<>();
+    private List<String> setListRoles(List<Role> list){
+        List<String> result = new ArrayList<>();
         if (list == null) {
             return result;
         }
         for(Role role : list){
-            result.add(new RoleDtoFlat(role));
+            result.add(role.getName());
         }
         return result;
     }
@@ -96,5 +102,47 @@ public class UserInfoResponseDto extends UserInfoDtoFlat {
             }
         }
         return false;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public class ProductModelDtoFlat{
+        private  UUID id;
+        @NotNull
+        @NotEmpty
+        @Size(min = 1, max = 50)
+        private String name;
+        @NotNull
+        @NotEmpty
+        @Min(value = 0)
+        private BigDecimal priceRoot;
+        @NotNull
+        @NotEmpty
+        private String description;
+        private  boolean status;
+        private Timestamp timeCreate;
+        private  Timestamp timeUpdate;
+
+        public ProductModelDtoFlat(ProductModel model) {
+            id = model.getId();
+            name = model.getName();
+            priceRoot = model.getPriceRoot();
+            description = model.getDescription();
+            status = model.isStatus();
+            timeCreate = model.getTimeCreate();
+            timeUpdate = model.getTimeUpdate();
+        }
+
+        public ProductModel changeToProductModelFlat() {
+            ProductModel model = new ProductModel();
+            model.setId(id);
+            model.setStatus(status);
+            model.setName(name);
+            model.setPriceRoot(priceRoot);
+            model.setDescription(description);
+            model.setTimeCreate(timeCreate);
+            model.setTimeUpdate(timeUpdate);
+            return model;
+        }
     }
 }

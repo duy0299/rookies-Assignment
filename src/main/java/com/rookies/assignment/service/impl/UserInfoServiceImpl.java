@@ -12,8 +12,10 @@ import com.rookies.assignment.dto.request.user.UserRequestUpdateRoleDto;
 import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
+import com.rookies.assignment.exceptions.ForbiddenException;
 import com.rookies.assignment.exceptions.ParamNotValidException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +44,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private AmazonClient amazonClient;
     @Value("${amazonProperties.folderSaveUser}")
     private String folderName;
+    @Autowired
+    private JwtProvider jwtProvider;
 
 //    Update info of User first name, last name, phone, gender
     @Override
@@ -77,6 +82,20 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDto<UserInfoResponseDto> getById(UUID id) {
         Optional<UserInfo> user = repository.findById(id);
+        if(user.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy User này");
+        }
+        return new ResponseDto<>(new UserInfoResponseDto(user.get()));
+    }
+
+    @Override
+    public ResponseDto<UserInfoResponseDto> getByToken(HttpServletRequest request) {
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        System.out.println(email);
+        if(email==null){
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
+        }
+        Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(email));
         if(user.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
         }

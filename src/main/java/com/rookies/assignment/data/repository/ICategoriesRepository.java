@@ -1,5 +1,6 @@
 package com.rookies.assignment.data.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -11,5 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICategoriesRepository  extends JpaRepository<Categories, Integer>{
         public Categories findByName(String name);
-	
+
+        public List<Categories> findByIdOrParentCategoriesId(int id, int parentId);
 }

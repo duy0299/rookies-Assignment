@@ -15,34 +15,34 @@ import java.util.List;
 @NoArgsConstructor
 public class CategoriesResponseDto extends CategoriesDtoFlat {
 
-    private List<ProductModelDtoFlat> listModel;
+    private List<ProductModelResponseDto> listModel;
     private List<CategoriesDtoFlat> listChildren;
 
     public CategoriesResponseDto(Categories categories, List<Categories> all){
         super(categories);
         listChildren = setlistListChildrent(all);
-        listModel = setlistProductModelFlat(categories.getListModel(), all);
+        listModel = setlistProductModel(categories.getListModel(), all);
     }
 
     public CategoriesResponseDto(Categories categories){
         super(categories);
-        listModel = setlistProductModelFlat(categories.getListModel(), new ArrayList<>());
+        listModel = new ArrayList<>();
         listChildren = new ArrayList<>();
     }
 
-    private List<ProductModelDtoFlat> setlistProductModelFlat(List<ProductModel> list, List<Categories> allCategories){
-        List<ProductModelDtoFlat> result = new ArrayList<>();
+    private List<ProductModelResponseDto> setlistProductModel(List<ProductModel> list, List<Categories> allCategories){
+        List<ProductModelResponseDto> result = new ArrayList<>();
         if (list == null) {
             return result;
         }
         for(ProductModel model : list){
-            result.add(new ProductModelDtoFlat(model));
+            result.add(new ProductModelResponseDto(model));
         }
 
         for (Categories categories: allCategories) {
             if(categories.getParentCategoriesId() == getId()){
                 for(ProductModel model : categories.getListModel()){
-                    result.add(new ProductModelDtoFlat(model));
+                    result.add(new ProductModelResponseDto(model));
                 }
             }
         }

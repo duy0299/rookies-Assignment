@@ -6,10 +6,8 @@ import com.rookies.assignment.dto.flat.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
     private List<String> listImages;
     private List<RatingOfModel> listRating;
     private CategoriesDtoFlat categories;
-    private List<String> listUserLike;
+    private List<WishlistOfModel> listWishlist;
     private float start;
     private BigDecimal priceTo, priceFrom;
 
@@ -30,7 +28,7 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         listProduct = setListProduct(model.getListProduct());
         listImages  = setListImages(model.getListImages());
         listRating      = setRatings(model.getListRatings());
-        listUserLike = setListUserLike(model.getListWishlists());
+        listWishlist = setListWishlist(model.getListWishlists());
         categories  = new CategoriesDtoFlat(model.getCategories());
         priceTo     = setPriceTo(listProduct, model.getPriceRoot());
         priceFrom   = setPriceFrom(listProduct, model.getPriceRoot());
@@ -87,13 +85,13 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
         }
         return result;
     }
-    private List<String> setListUserLike(List<Wishlist> list){
-        List<String> result = new ArrayList<>();
+    private List<WishlistOfModel> setListWishlist(List<Wishlist> list){
+        List<WishlistOfModel> result = new ArrayList<>();
         if(list == null){
             return result;
         }
         for(Wishlist wishlist : list){
-            result.add(wishlist.getUserInfo().getEmail());
+            result.add(new WishlistOfModel(wishlist));
         }
         return result;
     }
@@ -176,4 +174,17 @@ public class ProductModelResponseDto extends ProductModelDtoFlat {
 
     }
 
+    @Data
+    @NoArgsConstructor
+    private class WishlistOfModel  {
+        private  String email;
+        private  int id;
+        private  boolean status;
+
+        public WishlistOfModel(Wishlist wishlist){
+            email = wishlist.getUserInfo().getEmail();
+            id = wishlist.getId();
+            status = wishlist.isStatus();
+        }
+    }
 }

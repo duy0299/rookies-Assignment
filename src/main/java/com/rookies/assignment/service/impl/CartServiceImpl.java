@@ -70,6 +70,7 @@ public class CartServiceImpl implements ICartService {
         if (flag) {
 //          set quantity By method
             CartDto modifiedCar = listCart.get(index);
+            System.out.println("Old: " + listCart.get(index).getQuantity());
             modifiedCar.setQuantity( setQuantityByMethod( listCart.get(index).getQuantity(), dto.getQuantity(), method) );
             modifiedCar.setTotal();
 //          check quantity
@@ -82,6 +83,7 @@ public class CartServiceImpl implements ICartService {
                 listCart.set(index, modifiedCar);
             }
         }else{
+
             if (productOptional.get().getQuantity() < dto.getQuantity()){
                 throw new ParamNotValidException("số lượng vượt quá lượng hàng tồn kho");
             }

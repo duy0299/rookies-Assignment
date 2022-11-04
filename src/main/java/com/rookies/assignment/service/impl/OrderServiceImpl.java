@@ -1,11 +1,14 @@
 package com.rookies.assignment.service.impl;
 
 import com.rookies.assignment.data.entity.Order;
+import com.rookies.assignment.data.entity.Product;
 import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.data.repository.IOrderItemRepository;
 import com.rookies.assignment.data.repository.IOrderRepository;
+import com.rookies.assignment.data.repository.IProductRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
-import com.rookies.assignment.dto.request.OrderRequestDto;
+import com.rookies.assignment.dto.request.CartRequestDto;
+import com.rookies.assignment.dto.request.OrderRequestInsertDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.dto.response.OrderResponseDto;
@@ -33,18 +36,32 @@ public class OrderServiceImpl implements IOrderService {
     private IUserInfoRepository userRepository;
     @Autowired
     private IOrderItemRepository itemRepository;
+
+    @Autowired
+    private IProductRepository productRepository;
     @Autowired
     private JwtProvider jwtProvider;
     @Override
-    public ResponseDto<OrderResponseDto> insert(OrderRequestDto dto, HttpServletRequest request) {
+    public ResponseDto<OrderResponseDto> insert(OrderRequestInsertDto dto, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        List<CartDto> listCart = new ArrayList<>();
         if(email==null){
             throw new ForbiddenException("Bạn phải đăng nhập trước khi Thanh toán");
         }
-
         Optional<UserInfo> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
-        List<CartDto> listCart = (List<CartDto>) session.getAttribute("cart" + email);
+
+        for (CartRequestDto cartRequest: dto.getListProduct()) {
+            Optional<Product> productOptional = productRepository.findById(cartRequest.getProductId());
+            if (productOptional.isEmpty()){
+                throw new ResourceFoundException("Không tìm thấy  trang sức");
+            }
+            if(cartRequest.getQuantity() < 1 || cartRequest.getQuantity() >productOptional.get().getQuantity() ){
+                throw new ParamNotValidException("Số lượng  " +productOptional.get().getName() + "vượt quá lượng tồn kho hoặc thấp hơn 1");
+            }
+            listCart.add(new CartDto(productOptional.get(), cartRequest.getQuantity()));
+        }
+
 //       validate
         validateInsert(optionalUser, listCart);
 //       create Order

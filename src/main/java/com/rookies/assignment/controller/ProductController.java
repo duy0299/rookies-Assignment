@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin
 public class ProductController {
     @Autowired
     private IProductService service;

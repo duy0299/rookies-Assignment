@@ -1,10 +1,7 @@
 package com.rookies.assignment.service.impl;
 
 import com.rookies.assignment.data.entity.*;
-import com.rookies.assignment.data.repository.ICategoriesRepository;
-import com.rookies.assignment.data.repository.IProductModelRepository;
-import com.rookies.assignment.data.repository.IProductRepository;
-import com.rookies.assignment.data.repository.ISizeRepository;
+import com.rookies.assignment.data.repository.*;
 import com.rookies.assignment.dto.request.*;
 import com.rookies.assignment.dto.request.productmodel.ModelAndProductRequestInsertDto;
 import com.rookies.assignment.dto.request.productmodel.ModelRequestInsertDto;
@@ -15,6 +12,7 @@ import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.RepeatDataException;
 import com.rookies.assignment.exceptions.ResourceFoundException;
+import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.AmazonClient;
 import com.rookies.assignment.service.IProductModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +40,10 @@ public class ProductModelServiceImpl implements IProductModelService {
     private AmazonClient amazonClient;
     @Value("${amazonProperties.folderSaveProduct}")
     private String folderName;
-
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private IUserInfoRepository userRepository;
 
 
 
@@ -182,9 +183,9 @@ public class ProductModelServiceImpl implements IProductModelService {
         }
 
         listResult.sort( (ProductModelResponseDto p1, ProductModelResponseDto p2)->{
-            if(p1.getListUserLike().size() < p2.getListUserLike().size()) {
+            if(p1.getListWishlist().size() < p2.getListWishlist().size()) {
                 return 1;
-            }else  if(p1.getListUserLike().size() > p2.getListUserLike().size()) {
+            }else  if(p1.getListWishlist().size() > p2.getListWishlist().size()) {
                 return -1;
             }
             return 0;
@@ -235,6 +236,27 @@ public class ProductModelServiceImpl implements IProductModelService {
             listResult.add(new ProductModelResponseDto(model));
         }
         return new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
+    }
+
+    @Override
+    public ResponseByPageDto <List <ProductModelResponseDto> > listByCategories(int categoriesID, int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<List<Categories>> categoriesOptional = Optional.ofNullable(categoriesRepository.findByIdOrParentCategoriesId(categoriesID, categoriesID));
+        if(categoriesOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
+        }
+        List<Integer> listCategoriesId = new ArrayList<>();
+        for (Categories categories : categoriesOptional.get()) {
+            listCategoriesId.add(categories.getId());
+        }
+        Optional<Page<ProductModel>> ModelOptional = Optional.ofNullable(repository.findByCategoriesIdInAndStatusTrue(listCategoriesId,  pageable));
+
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        for (ProductModel model: ModelOptional.get().toList()) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+        return new ResponseByPageDto(ModelOptional.get().getTotalPages(), listResult);
     }
 
     @Override

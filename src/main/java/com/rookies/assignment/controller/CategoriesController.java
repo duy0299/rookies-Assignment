@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class CategoriesController {
 
     @Autowired
@@ -28,9 +29,9 @@ public class CategoriesController {
         return service.listAll();
     }
 
-    @DeleteMapping(value = "/category")
+    @DeleteMapping(value = "/category/{id}")
     @ResponseBody
-    public ResponseDto<CategoriesResponseDto>  delete(@RequestParam(name = "id", required = true) int id){
+    public ResponseDto<CategoriesResponseDto>  delete(@PathVariable("id") int id){
         return service.delete(id);
     }
 
@@ -40,9 +41,10 @@ public class CategoriesController {
         return service.insert(dto);
     }
 
-    @PutMapping(value = "/category")
+    @PutMapping(value = "/category/{id}")
     @ResponseBody
-    public ResponseDto<CategoriesResponseDto>  update(@Valid @RequestBody CategoriesDtoFlat dto){
+    public ResponseDto<CategoriesResponseDto>  update(@PathVariable("id") int id , @Valid @RequestBody CategoriesDtoFlat dto){
+        dto.setId(id);
         return service.update(dto);
     }
 }

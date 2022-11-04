@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin
 public class RatingController {
     @Autowired
     private RatingServiceImpl service;
@@ -47,9 +48,9 @@ public class RatingController {
     }
 
 
-    @DeleteMapping("")
+    @DeleteMapping("/rating/{id}")
     @ResponseBody
-    public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto delete(@PathVariable("id") Integer id){
         return service.delete(id);
     }
 }
