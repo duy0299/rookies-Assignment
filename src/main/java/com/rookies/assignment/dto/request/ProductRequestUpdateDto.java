@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -19,12 +20,26 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequestUpdateDto extends ProductDtoFlat {
-
+public class ProductRequestUpdateDto{
+    private  UUID id;
+    @NotNull
+    @NotEmpty
+    @javax.validation.constraints.Size(min = 1, max = 50)
+    private  String name;
+    @NotNull
+    @NotEmpty
+    private  String saleType;
+    @NotNull
+    @NotEmpty
+    @Min(value = 0)
+    private  BigDecimal priceSale;
+    @NotNull
+    @NotEmpty
+    @Min(value = 0)
+    private  int quantity;
     @NotNull
     @NotEmpty
     private int sizeID;
-
     @NotNull
     @NotEmpty
     private UUID modelID;
@@ -36,10 +51,10 @@ public class ProductRequestUpdateDto extends ProductDtoFlat {
 
         product.setSize(newSize);
         product.setModel(newModel);
-        product.setName(getName());
-        product.setSaleType(getSaleType());
-        product.setPriceSale(getPriceSale());
-        product.setQuantity(getQuantity());
+        product.setName(name);
+        product.setSaleType(saleType);
+        product.setPriceSale(priceSale);
+        product.setQuantity(quantity);
         product.setTimeUpdate(now);
 
         return product;
@@ -53,13 +68,13 @@ public class ProductRequestUpdateDto extends ProductDtoFlat {
                 }
                 break;
             }
-            case "direct subtract":{
+            case "direct":{
                 if(getPriceSale().floatValue() < 0 ||  getPriceSale().compareTo(priceRoot) == 1){
                     throw new ResourceFoundException("tỷ lệ giảm sai, không được giảm nhiều hơn giá gốc");
                 }
                 break;
             }
-            case "add directly":{
+            case "add":{
                 if(getPriceSale().floatValue() < 0){
                     throw new ResourceFoundException("tỷ lệ tăng  sai, hãy chọn lại");
                 }

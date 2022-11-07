@@ -26,25 +26,25 @@ public class UserController {
     private JwtProvider jwtProvider;
 
 
-    @PutMapping("/user/info")
+    @PutMapping("/user/info/{id}")
     @ResponseBody
-    public ResponseDto updateInfo(@Valid @RequestBody UserInfoDtoFlat dto, HttpSession session){
-//        session.getAttribute()
+    public ResponseDto updateInfo(@PathVariable("id")UUID id, @Valid @RequestBody UserInfoDtoFlat dto, HttpSession session){
+        dto.setId(id);
         return service.update(dto);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/{id}")
     @ResponseBody
-    public ResponseDto delete(@RequestParam(name = "userID" )UUID id){
+    public ResponseDto delete(@PathVariable("id")UUID id){
 //        if(!checkRole.checkLevelUser(1, 7, session)){
 //            throw new ForbiddenException("Bạn không có đủ quyền để thực hiện");
 //        }
         return service.delete(id);
     }
 
-    @PutMapping("/user/status")
+    @PutMapping("/user/status/{id}")
     @ResponseBody
-    public ResponseDto updateStatus(@RequestParam(name = "userID" )UUID id, @RequestParam(name = "status" )boolean status){
+    public ResponseDto updateStatus(@PathVariable("id")UUID id, @RequestParam(name = "status" )boolean status){
         System.out.println("start");
         return service.updateStatus(id, status);
     }
@@ -58,7 +58,7 @@ public class UserController {
     @GetMapping("/users")
     @ResponseBody
     public ResponseByPageDto listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
-        return service.listAll(page, size);
+        return service.listAll(page-1, size);
     }
 
     @GetMapping("/user/with-token")
@@ -67,22 +67,23 @@ public class UserController {
         return service.getByToken(request);
     }
 
-    @PutMapping("/user/password")
+    @PutMapping("/user/password/{id}")
     @ResponseBody
-    public ResponseDto updatePassword(@Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpSession session){
-
+    public ResponseDto updatePassword(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpSession session){
+        dto.setUserID(id);
         return service.updatePassword(dto);
     }
 
-    @PutMapping("/user/roles")
+    @PutMapping("/user/roles/{id}")
     @ResponseBody
-    public ResponseDto updateRole(@Valid @RequestBody UserRequestUpdateRoleDto dto, HttpSession session){
+    public ResponseDto updateRole(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdateRoleDto dto, HttpSession session){
+        dto.setUserID(id);
         return service.updateRole(dto);
     }
 
-    @PutMapping("/user/avatar")
+    @PutMapping("/user/avatar/{id}")
     @ResponseBody
-    public ResponseDto updateAvatar(@RequestParam(name = "userID" ) UUID id,
+    public ResponseDto updateAvatar(@PathVariable("id") UUID id,
                                     @RequestParam(name = "fileAvatar" )MultipartFile fileAvatar, HttpSession session){
         UserRequestUpdateAvatarDto dto = new UserRequestUpdateAvatarDto();
         dto.setUserID(id);

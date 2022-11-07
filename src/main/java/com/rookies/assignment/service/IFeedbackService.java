@@ -1,26 +1,26 @@
 package com.rookies.assignment.service;
 
-import java.util.List;
-
-import com.rookies.assignment.dto.request.FeedbackRequestDto;
+import com.rookies.assignment.dto.request.FeedbackRequestInsertDto;
 import com.rookies.assignment.dto.response.FeedbackResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
-import com.rookies.assignment.data.entity.Feedback;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Component
 public interface IFeedbackService {
 
-	public ResponseDto<FeedbackResponseDto> insert(FeedbackRequestDto feedback);
+	public ResponseDto<FeedbackResponseDto> insert(FeedbackRequestInsertDto dto, HttpServletRequest request);
 
 	
 	public ResponseDto<FeedbackResponseDto> delete(Integer id);
 
-	public ResponseDto<FeedbackResponseDto> updateStatus(FeedbackRequestDto feedback);
+	public ResponseDto<FeedbackResponseDto> updateStatus(int id, short status);
 	
 	public ResponseDto<FeedbackResponseDto> getById(Integer id);
 
-	public ResponseDto<List<FeedbackResponseDto>> listAll();
+	public ResponseByPageDto<List<FeedbackResponseDto>> listAll(int page, int size);
 	
 }

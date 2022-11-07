@@ -5,6 +5,7 @@ import java.util.List;
 import com.rookies.assignment.dto.request.RatingRequestInsertDto;
 import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
 import com.rookies.assignment.dto.response.RatingResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,6 @@ public interface IRatingService {
 	
 	public ResponseDto<RatingResponseDto> getById(Integer id);
 
-	public ResponseDto<List<RatingResponseDto>>  listAll();
+	public ResponseByPageDto<List<RatingResponseDto>> listAll(int page, int size);
 
 }

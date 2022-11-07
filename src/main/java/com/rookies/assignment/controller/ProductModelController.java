@@ -31,13 +31,13 @@ public class ProductModelController {
         return service.getById(id);
     }
 
-    @GetMapping("/models/all-status")
+    @GetMapping("/models")
     @ResponseBody
-    public ResponseDto<List<ProductModelResponseDto>> listAll(){
-        return service.listAll();
+    public ResponseByPageDto<List<ProductModelResponseDto>> listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page-1, size);
     }
 
-    @PostMapping("/model-with-products")
+    @PostMapping("/model/with-products")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> insertModelAndProduct(
                @RequestParam(name="images")List<MultipartFile> images,
@@ -88,21 +88,15 @@ public class ProductModelController {
     }
 
 
-    @PutMapping("/model/{id}/info")
+    @PutMapping("/model/info/{id}")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateInfo( @PathVariable("id")UUID id,
-                    @RequestParam(name="modelName")String modelName, @RequestParam(name="priceRoot")BigDecimal priceRoot,
-                    @RequestParam(name="description")String description,  @RequestParam(name="categoriesID")Integer categoriesID){
-        ModelRequestUpdateDto dto = new ModelRequestUpdateDto();
-        dto.setId(id);
-        dto.setCategoriesID(categoriesID);
-        dto.setName(modelName);
-        dto.setDescription(description);
-        dto.setPriceRoot(priceRoot);
-        return service.update(dto);
+                    @RequestBody ModelRequestUpdateDto request){
+        request.setId(id);
+        return service.update(request);
     }
 
-    @PutMapping("/model/{id}/images")
+    @PutMapping("/model/images/{id}")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateImage( @PathVariable("id")UUID id, @RequestParam(name="images")List<MultipartFile> images){
         ModelRequestUpdateImageDto dto = new ModelRequestUpdateImageDto();
@@ -111,7 +105,7 @@ public class ProductModelController {
         return service.updateImage(dto);
     }
 
-    @PutMapping("/model/{id}/status")
+    @PutMapping("/model/status/{id}")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateStatus( @PathVariable("id")UUID id, @RequestParam(name="status")boolean status){
         return service.updateStatus(id, status);
@@ -124,9 +118,9 @@ public class ProductModelController {
     }
 
 
-    @GetMapping("/models")
+    @GetMapping("/models/status-true")
     @ResponseBody
-    public ResponseByPageDto<List<ProductModelResponseDto>> searchName(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+    public ResponseByPageDto<List<ProductModelResponseDto>> listByStatusTrue(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
         return service.listByPage(page-1, size);
     }
 

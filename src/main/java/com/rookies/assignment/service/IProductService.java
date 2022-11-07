@@ -7,6 +7,7 @@ import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
 import com.rookies.assignment.dto.response.ProductResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +21,11 @@ public interface IProductService {
 
 	public ResponseDto<ProductResponseDto> updateAvatar(ProductRequestUpdateAvatarDto dto);
 
-	public ResponseDto<ProductResponseDto> updateStatus(UUID productID);
+	public ResponseDto<ProductResponseDto> updateStatus(UUID id, boolean status);
 
 	public ResponseDto<ProductResponseDto> delete(UUID id);
 	
 	public ResponseDto<ProductResponseDto> getById(UUID id);
 
-	public ResponseDto<List<ProductResponseDto>> listAll();
+	public ResponseByPageDto<List<ProductResponseDto>> listAll(int page, int size);
 }

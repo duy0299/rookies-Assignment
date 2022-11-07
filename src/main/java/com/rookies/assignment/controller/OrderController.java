@@ -2,6 +2,7 @@ package com.rookies.assignment.controller;
 
 import com.rookies.assignment.dto.request.OrderRequestInsertDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class OrderController {
 
     @GetMapping("/orders")
     @ResponseBody
-    public ResponseDto listAll(){
-        return service.listAll();
+    public ResponseByPageDto listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page-1, size);
     }
 
     @PostMapping("/order")
@@ -35,9 +36,10 @@ public class OrderController {
         return service.insert(dto, request);
     }
 
-    @PutMapping("/order/status")
+    @PutMapping("/order/status/{id}")
     @ResponseBody
-    public ResponseDto updateStatus(@Valid @RequestBody OrderRequestUpdateDto dto){
+    public ResponseDto updateStatus(@PathVariable("id") UUID id, @Valid @RequestBody OrderRequestUpdateDto dto){
+        dto.setOrder_id(id);
         return service.updateStatus(dto);
     }
 

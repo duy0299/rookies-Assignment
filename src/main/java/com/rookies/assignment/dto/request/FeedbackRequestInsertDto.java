@@ -10,46 +10,32 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 @Data
 @NoArgsConstructor
-public class FeedbackRequestDto extends FeedbackDtoFlat {
-    private UUID user_id;
+public class FeedbackRequestInsertDto {
+    private String content;
 
-    public Feedback changeToFeedbackInsert(){
+
+    public FeedbackRequestInsertDto(String content){
+        this.content = content;
+    }
+    public Feedback changeToFeedbackInsert(UserInfo userInfo){
         Feedback feedback = new Feedback();
-        UserInfo userInfo = new UserInfo();
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        userInfo.setId(user_id);
-
         feedback.setStatus((short) 1);
         feedback.setUserInfo(userInfo);
-
-        feedback.setContent(getContent());
+        feedback.setContent(content);
         feedback.setTimeCreate(now);
         feedback.setTimeUpdate(now);
 
         return feedback;
     }
 
-    public Feedback changeToFeedbackUpdateStatus(Feedback oldFeedback){
-        Feedback feedback = new Feedback();
-        Date dateNow = new Date();
-        Timestamp now = new Timestamp(dateNow.getTime());
 
-        feedback.setStatus(getStatus());
-        feedback.setId(getId());
-        feedback.setTimeUpdate(now);
-        feedback.setUserInfo(oldFeedback.getUserInfo());
-        feedback.setContent(oldFeedback.getContent());
-        feedback.setTimeCreate(oldFeedback.getTimeCreate());
-
-        return feedback;
-    }
 
     public boolean isFirstFeedbackToday(List<Feedback> listFeedback){
         if(listFeedback == null){

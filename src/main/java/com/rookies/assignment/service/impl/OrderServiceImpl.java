@@ -12,6 +12,7 @@ import com.rookies.assignment.dto.request.OrderRequestInsertDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.CartDto;
 import com.rookies.assignment.dto.response.OrderResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.exceptions.ForbiddenException;
 import com.rookies.assignment.exceptions.ParamNotValidException;
@@ -19,6 +20,9 @@ import com.rookies.assignment.exceptions.ResourceFoundException;
 import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +47,6 @@ public class OrderServiceImpl implements IOrderService {
     private JwtProvider jwtProvider;
     @Override
     public ResponseDto<OrderResponseDto> insert(OrderRequestInsertDto dto, HttpServletRequest request) {
-        HttpSession session = request.getSession();
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
         List<CartDto> listCart = new ArrayList<>();
         if(email==null){
@@ -99,8 +102,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public ResponseDto<List<OrderResponseDto>> listAll() {
-        Optional<List<Order>> optional = Optional.ofNullable(repository.findAll());
+    public ResponseByPageDto<List<OrderResponseDto>> listAll(int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<Page<Order>> optional = Optional.ofNullable(repository.findAll(pageable));
         List<OrderResponseDto> listResult = new ArrayList<>();
         if (optional.isEmpty()){
             throw new ResourceFoundException("Đơn hàng này không tồn tại");
@@ -109,7 +113,7 @@ public class OrderServiceImpl implements IOrderService {
         for (Order order: optional.get()) {
             listResult.add(new OrderResponseDto(order));
         }
-        return new ResponseDto<>(listResult);
+        return new ResponseByPageDto<>(optional.get().getTotalPages(), listResult);
     }
 
     public void validateInsert(Optional<UserInfo> optionalUser, List<CartDto> listCart){

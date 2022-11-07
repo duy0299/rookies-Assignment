@@ -54,7 +54,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         System.out.println("configure HttpSecurity Begin");
         http.cors().and().csrf().disable()
 //                 /** => tất cả đều truy cập đc
-//                .authorizeRequests().antMatchers(HttpMethod.GET,"/product", "/products","/size", "/sizes", "/login").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.GET,"/user/with-token").permitAll()
+                .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -66,8 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/user/roles").hasAnyAuthority("ADMIN", "USER_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/user/avatar").hasAnyAuthority("USER")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN", "USER_MANAGER")
-                .antMatchers(HttpMethod.GET, "/user/with-token").hasAnyAuthority( "USER")
-                .antMatchers(HttpMethod.GET, "/user/**").hasAnyAuthority( "ADMIN", "USER_MANAGER")
+                .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority( "ADMIN", "USER_MANAGER")
                 .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "USER_MANAGER");
 
 //Product

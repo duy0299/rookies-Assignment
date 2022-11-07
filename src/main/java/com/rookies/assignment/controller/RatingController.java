@@ -2,6 +2,7 @@ package com.rookies.assignment.controller;
 
 import com.rookies.assignment.dto.request.RatingRequestInsertDto;
 import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.impl.RatingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,8 @@ public class RatingController {
 
     @GetMapping("/ratings")
     @ResponseBody
-    public ResponseDto listAll(){
-        return service.listAll();
+    public ResponseByPageDto listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page-1, size);
     }
 
     @PostMapping("/rating")
@@ -34,16 +35,18 @@ public class RatingController {
         return service.insert(dto, request);
     }
 
-    @PutMapping("/rating")
+    @PutMapping("/rating/{id}")
     @ResponseBody
-    public ResponseDto update(@Valid @RequestBody RatingRequestUpdateDto dto){
+    public ResponseDto update(@PathVariable("id") Integer id, @Valid @RequestBody RatingRequestUpdateDto dto){
+        dto.setId(id);
         return service.update(dto);
     }
 
 
-    @PutMapping("/rating/status")
+    @PutMapping("/rating/status/{id}")
     @ResponseBody
-    public ResponseDto updateStatus(@Valid @RequestBody RatingRequestUpdateDto dto){
+    public ResponseDto updateStatus(@PathVariable("id") Integer id, @Valid @RequestBody RatingRequestUpdateDto dto){
+        dto.setId(id);
         return service.updateStatus(dto);
     }
 

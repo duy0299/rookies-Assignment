@@ -9,6 +9,7 @@ import com.rookies.assignment.data.repository.IUserInfoRepository;
 import com.rookies.assignment.dto.request.RatingRequestInsertDto;
 import com.rookies.assignment.dto.request.RatingRequestUpdateDto;
 import com.rookies.assignment.dto.response.RatingResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import com.rookies.assignment.exceptions.ForbiddenException;
@@ -18,6 +19,9 @@ import com.rookies.assignment.exceptions.TooManyRequestsException;
 import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -116,8 +120,9 @@ public class RatingServiceImpl implements IRatingService {
     }
 
     @Override
-    public ResponseDto<List<RatingResponseDto>> listAll() {
-        Optional<List<Rating>> listOptional = Optional.ofNullable(repository.findAll());
+    public ResponseByPageDto<List<RatingResponseDto>> listAll(int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<Page<Rating>> listOptional = Optional.ofNullable(repository.findAll(pageable));
         List<RatingResponseDto> listResult = new ArrayList<>();
         if(listOptional.isEmpty()){
             throw new ResourceFoundException("Danh sách rỗng");
@@ -127,6 +132,6 @@ public class RatingServiceImpl implements IRatingService {
             listResult.add(new RatingResponseDto(rating));
         }
 
-        return new ResponseDto<>(listResult);
+        return new ResponseByPageDto<>(listOptional.get().getTotalPages(), listResult);
     }
 }

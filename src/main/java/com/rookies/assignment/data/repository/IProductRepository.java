@@ -14,6 +14,7 @@ import com.rookies.assignment.data.entity.Product;
 public interface IProductRepository extends JpaRepository<Product, UUID>{
     Page<Product> findByStatus(boolean status, Pageable pageable);
     Page<Product> findByNameAndStatus(String name, boolean status, Pageable pageable);
+    Page<Product> findAll(Pageable pageable);
 
     List<Product> findBySizeId(Integer sizeID);
 }

@@ -139,12 +139,10 @@ public class ProductModelServiceImpl implements IProductModelService {
         Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findByStatus(true, pageable));
         List<ProductModelResponseDto> listResult = new ArrayList<>();
 
-        System.out.println( listOptional);
-
         if(listOptional.isEmpty()){
             throw new ResourceFoundException("Danh sách rỗng");
         }
-        System.out.println(listOptional.get().getTotalPages());
+
         for (ProductModel model: listOptional.get().toList()) {
             listResult.add(new ProductModelResponseDto(model));
         }
@@ -154,18 +152,21 @@ public class ProductModelServiceImpl implements IProductModelService {
 
     //    List all model product
     @Override
-    public ResponseDto<List<ProductModelResponseDto>> listAll() {
-        Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
+    public ResponseByPageDto<List<ProductModelResponseDto>> listAll(int page, int size) {
+        Pageable pageable =  PageRequest.of(page, size);
+        Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findAll(pageable));
         List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        System.out.println( listOptional);
 
         if(listOptional.isEmpty()){
             throw new ResourceFoundException("Danh sách rỗng");
         }
-//        ProductModel =>convert to ProductModelResponseDto => add to listResult
-        for (ProductModel model: listOptional.get()) {
+        System.out.println(listOptional.get().getTotalPages());
+        for (ProductModel model: listOptional.get().toList()) {
             listResult.add(new ProductModelResponseDto(model));
         }
-        return new ResponseDto<>(listResult);
+        return  new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
     }
 
     @Override

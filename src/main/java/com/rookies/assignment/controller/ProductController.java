@@ -4,12 +4,14 @@ import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.ProductRequestUpdateDto;
 import com.rookies.assignment.dto.response.ProductResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +30,8 @@ public class ProductController {
 
     @GetMapping(value = "/products")
     @ResponseBody
-    public ResponseDto<List<ProductResponseDto>> all(){
-        return service.listAll();
+    public ResponseByPageDto<List<ProductResponseDto>> all(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page-1, size);
     }
 
     @PostMapping(value = "/product")
@@ -50,26 +52,17 @@ public class ProductController {
         return service.insert(dto);
     }
 
-    @PutMapping(value = "/product")
+    @PutMapping(value = "/product/{id}")
     @ResponseBody
-    public ResponseDto<ProductResponseDto> updateNoAvatar( @RequestParam(name="sizeID")int sizeID,      @RequestParam(name="modelID")UUID modelID,
-                                                           @RequestParam(name="name")String name,       @RequestParam(name="saleType")String saleType,
-                                                           @RequestParam(name="quantity")int quantity,  @RequestParam(name="productID" )UUID productID,
-                                                           @RequestParam(name="priceSale") BigDecimal priceSale ){
-        ProductRequestUpdateDto dto = new ProductRequestUpdateDto();
-        dto.setId(productID);
-        dto.setName(name);
-        dto.setQuantity(quantity);
-        dto.setSizeID(sizeID);
-        dto.setModelID(modelID);
-        dto.setSaleType(saleType);
-        dto.setPriceSale(priceSale);
-        return service.update(dto);
+    public ResponseDto<ProductResponseDto> updateNoAvatar(@PathVariable("id") UUID productID,
+                                                          @Valid @RequestBody ProductRequestUpdateDto request){
+        request.setId(productID);
+        return service.update(request);
     }
 
-    @PutMapping(value = "/product/avatar")
+    @PutMapping(value = "/product/avatar/{id}")
     @ResponseBody
-    public ResponseDto<ProductResponseDto> updateAvatar( @RequestParam(name="productID" )UUID productID,
+    public ResponseDto<ProductResponseDto> updateAvatar( @PathVariable("id")UUID productID,
                                                          @RequestParam(name="fileAvatar")MultipartFile fileAvatar ){
         ProductRequestUpdateAvatarDto dto = new ProductRequestUpdateAvatarDto();
         dto.setProductID(productID);
@@ -77,15 +70,16 @@ public class ProductController {
         return service.updateAvatar(dto);
     }
 
-    @PutMapping(value = "/product/status")
+    @PutMapping(value = "/product/status/{id}")
     @ResponseBody
-    public ResponseDto<ProductResponseDto> updateStatus( @RequestParam(name="productID" )UUID productID){
-        return service.updateStatus(productID);
+    public ResponseDto<ProductResponseDto> updateStatus( @PathVariable("id")UUID id,
+                                                         @RequestParam(name = "status", required = true) boolean status){
+        return service.updateStatus(id, status);
     }
 
-    @DeleteMapping(value = "/product")
+    @DeleteMapping(value = "/product/{id}")
     @ResponseBody
-    public ResponseDto<ProductResponseDto> delete(@RequestParam(name = "id", required = true) UUID id){
+    public ResponseDto<ProductResponseDto> delete(@PathVariable("id") UUID id){
         return service.delete(id);
     }
 }

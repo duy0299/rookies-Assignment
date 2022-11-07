@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RatingResponseDto extends RatingDtoFlat {
     private UserInfoDtoFlat userInfo;
-    private ProductModelDtoFlat modelDtoFlat;
+    private ProductModelDtoFlat model;
 
     public RatingResponseDto(Rating rating){
         super(rating);
         userInfo = new UserInfoDtoFlat(rating.getUserInfo());
-        modelDtoFlat = new ProductModelDtoFlat(rating.getModel());
+        model = new ProductModelDtoFlat(rating.getModel());
     }
 
 }

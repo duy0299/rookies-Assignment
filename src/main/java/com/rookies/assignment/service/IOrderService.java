@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.rookies.assignment.dto.request.OrderRequestInsertDto;
 import com.rookies.assignment.dto.request.OrderRequestUpdateDto;
 import com.rookies.assignment.dto.response.OrderResponseDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,7 @@ public interface IOrderService {
 	
 	public ResponseDto<OrderResponseDto> getById(UUID id);
 
-	public ResponseDto<List<OrderResponseDto>> listAll();
+	public ResponseByPageDto<List<OrderResponseDto>> listAll(int page, int size);
 	
 	
 }

@@ -1,11 +1,13 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.dto.request.FeedbackRequestDto;
+import com.rookies.assignment.dto.request.FeedbackRequestInsertDto;
+import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IFeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -22,25 +24,26 @@ public class FeedbackController {
 
     @GetMapping("/feedbacks")
     @ResponseBody
-    public ResponseDto listAll(){
-        return service.listAll();
+    public ResponseByPageDto listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listAll(page-1, size);
     }
 
-    @DeleteMapping("/feedback")
+    @DeleteMapping("/feedback/{id}")
     @ResponseBody
-    public ResponseDto delete(@RequestParam(name = "id", required = true) Integer id){
+    public ResponseDto delete(@PathVariable("id") Integer id){
         return service.delete(id);
     }
 
     @PostMapping("/feedback")
     @ResponseBody
-    public ResponseDto insert(@Valid @RequestBody FeedbackRequestDto dto){
-        return service.insert(dto);
+    public ResponseDto insert(@Valid @RequestBody FeedbackRequestInsertDto dto, HttpServletRequest request){
+        return service.insert(dto, request);
     }
 
-    @PutMapping("/feedback/status")
+    @PutMapping("/feedback/status/{id}")
     @ResponseBody
-    public ResponseDto update(@Valid @RequestBody FeedbackRequestDto dto){
-        return service.updateStatus(dto);
+    public ResponseDto update(@PathVariable("id") int id,
+                              @RequestParam(name = "status", required = true) short status){
+        return service.updateStatus(id, status);
     }
 }
