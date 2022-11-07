@@ -60,7 +60,7 @@ public class ProductController {
         return service.update(request);
     }
 
-    @PutMapping(value = "/product/avatar/{id}")
+    @PutMapping(value = "/product/{id}/avatar")
     @ResponseBody
     public ResponseDto<ProductResponseDto> updateAvatar( @PathVariable("id")UUID productID,
                                                          @RequestParam(name="fileAvatar")MultipartFile fileAvatar ){
@@ -70,7 +70,7 @@ public class ProductController {
         return service.updateAvatar(dto);
     }
 
-    @PutMapping(value = "/product/status/{id}")
+    @PutMapping(value = "/product/{id}/status")
     @ResponseBody
     public ResponseDto<ProductResponseDto> updateStatus( @PathVariable("id")UUID id,
                                                          @RequestParam(name = "status", required = true) boolean status){

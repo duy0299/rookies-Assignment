@@ -35,7 +35,7 @@ public class WishlistController {
         return service.insert(dto,  request);
     }
 
-    @PutMapping("/wishlist/status/{id}")
+    @PutMapping("/wishlist/{id}/status")
     @ResponseBody
     public ResponseDto update(@PathVariable("id") Integer id,  @RequestParam(name="page")Boolean status){
         WishlistRequestUpdateDto dto = new WishlistRequestUpdateDto();

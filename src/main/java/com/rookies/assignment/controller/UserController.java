@@ -26,7 +26,7 @@ public class UserController {
     private JwtProvider jwtProvider;
 
 
-    @PutMapping("/user/info/{id}")
+    @PutMapping("/user/{id}/info")
     @ResponseBody
     public ResponseDto updateInfo(@PathVariable("id")UUID id, @Valid @RequestBody UserInfoDtoFlat dto, HttpSession session){
         dto.setId(id);
@@ -36,13 +36,10 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     @ResponseBody
     public ResponseDto delete(@PathVariable("id")UUID id){
-//        if(!checkRole.checkLevelUser(1, 7, session)){
-//            throw new ForbiddenException("Bạn không có đủ quyền để thực hiện");
-//        }
         return service.delete(id);
     }
 
-    @PutMapping("/user/status/{id}")
+    @PutMapping("/user/{id}/status")
     @ResponseBody
     public ResponseDto updateStatus(@PathVariable("id")UUID id, @RequestParam(name = "status" )boolean status){
         System.out.println("start");
@@ -67,21 +64,21 @@ public class UserController {
         return service.getByToken(request);
     }
 
-    @PutMapping("/user/password/{id}")
+    @PutMapping("/user/{id}/password")
     @ResponseBody
     public ResponseDto updatePassword(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpSession session){
         dto.setUserID(id);
         return service.updatePassword(dto);
     }
 
-    @PutMapping("/user/roles/{id}")
+    @PutMapping("/user/{id}/roles")
     @ResponseBody
     public ResponseDto updateRole(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdateRoleDto dto, HttpSession session){
         dto.setUserID(id);
         return service.updateRole(dto);
     }
 
-    @PutMapping("/user/avatar/{id}")
+    @PutMapping("/user/{id}/avatar")
     @ResponseBody
     public ResponseDto updateAvatar(@PathVariable("id") UUID id,
                                     @RequestParam(name = "fileAvatar" )MultipartFile fileAvatar, HttpSession session){

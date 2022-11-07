@@ -88,7 +88,7 @@ public class ProductModelController {
     }
 
 
-    @PutMapping("/model/info/{id}")
+    @PutMapping("/model/{id}/info")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateInfo( @PathVariable("id")UUID id,
                     @RequestBody ModelRequestUpdateDto request){
@@ -96,7 +96,7 @@ public class ProductModelController {
         return service.update(request);
     }
 
-    @PutMapping("/model/images/{id}")
+    @PutMapping("/model/{id}/images")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateImage( @PathVariable("id")UUID id, @RequestParam(name="images")List<MultipartFile> images){
         ModelRequestUpdateImageDto dto = new ModelRequestUpdateImageDto();
@@ -105,7 +105,7 @@ public class ProductModelController {
         return service.updateImage(dto);
     }
 
-    @PutMapping("/model/status/{id}")
+    @PutMapping("/model/{id}/status")
     @ResponseBody
     public ResponseDto<ProductModelResponseDto> updateStatus( @PathVariable("id")UUID id, @RequestParam(name="status")boolean status){
         return service.updateStatus(id, status);

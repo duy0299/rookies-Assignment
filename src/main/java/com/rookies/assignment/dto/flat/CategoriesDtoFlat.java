@@ -52,21 +52,20 @@ public class CategoriesDtoFlat {
         categories.setTimeUpdate(now);
         categories.setDescription(description);
         categories.setParentCategoriesId(parentCategoriesId);
+        categories.setStatus(true);
         return categories;
     }
 
     public Categories changeToCategoriesUpdate(Categories oldCategories){
-        Categories categories = new Categories();
+        Categories categories = oldCategories;
         Date dateNow = new Date();
         Timestamp now = new Timestamp(dateNow.getTime());
 
-        categories.setListModel(oldCategories.getListModel());
         categories.setId(id);
         categories.setName(name);
         categories.setTimeUpdate(now);
         categories.setDescription(description);
         categories.setParentCategoriesId(parentCategoriesId);
-        categories.setTimeCreate(oldCategories.getTimeCreate());
         return categories;
     }
 }

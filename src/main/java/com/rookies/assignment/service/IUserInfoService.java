@@ -31,7 +31,7 @@ public interface IUserInfoService {
 	public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto);
 
 	//    admin add or remove Role for User
-	ResponseDto<UserInfoResponseDto> updateRole(UserRequestUpdateRoleDto dto);
+	public ResponseDto<UserInfoResponseDto> updateRole(UserRequestUpdateRoleDto dto);
 
 	public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto);
 

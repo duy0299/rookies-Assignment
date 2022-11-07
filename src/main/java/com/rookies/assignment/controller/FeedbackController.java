@@ -40,7 +40,7 @@ public class FeedbackController {
         return service.insert(dto, request);
     }
 
-    @PutMapping("/feedback/status/{id}")
+    @PutMapping("/feedback/{id}/status")
     @ResponseBody
     public ResponseDto update(@PathVariable("id") int id,
                               @RequestParam(name = "status", required = true) short status){

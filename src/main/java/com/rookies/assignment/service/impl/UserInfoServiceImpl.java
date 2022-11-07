@@ -140,6 +140,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if(listRoleOptional.isEmpty()){
             throw new ResourceFoundException("danh sách Role Rỗng");
         }
+
+
         for (String nameRole : dto.getListRole()) {
             if(!nameRole.equals("BAN") && !nameRole.equals("ADMIN") && !nameRole.equals("USER") &&
                     !nameRole.equals("BAN_COMMENT") && !nameRole.equals("FEEDBACK_MANAGER") && !nameRole.equals("WAREHOUSE_MANAGER") &&
@@ -148,7 +150,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             }
 
             for (Role role : listRoleOptional.get()) {
-                if(nameRole == role.getName()){
+                if(nameRole.equals(role.getName())){
                     listRole.add(role);
                     break;
                 }

@@ -43,7 +43,7 @@ public class RatingController {
     }
 
 
-    @PutMapping("/rating/status/{id}")
+    @PutMapping("/rating/{id}/status")
     @ResponseBody
     public ResponseDto updateStatus(@PathVariable("id") Integer id, @Valid @RequestBody RatingRequestUpdateDto dto){
         dto.setId(id);

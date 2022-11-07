@@ -36,7 +36,7 @@ public class OrderController {
         return service.insert(dto, request);
     }
 
-    @PutMapping("/order/status/{id}")
+    @PutMapping("/order/{id}/status")
     @ResponseBody
     public ResponseDto updateStatus(@PathVariable("id") UUID id, @Valid @RequestBody OrderRequestUpdateDto dto){
         dto.setOrder_id(id);

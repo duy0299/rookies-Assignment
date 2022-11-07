@@ -27,9 +27,9 @@ public class CategoriesServiceImpl implements ICategoriesService {
         if(!optionalCategories.isEmpty()){
             throw new RepeatDataException("Loại Trang Sức này đã tồn tại.");
         }
-        System.out.println("test1");
+
         Categories newCategories = repository.save(dto.changeToCategoriesInsert());
-        System.out.println("test2");
+
         return new ResponseDto<>(
                 new CategoriesResponseDto(
                         newCategories
