@@ -49,12 +49,17 @@ public class UserInfoServiceImpl implements IUserInfoService {
 
 //    Update info of User first name, last name, phone, gender
     @Override
-    public ResponseDto<UserInfoResponseDto> update(UserInfoDtoFlat dto) {
-        Optional<UserInfo> optional = repository.findById(dto.getId());
+    public ResponseDto<UserInfoResponseDto> update(UserInfoDtoFlat dto, HttpServletRequest request) {
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn Chưa đăng nhập");
+        }
+
+        Optional<UserInfo> optional = Optional.ofNullable(repository.findByEmail(email));
 //        Validate
         validateUpdate(optional, dto);
         UserInfo modified = repository.save(dto.changeToUserInfoUpdate(optional.get()));
-        return new ResponseDto(new UserInfoResponseDto(modified));
+        return new ResponseDto<>(new UserInfoResponseDto(modified));
     }
 
     @Override
@@ -64,7 +69,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             throw new ResourceFoundException("Không tìm thấy User này");
         }
         repository.delete(user.get());
-        return new ResponseDto(null);
+        return new ResponseDto<>(null);
     }
 
     @Override
@@ -76,7 +81,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         optional.get().setStatus(status);
 
         UserInfo modified = repository.save(optional.get());
-        return new ResponseDto(new UserInfoResponseDto(modified));
+        return new ResponseDto<>(new UserInfoResponseDto(modified));
     }
 
     @Override
@@ -91,7 +96,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDto<UserInfoResponseDto> getByToken(HttpServletRequest request) {
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
-        System.out.println(email);
         if(email==null){
             throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
         }
@@ -114,13 +118,20 @@ public class UserInfoServiceImpl implements IUserInfoService {
         for (UserInfo userInfo: optional.get()) {
             listResult.add(new UserInfoResponseDto(userInfo));
         }
-        return new ResponseByPageDto(optional.get().getTotalPages(), listResult);
+        return new ResponseByPageDto<>(optional.get().getTotalPages(), listResult);
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto) {
-        Optional<UserInfo> user = repository.findById(dto.getUserID());
-        validateUpdatePassword(user, dto);
+    public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto, HttpServletRequest request) {
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn Chưa đăng nhập");
+        }
+        Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(email));
+        if(user.isEmpty()){
+            throw new ResourceFoundException("Không tìm thấy User này");
+        }
+        validateUpdatePassword(user.get(), dto);
         user.get().setPassword(dto.getNewPassword());
         repository.save(user.get());
         return new ResponseDto<>(new UserInfoResponseDto(user.get()));
@@ -140,7 +151,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if(listRoleOptional.isEmpty()){
             throw new ResourceFoundException("danh sách Role Rỗng");
         }
-
 
         for (String nameRole : dto.getListRole()) {
             if(!nameRole.equals("BAN") && !nameRole.equals("ADMIN") && !nameRole.equals("USER") &&
@@ -162,8 +172,13 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     @Override
-    public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto) {
-        Optional<UserInfo> user = repository.findById(dto.getUserID());
+    public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto, HttpServletRequest request) {
+        String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        if(email==null){
+            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
+        }
+        Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(email));
+
         String urlAvatar = "";
         if(user.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
@@ -213,18 +228,19 @@ public class UserInfoServiceImpl implements IUserInfoService {
         }
     }
 
-    public void validateUpdatePassword(Optional<UserInfo> optional, UserRequestUpdatePasswordDto dto){
-        if(optional.isEmpty()){
-            throw new ResourceFoundException("Không tìm thấy User này");
+    public void validateUpdatePassword(UserInfo user, UserRequestUpdatePasswordDto dto){
+        if(dto.getPassword().trim().equals("") || dto.getPasswordConfirmation().trim().equals("") ||
+                dto.getNewPassword().trim().equals("")){
+            throw new ParamNotValidException("Cố thông tin bị rổng");
         }
         if(!dto.getNewPassword().equals(dto.getPasswordConfirmation()) ){
-            throw new ParamNotValidException("Mật khẩu xác nhận lại không giống với mật khẩu mới ");
+            throw new ParamNotValidException("Mật khẩu xác nhận lại không giống với mật khẩu mới");
         }
-        if(!dto.getPassword().equals(optional.get().getPassword()) ){
+        if(!dto.getPassword().equals(user.getPassword()) ){
             throw new ParamNotValidException("mật khẩu củ không đúng");
         }
         //	check  condition 1 uppercase, 1 lowercase, 1 number, from 8-20 characters
-        if(Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,20})$", dto.getPassword())) {
+        if(!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,20})$", dto.getNewPassword())) {
             throw new ParamNotValidException("Mật khẩu mới không phù hợp với yêu cầu. Phải có ít nhất 1 số từ 1-9, 1 chữ hoa, 1 chữ thường và dài từ 8-20 ký tự");
         }
     }

@@ -52,16 +52,16 @@ public class LoginServiceImpl implements ILoginService {
         if(dto.getFirstName().trim().equals("") || dto.getLastName().trim().equals("") || dto.getPhoneNumber().trim().equals("") ||
                 dto.getEmail().trim().equals("") || dto.getPassword().trim().equals("") || dto.getPasswordConfirmation().trim().equals("")) {
             String error= "không thể để trống";
-            throw new ParamNotValidException("Có thông tin bị trống");
+            throw new IllegalArgumentException("Có thông tin bị trống");
         }
         //  check password confirmation
         if(!dto.getPassword().equals(dto.getPasswordConfirmation())) {
-            throw new ParamNotValidException("Mật khẩu không khớp với nhau");
+            throw new IllegalArgumentException("Mật khẩu không khớp với nhau");
         }
 
         //	check  condition 1 uppercase, 1 lowercase, 1 number, from 8-20 characters
         if(!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8,20})$", dto.getPassword())) {
-            throw new ParamNotValidException("Mật khẩu không phù hợp với yêu cầu");
+            throw new IllegalArgumentException("Mật khẩu không phù hợp với yêu cầu");
         }
         //	check xem email này có chưa
         Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(dto.getEmail()));

@@ -2,7 +2,6 @@ package com.rookies.assignment.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rookies.assignment.exceptions.ForbiddenException;
-import org.apache.http.HttpException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -35,10 +34,15 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
 //        đăng nhập sai
         body.put("status", HttpStatus.FORBIDDEN);
         body.put("error", "FORBIDDEN");
-        body.put("message", authException.getMessage());
+//        body.put("message", authException.getMessage());
+        body.put("message", "Bạn chưa đủ quyền thực hiện");
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
     }
+
+
+
+
 }

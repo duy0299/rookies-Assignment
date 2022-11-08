@@ -1,6 +1,7 @@
 package com.rookies.assignment.data.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,6 @@ public interface IProductRepository extends JpaRepository<Product, UUID>{
     Page<Product> findByStatus(boolean status, Pageable pageable);
     Page<Product> findByNameAndStatus(String name, boolean status, Pageable pageable);
     Page<Product> findAll(Pageable pageable);
-
+    Optional<List<Product>> findByIdInAndStatusTrue(List<UUID> listID);
     List<Product> findBySizeId(Integer sizeID);
 }

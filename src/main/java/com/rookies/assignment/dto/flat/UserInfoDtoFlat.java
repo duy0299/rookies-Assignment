@@ -48,7 +48,6 @@ public class UserInfoDtoFlat {
         user.setPhoneNumber(phoneNumber);
         user.setGender(setGenderUser(gender));
         user.setTimeUpdate(now);
-
         return user;
     }
 

@@ -17,9 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserRequestUpdatePasswordDto  {
 
-    @NotEmpty
-    @NotNull
-    private UUID userID;
+
     @NotEmpty
     @NotNull
     private String password;

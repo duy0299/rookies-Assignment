@@ -136,24 +136,6 @@ public class ProductModelServiceImpl implements IProductModelService {
     @Override
     public ResponseByPageDto <List <ProductModelResponseDto> > listByPage(int page, int size) {
         Pageable pageable =  PageRequest.of(page, size);
-        Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findByStatus(true, pageable));
-        List<ProductModelResponseDto> listResult = new ArrayList<>();
-
-        if(listOptional.isEmpty()){
-            throw new ResourceFoundException("Danh sách rỗng");
-        }
-
-        for (ProductModel model: listOptional.get().toList()) {
-            listResult.add(new ProductModelResponseDto(model));
-        }
-
-        return new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
-    }
-
-    //    List all model product
-    @Override
-    public ResponseByPageDto<List<ProductModelResponseDto>> listAll(int page, int size) {
-        Pageable pageable =  PageRequest.of(page, size);
         Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findAll(pageable));
         List<ProductModelResponseDto> listResult = new ArrayList<>();
 
@@ -167,6 +149,21 @@ public class ProductModelServiceImpl implements IProductModelService {
             listResult.add(new ProductModelResponseDto(model));
         }
         return  new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
+    }
+
+    //    List all model product
+    @Override
+    public ResponseDto<List<ProductModelResponseDto>> listAll() {
+        Optional<List<ProductModel>> listOptional = Optional.ofNullable(repository.findAll());
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+        if(listOptional.isEmpty()){
+            throw new ResourceFoundException("Danh sách rỗng");
+        }
+
+        for (ProductModel model: listOptional.get()) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+        return  new ResponseDto(listResult);
     }
 
     @Override
@@ -224,19 +221,19 @@ public class ProductModelServiceImpl implements IProductModelService {
 //    Search product model by name
     @Override
     public ResponseByPageDto <List <ProductModelResponseDto> > listByName(String name, int page, int size) {
-        Pageable pageable =  PageRequest.of(page, size);
-        name = changeToText(name);
-
-        Optional<Page<ProductModel>> listOptional = Optional.ofNullable(repository.findByNameAndStatus(name, true, pageable));
+        Optional<List<ProductModel>> listOptional = repository.findByStatusTrue();
         if(listOptional.isEmpty()){
-            throw new ResourceFoundException("Danh sách rỗng");
+            throw new ResourceFoundException("Không tìm thấy");
         }
-        List<ProductModelResponseDto> listResult = new ArrayList<>();
+        List<ProductModel> list = new ArrayList<>();
+//        compare names
 
-        for (ProductModel model: listOptional.get().toList()) {
-            listResult.add(new ProductModelResponseDto(model));
+        for (ProductModel model :listOptional.get()) {
+            if(changeToText(model.getName()).contains(changeToText(name))){
+                list.add(model);
+            }
         }
-        return new ResponseByPageDto(listOptional.get().getTotalPages(), listResult);
+        return pagination(list, page+1,  size);
     }
 
     @Override
@@ -287,7 +284,7 @@ public class ProductModelServiceImpl implements IProductModelService {
         text = text.replaceAll("ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự", "u");
         text = text.replaceAll("ý|ỳ|ỷ|ỹ|ỵ", "y");
         text = text.replaceAll("đ", "d");
-        return text;
+        return text.toLowerCase();
     }
 
 
@@ -342,4 +339,33 @@ public class ProductModelServiceImpl implements IProductModelService {
         return  listResult;
     }
 
+    public ResponseByPageDto<List <ProductModelResponseDto> >pagination(List<ProductModel> list, int page, int size){
+        int start = (page==1)?0:(page - 1) * size;
+        int end   = page * size;
+        int totalPage = 0;
+        List<ProductModel> result = new ArrayList<>();
+        if(list.size()>1 && list.size()>=end){
+            for (int i = start; i < end; i++) {
+                result.add(list.get(i));
+            }
+        }else{
+            for (int i = start; i < list.size(); i++) {
+                result.add(list.get(i));
+            }
+        }
+
+        if(list.size() > 0){
+            if(list.size() % size == 0){
+                totalPage=  list.size() / size;
+            }else{
+                totalPage = (list.size() / size) + 1;
+            }
+        }
+        List<ProductModelResponseDto> listResult = new ArrayList<>();
+
+        for (ProductModel model: result) {
+            listResult.add(new ProductModelResponseDto(model));
+        }
+        return new ResponseByPageDto(totalPage, listResult);
+    }
 }

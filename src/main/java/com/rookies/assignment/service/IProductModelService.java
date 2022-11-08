@@ -30,7 +30,7 @@ public interface IProductModelService {
 	
 	public ResponseDto<ProductModelResponseDto> getById(UUID id);
 
-	public ResponseByPageDto<List<ProductModelResponseDto>> listAll(int page, int size);
+	public ResponseDto<List<ProductModelResponseDto>> listAll();
 
 	public ResponseByPageDto<List<ProductModelResponseDto>> listByPage(int page, int size);
 

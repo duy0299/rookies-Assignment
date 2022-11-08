@@ -1,5 +1,6 @@
 package com.rookies.assignment.controller;
 
+import com.rookies.assignment.data.entity.ProductModel;
 import com.rookies.assignment.dto.request.*;
 import com.rookies.assignment.dto.request.productmodel.ModelAndProductRequestInsertDto;
 import com.rookies.assignment.dto.request.productmodel.ModelRequestInsertDto;
@@ -33,8 +34,14 @@ public class ProductModelController {
 
     @GetMapping("/models")
     @ResponseBody
-    public ResponseByPageDto<List<ProductModelResponseDto>> listAll(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
-        return service.listAll(page-1, size);
+    public ResponseDto<List<ProductModelResponseDto>> listAll(){
+        return service.listAll();
+    }
+
+    @GetMapping("/models/With-page")
+    @ResponseBody
+    public ResponseByPageDto<List<ProductModelResponseDto>> listByPage(@RequestParam(name="page")int page, @RequestParam(name="size")int size){
+        return service.listByPage(page-1, size);
     }
 
     @PostMapping("/model/with-products")
@@ -156,5 +163,6 @@ public class ProductModelController {
     public ResponseDto<List<ProductModelResponseDto>> listMostPopularProduct(){
         return service.listMostPopularProduct();
     }
+
 
 }

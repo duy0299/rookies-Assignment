@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 public interface IUserInfoService {
 
-	public ResponseDto<UserInfoResponseDto> update(UserInfoDtoFlat dto);
+	public ResponseDto<UserInfoResponseDto> update(UserInfoDtoFlat dto, HttpServletRequest request);
 	
 	public ResponseDto<UserInfoResponseDto> delete(UUID id);
 
@@ -28,11 +28,11 @@ public interface IUserInfoService {
 
 	public ResponseByPageDto<List<UserInfoResponseDto>> listAll(int page, int size);
 
-	public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto);
+	public ResponseDto<UserInfoResponseDto> updatePassword(UserRequestUpdatePasswordDto dto, HttpServletRequest request);
 
 	//    admin add or remove Role for User
 	public ResponseDto<UserInfoResponseDto> updateRole(UserRequestUpdateRoleDto dto);
 
-	public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto);
+	public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto, HttpServletRequest request);
 
 }

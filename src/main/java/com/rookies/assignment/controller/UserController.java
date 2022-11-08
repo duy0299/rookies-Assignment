@@ -6,14 +6,15 @@ import com.rookies.assignment.dto.request.user.UserRequestUpdatePasswordDto;
 import com.rookies.assignment.dto.request.user.UserRequestUpdateRoleDto;
 import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
+import com.rookies.assignment.dto.response.UserInfoResponseDto;
 import com.rookies.assignment.security.jwt.JwtProvider;
 import com.rookies.assignment.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.UUID;
 
@@ -22,15 +23,12 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private IUserInfoService service;
-    @Autowired
-    private JwtProvider jwtProvider;
 
 
-    @PutMapping("/user/{id}/info")
+    @PutMapping("/user/with-token/info")
     @ResponseBody
-    public ResponseDto updateInfo(@PathVariable("id")UUID id, @Valid @RequestBody UserInfoDtoFlat dto, HttpSession session){
-        dto.setId(id);
-        return service.update(dto);
+    public ResponseDto<UserInfoResponseDto> updateInfo(@Valid @RequestBody UserInfoDtoFlat dto, HttpServletRequest request){
+        return service.update(dto, request);
     }
 
     @DeleteMapping("/user/{id}")
@@ -41,13 +39,14 @@ public class UserController {
 
     @PutMapping("/user/{id}/status")
     @ResponseBody
-    public ResponseDto updateStatus(@PathVariable("id")UUID id, @RequestParam(name = "status" )boolean status){
+    public ResponseDto<UserInfoResponseDto> updateStatus(@PathVariable("id")UUID id, @RequestParam(name = "status" )boolean status){
         System.out.println("start");
         return service.updateStatus(id, status);
     }
 
     @GetMapping("/user/{id}")
     @ResponseBody
+    @PreAuthorize("hasRole('ADMIN', 'USER_MANAGER')")
     public ResponseDto getById(@PathVariable("id") UUID id){
         return service.getById(id);
     }
@@ -60,31 +59,28 @@ public class UserController {
 
     @GetMapping("/user/with-token")
     @ResponseBody
-    public ResponseDto getByToken(HttpServletRequest request){
+    public ResponseDto<UserInfoResponseDto> getByToken(HttpServletRequest request){
         return service.getByToken(request);
     }
 
-    @PutMapping("/user/{id}/password")
+    @PutMapping("/user/with-token/password")
     @ResponseBody
-    public ResponseDto updatePassword(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpSession session){
-        dto.setUserID(id);
-        return service.updatePassword(dto);
+    public ResponseDto<UserInfoResponseDto> updatePassword( @Valid @RequestBody UserRequestUpdatePasswordDto dto, HttpServletRequest request){
+        return service.updatePassword(dto, request);
     }
 
     @PutMapping("/user/{id}/roles")
     @ResponseBody
-    public ResponseDto updateRole(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdateRoleDto dto, HttpSession session){
+    public ResponseDto<UserInfoResponseDto> updateRole(@PathVariable("id")UUID id, @Valid @RequestBody UserRequestUpdateRoleDto dto){
         dto.setUserID(id);
         return service.updateRole(dto);
     }
 
-    @PutMapping("/user/{id}/avatar")
+    @PutMapping("/user/with-token/avatar")
     @ResponseBody
-    public ResponseDto updateAvatar(@PathVariable("id") UUID id,
-                                    @RequestParam(name = "fileAvatar" )MultipartFile fileAvatar, HttpSession session){
+    public ResponseDto<UserInfoResponseDto> updateAvatar(@RequestParam(name = "fileAvatar" )MultipartFile fileAvatar, HttpServletRequest request){
         UserRequestUpdateAvatarDto dto = new UserRequestUpdateAvatarDto();
-        dto.setUserID(id);
         dto.setFileAvatar(fileAvatar);
-        return service.updateAvatar(dto);
+        return service.updateAvatar(dto, request);
     }
 }

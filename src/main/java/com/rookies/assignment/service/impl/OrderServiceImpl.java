@@ -53,7 +53,6 @@ public class OrderServiceImpl implements IOrderService {
             throw new ForbiddenException("Bạn phải đăng nhập trước khi Thanh toán");
         }
         Optional<UserInfo> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
-
         for (CartRequestDto cartRequest: dto.getListProduct()) {
             Optional<Product> productOptional = productRepository.findById(cartRequest.getProductId());
             if (productOptional.isEmpty()){
@@ -69,6 +68,7 @@ public class OrderServiceImpl implements IOrderService {
         validateInsert(optionalUser, listCart);
 //       create Order
         Order newOrder = repository.save(dto.changeToOrderInsert(optionalUser.get(), listCart));
+        updateQuantityProduct(dto.getListProduct());
         return new ResponseDto<>(new OrderResponseDto(newOrder));
     }
 
@@ -81,7 +81,6 @@ public class OrderServiceImpl implements IOrderService {
         Order modifiedOrder = repository.save(dto.changeToOrderUpdateStatus(optionalOrder.get()));
         return new ResponseDto<>(new OrderResponseDto(modifiedOrder));
     }
-
     @Override
     public ResponseDto<OrderResponseDto> delete(UUID id) {
         Optional<Order> optionalOrder = repository.findById(id);
@@ -91,7 +90,6 @@ public class OrderServiceImpl implements IOrderService {
         repository.delete(optionalOrder.get());
         return new ResponseDto<>(null);
     }
-
     @Override
     public ResponseDto<OrderResponseDto> getById(UUID id) {
         Optional<Order> optionalOrder = repository.findById(id);
@@ -100,7 +98,6 @@ public class OrderServiceImpl implements IOrderService {
         }
         return new ResponseDto<>(new OrderResponseDto(optionalOrder.get()));
     }
-
     @Override
     public ResponseByPageDto<List<OrderResponseDto>> listAll(int page, int size) {
         Pageable pageable =  PageRequest.of(page, size);
@@ -132,5 +129,31 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
 
+    }
+
+    private void updateQuantityProduct(List<CartRequestDto> cartDto){
+        List<UUID> listID = new ArrayList<>();
+        for (CartRequestDto cart : cartDto) {
+            listID.add(cart.getProductId());
+        }
+        Optional<List<Product>> optional = productRepository.findByIdInAndStatusTrue(listID);
+        if(optional.isEmpty()){
+            throw new ResourceFoundException("trông giỏ hàng có sản phẩm không tồn tại");
+        }
+        List<Product> ListProduct = optional.get();
+        for (int i=0; i < ListProduct.size(); i++ ) {
+            for (CartRequestDto cart : cartDto) {
+                if(cart.getProductId().equals(ListProduct.get(i).getId())){
+                    int newQuantity = ListProduct.get(i).getQuantity() - cart.getQuantity();
+                    int newSold = ListProduct.get(i).getSoldProductQuantity() + cart.getQuantity();
+                    if (newQuantity < 0) {
+                        throw new ParamNotValidException("Số lượng vượt quá cho phép");
+                    }
+                    ListProduct.get(i).setSoldProductQuantity(newSold);
+                    ListProduct.get(i).setQuantity(newQuantity);
+                }
+            }
+        }
+        productRepository.saveAll(ListProduct);
     }
 }

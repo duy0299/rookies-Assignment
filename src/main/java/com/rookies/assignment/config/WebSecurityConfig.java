@@ -38,36 +38,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println("configure AuthenticationManagerBuilder 1");
         auth.userDetailsService(userDetailsService).passwordEncoder( passwordEncoder() );
-        System.out.println("configure AuthenticationManagerBuilder 2");
     }
 
     @Bean
     @Override
     public AuthenticationManager authenticationManager() throws Exception{
-        System.out.println("authenticationManager 1");
         return super.authenticationManager();
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("configure HttpSecurity Begin");
         http.cors().and().csrf().disable()
-//                 /** => tất cả đều truy cập đc
-                .authorizeRequests().antMatchers(HttpMethod.GET,"/user/with-token").permitAll()
-                .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //User
         http.authorizeRequests()
                 .antMatchers(HttpMethod.PUT, "/user/status").hasAnyAuthority("ADMIN", "USER_MANAGER")
-                .antMatchers(HttpMethod.PUT, "/user/info").hasAnyAuthority("USER")
-                .antMatchers(HttpMethod.PUT, "/user/password").hasAnyAuthority("USER")
                 .antMatchers(HttpMethod.PUT, "/user/roles").hasAnyAuthority("ADMIN", "USER_MANAGER")
-                .antMatchers(HttpMethod.PUT, "/user/avatar").hasAnyAuthority("USER")
                 .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority("ADMIN", "USER_MANAGER")
-                .antMatchers(HttpMethod.GET, "/user/{id}").hasAnyAuthority( "ADMIN", "USER_MANAGER")
                 .antMatchers(HttpMethod.DELETE, "/user").hasAnyAuthority("ADMIN", "USER_MANAGER");
 
 //Product
@@ -80,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //product-model
         http.authorizeRequests()
                 .antMatchers(HttpMethod.DELETE, "/model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
-//                .antMatchers(HttpMethod.GET, "/models").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
                 .antMatchers(HttpMethod.POST, "/model").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
                 .antMatchers(HttpMethod.POST, "/model-with-products").hasAnyAuthority("ADMIN", "WAREHOUSE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/model/info").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER")
@@ -101,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/size").hasAnyAuthority("ADMIN","WAREHOUSE_MANAGER");
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.PUT, "/contact",  "/cart").hasAnyAuthority( "ADMIN");
+                .antMatchers(HttpMethod.PUT, "/contact").hasAnyAuthority( "ADMIN");
 
 //Feedback - Rating - Wishlist
         http.authorizeRequests()
