@@ -5,7 +5,6 @@ import com.rookies.assignment.data.entity.UserInfo;
 import com.rookies.assignment.data.repository.IRoleRepository;
 import com.rookies.assignment.data.repository.IUserInfoRepository;
 import com.rookies.assignment.dto.flat.UserInfoDtoFlat;
-import com.rookies.assignment.dto.request.user.UserRequestDto;
 import com.rookies.assignment.dto.request.user.UserRequestUpdateAvatarDto;
 import com.rookies.assignment.dto.request.user.UserRequestUpdatePasswordDto;
 import com.rookies.assignment.dto.request.user.UserRequestUpdateRoleDto;
@@ -97,7 +96,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDto<UserInfoResponseDto> getByToken(HttpServletRequest request) {
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
         if(email==null){
-            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
+            throw new ForbiddenException("Bạn Chưa đăng nhập");
         }
         Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(email));
         if(user.isEmpty()){
@@ -144,7 +143,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
         Optional<UserInfo> userOptional = repository.findById(dto.getUserID());
         Optional<List<Role>> listRoleOptional = Optional.ofNullable(roleRepository.findAll());
         List<Role> listRole = new ArrayList<>();
-
         if(userOptional.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
         }
@@ -174,12 +172,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDto<UserInfoResponseDto> updateAvatar(UserRequestUpdateAvatarDto dto, HttpServletRequest request) {
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
+        String urlAvatar = "";
         if(email==null){
-            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
+            throw new ForbiddenException("Bạn Chưa đăng nhập");
         }
         Optional<UserInfo> user = Optional.ofNullable(repository.findByEmail(email));
-
-        String urlAvatar = "";
         if(user.isEmpty()){
             throw new ResourceFoundException("Không tìm thấy User này");
         }
@@ -211,22 +208,14 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 && !dto.getGender().toLowerCase().trim().equals("male") && !dto.getGender().toLowerCase().trim().equals("female")  ){
             throw new ParamNotValidException("Giới tính phải là Nam hoặc Nữ");
         }
+        if(!Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$", dto.getEmail())) {
+            throw new ParamNotValidException("Email Không hợp lệ");
+        }
         if(!Pattern.matches("^([0-9]{8,14})$", dto.getPhoneNumber())) {
             throw new ParamNotValidException("số điện thoại không phù hợp");
         }
     }
 
-    public void validateUpdateStatus(Optional<UserInfo> optional, UserRequestDto dto){
-        if(optional.isEmpty()){
-            throw new ResourceFoundException("Không tìm thấy User này");
-        }
-        if(!dto.isStatus() ){
-            throw new ParamNotValidException("Giới tính phải là Nam hoặc Nữ");
-        }
-        if(!Pattern.matches("^([0-9]{8,14})$", dto.getPhoneNumber())) {
-            throw new ParamNotValidException("số điện thoại không phù hợp");
-        }
-    }
 
     public void validateUpdatePassword(UserInfo user, UserRequestUpdatePasswordDto dto){
         if(dto.getPassword().trim().equals("") || dto.getPasswordConfirmation().trim().equals("") ||

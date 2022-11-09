@@ -38,7 +38,7 @@ public class FeedbackServiceImpl implements IFeedbackService {
     public ResponseDto<FeedbackResponseDto> insert(FeedbackRequestInsertDto dto, HttpServletRequest request) {
         String email = jwtProvider.getUserIFromHttpServletRequest(request);
         if(email==null){
-            throw new ForbiddenException("Bạn phải đăng nhập trước khi Đánh giá");
+            throw new ForbiddenException("Bạn Chưa đăng nhập");
         }
 
         Optional<UserInfo> optionalUserInfo = Optional.ofNullable(userRepository.findByEmail(email));

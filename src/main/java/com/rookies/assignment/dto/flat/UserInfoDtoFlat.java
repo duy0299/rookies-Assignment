@@ -25,6 +25,16 @@ public class UserInfoDtoFlat {
     private  Timestamp timeCreate;
     private  Timestamp timeUpdate;
 
+    public UserInfoDtoFlat( String firstName, String lastName, String phoneNumber, String gender, String email, boolean status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.email = email;
+        this.avatar = avatar;
+        this.status = status;
+    }
+
     public UserInfoDtoFlat(UserInfo user) {
         id = user.getId();
         firstName = user.getFirstName();
