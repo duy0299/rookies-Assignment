@@ -46,7 +46,6 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN', 'USER_MANAGER')")
     public ResponseDto getById(@PathVariable("id") UUID id){
         return service.getById(id);
     }

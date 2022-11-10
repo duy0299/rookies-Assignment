@@ -4,6 +4,7 @@ import com.rookies.assignment.dto.flat.SizeDtoFlat;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.impl.SizeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

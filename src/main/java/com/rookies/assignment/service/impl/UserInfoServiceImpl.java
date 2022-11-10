@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private IUserInfoRepository repository;
     @Autowired
     private IRoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AmazonClient amazonClient;
@@ -131,6 +135,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             throw new ResourceFoundException("Không tìm thấy User này");
         }
         validateUpdatePassword(user.get(), dto);
+        dto.setNewPassword(passwordEncoder.encode(dto.getNewPassword()));
         user.get().setPassword(dto.getNewPassword());
         repository.save(user.get());
         return new ResponseDto<>(new UserInfoResponseDto(user.get()));
@@ -222,10 +227,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 dto.getNewPassword().trim().equals("")){
             throw new ParamNotValidException("Cố thông tin bị rổng");
         }
+
         if(!dto.getNewPassword().equals(dto.getPasswordConfirmation()) ){
             throw new ParamNotValidException("Mật khẩu xác nhận lại không giống với mật khẩu mới");
         }
-        if(!dto.getPassword().equals(user.getPassword()) ){
+
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
             throw new ParamNotValidException("mật khẩu củ không đúng");
         }
         //	check  condition 1 uppercase, 1 lowercase, 1 number, from 8-20 characters

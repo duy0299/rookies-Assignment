@@ -1,7 +1,6 @@
 package com.rookies.assignment.controller;
 
-import com.rookies.assignment.data.entity.ProductModel;
-import com.rookies.assignment.dto.request.*;
+import com.rookies.assignment.dto.request.ProductRequestInsertDto;
 import com.rookies.assignment.dto.request.productmodel.ModelAndProductRequestInsertDto;
 import com.rookies.assignment.dto.request.productmodel.ModelRequestInsertDto;
 import com.rookies.assignment.dto.request.productmodel.ModelRequestUpdateDto;
@@ -11,6 +10,7 @@ import com.rookies.assignment.dto.response.ResponseByPageDto;
 import com.rookies.assignment.dto.response.ResponseDto;
 import com.rookies.assignment.service.IProductModelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

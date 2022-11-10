@@ -21,9 +21,7 @@ public class JwtProvider {
 
 //    Tạo Token
     public String createToken(Authentication authentication){
-        System.out.println("JwtProvider => createToken Begin");
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-        System.out.println("JwtProvider => createToken END");
         return Jwts.builder()
 //                email
                 .setSubject(userPrinciple.getUsername())
@@ -59,9 +57,7 @@ public class JwtProvider {
 
 //    lấy Email dựa vào token
     public String getEmailFromToken(String token) {
-        System.out.println("JwtProvider => getEmailFromToken Begin");
         String email = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
-        System.out.println("JwtProvider => getEmailFromToken End");
         return email;
     }
 

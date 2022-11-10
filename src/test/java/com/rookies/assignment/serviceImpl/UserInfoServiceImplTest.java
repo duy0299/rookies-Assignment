@@ -86,9 +86,9 @@ public class UserInfoServiceImplTest {
     @Test
     void validateUpdatePassword_ShouldThrowParamNotValidException_WhenOldPasswordDifferentNewPassword(){
         initiaUser = new UserInfo();
-        initiaUser.setPassword("c");
+        initiaUser.setPassword("$2y$10$9.JeIXVO3K4pQPBfEy8IauB9mJ656VGsJAK9Sb1sguJ1BWCgywVmo");
         dto =
-                new UserRequestUpdatePasswordDto("a", "b","b");
+                new UserRequestUpdatePasswordDto("bA1234567", "aa","aa");
         ParamNotValidException exception = Assertions.assertThrows(ParamNotValidException.class,
                 ()->userService.validateUpdatePassword(initiaUser, dto));
         Assertions.assertEquals("mật khẩu củ không đúng",exception.getMessage());
@@ -96,9 +96,9 @@ public class UserInfoServiceImplTest {
     @Test
     void validateUpdatePassword_ShouldThrowParamNotValidException_WhenPasswordNotPatternMatches(){
         initiaUser = new UserInfo();
-        initiaUser.setPassword("a");
+        initiaUser.setPassword("$2y$10$9.JeIXVO3K4pQPBfEy8IauB9mJ656VGsJAK9Sb1sguJ1BWCgywVmW");
         dto =
-                new UserRequestUpdatePasswordDto("a", "b","b");
+                new UserRequestUpdatePasswordDto("bA1234567", "bbb","bbb");
         ParamNotValidException exception = Assertions.assertThrows(ParamNotValidException.class,
                 ()->userService.validateUpdatePassword(initiaUser, dto));
         Assertions.assertEquals("Mật khẩu mới không phù hợp với yêu cầu. Phải có ít nhất 1 số từ 1-9, 1 chữ hoa, 1 chữ thường và dài từ 8-20 ký tự",exception.getMessage());
@@ -185,7 +185,6 @@ public class UserInfoServiceImplTest {
 
     @Test
     void getByToken_ShouldThrowForbiddenException_WhenNotFoundToken(){
-
         Mockito.when(jwtProvider.getUserIFromHttpServletRequest(any(HttpServletRequest.class))).thenReturn(null);
 
         ForbiddenException exception = Assertions.assertThrows(ForbiddenException.class,
@@ -194,7 +193,6 @@ public class UserInfoServiceImplTest {
     }
     @Test
     void getByToken_ShouldThrowForbiddenException_WhenFindTokenButNotFoundEmailInDatabase(){
-
         Mockito.when(jwtProvider.getUserIFromHttpServletRequest(any(HttpServletRequest.class))).thenReturn("b@gmail.com");
         Mockito.when(repository.findByEmail("a@gmail.com")).thenReturn(initiaUser);
 
